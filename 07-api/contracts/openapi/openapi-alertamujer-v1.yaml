@@ -1,0 +1,403 @@
+openapi: 3.0.3
+info:
+  title: AlertaMujer API
+  version: 1.0.0
+  description: >-
+    Contrato REST funcional de AlertaMujer. Define la integración mínima;
+    no declara Backend implementado ni agrega capacidades fuera del SRS.
+x-operation-contract:
+  requiredMetadata: [actor, previousState, postState, idempotency, transaction, auditEvent]
+  errorRule: Each operation declares its business-specific errors in responses. Every protected operation also returns 401 for invalid session and 403 for unauthorized role or resource; every resource lookup may return 404 without revealing foreign data.
+servers:
+  - url: https://api.alertamujer.local/api/v1
+tags:
+  - name: Identity
+  - name: Profile
+  - name: Contacts
+  - name: Emergencies
+  - name: Evidence
+  - name: Administration
+paths:
+  /registration-requests:
+    post:
+      tags: [Identity]
+      summary: Inicia un registro público
+      security: []
+      x-functional: { actor: PUBLIC, previousState: No account and accepted terms, postState: SELF_REGISTERED request pending with acceptance timestamp, idempotency: None; duplicate data returns 422, transaction: Create request only, auditEvent: NONE }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/RegistrationRequestInput' } } } }
+      responses: { '201': { description: Solicitud creada, content: { application/json: { schema: { $ref: '#/components/schemas/RegistrationRequest' } } } }, '400': { $ref: '#/components/responses/ValidationError' }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /registration-requests/{registrationRequestId}/verification-codes:
+    post:
+      tags: [Identity]
+      summary: Emite o reenvía OTP de registro
+      security: []
+      x-functional: { actor: PUBLIC associated to request, previousState: Pending request, postState: Current OTP active and previous OTP invalidated, idempotency: Repeated request issues a new allowed OTP, transaction: Lock request and invalidate/create OTP, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/RegistrationRequestId' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ChannelRequest' } } } }
+      responses: { '201': { description: OTP emitted, content: { application/json: { schema: { $ref: '#/components/schemas/OtpIssued' } } } }, '404': { $ref: '#/components/responses/NotFound' }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /registration-requests/{registrationRequestId}/verification-codes/verify:
+    post:
+      tags: [Identity]
+      summary: Consume OTP de registro
+      security: []
+      x-functional: { actor: PUBLIC associated to request, previousState: Valid pending OTP, postState: Channel verified; both channels create USER account, idempotency: Used OTP is rejected, transaction: Lock OTP/request and create account atomically when complete, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/RegistrationRequestId' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/OtpVerification' } } } }
+      responses: { '200': { description: Verification state, content: { application/json: { schema: { $ref: '#/components/schemas/RegistrationVerificationResult' } } } }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /auth/login:
+    post:
+      tags: [Identity]
+      summary: Inicia sesión
+      security: []
+      x-functional: { actor: PUBLIC, previousState: Enabled account with valid credentials, postState: Revocable session created, idempotency: Each successful call creates or renews only the requested session, transaction: Verify credential and persist session, auditEvent: ADMIN_LOGIN only for ENTITY_ADMIN }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/LoginInput' } } } }
+      responses: { '200': { description: Session tokens and safe user data, content: { application/json: { schema: { $ref: '#/components/schemas/SessionResponse' } } } }, '401': { $ref: '#/components/responses/Unauthorized' } }
+  /auth/refresh:
+    post:
+      tags: [Identity]
+      summary: Renueva una sesión
+      security: []
+      x-functional: { actor: Valid refresh-token holder, previousState: Active unrevoked session, postState: Session activity and tokens renewed, idempotency: Reuse of invalid or revoked refresh token is rejected, transaction: Lock and rotate session state, auditEvent: NONE }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/RefreshInput' } } } }
+      responses: { '200': { description: Renewed tokens, content: { application/json: { schema: { $ref: '#/components/schemas/SessionResponse' } } } }, '401': { $ref: '#/components/responses/Unauthorized' } }
+  /auth/logout:
+    post:
+      tags: [Identity]
+      summary: Revoca la sesión actual
+      x-functional: { actor: Authenticated user, previousState: Active session, postState: Session revoked, idempotency: Repeating a revoked session returns 204, transaction: Revoke current sid, auditEvent: NONE }
+      responses: { '204': { description: Session revoked }, '401': { $ref: '#/components/responses/Unauthorized' } }
+  /auth/password-reset/verification-codes:
+    post:
+      tags: [Identity]
+      summary: Solicita OTP de recuperación
+      security: []
+      x-functional: { actor: PUBLIC, previousState: Existing account is not disclosed, postState: Allowed PASSWORD_RESET OTP may exist, idempotency: Repeated request follows resend limit, transaction: Lock candidate account and invalidate/create OTP, auditEvent: NONE }
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [email], properties: { email: { type: string, format: email } } } } } }
+      responses: { '202': { description: Request accepted without disclosing account existence }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /auth/password-reset/confirm:
+    post:
+      tags: [Identity]
+      summary: Cambia contraseña mediante OTP
+      security: []
+      x-functional: { actor: Holder of valid recovery OTP, previousState: Valid PASSWORD_RESET OTP, postState: Password changed and all sessions revoked, idempotency: Used OTP is rejected, transaction: Lock OTP and credentials; update hash; revoke sessions, auditEvent: NONE }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PasswordResetConfirm' } } } }
+      responses: { '204': { description: Password changed }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /me:
+    get:
+      tags: [Profile]
+      summary: Consulta el perfil propio
+      x-functional: { actor: USER or ENTITY_ADMIN, previousState: Active authenticated account, postState: No state change, idempotency: Safe read, transaction: Read own user only, auditEvent: NONE }
+      responses: { '200': { description: Safe profile, content: { application/json: { schema: { $ref: '#/components/schemas/UserProfile' } } } }, '401': { $ref: '#/components/responses/Unauthorized' } }
+    patch:
+      tags: [Profile]
+      summary: Actualiza campos permitidos del perfil
+      x-functional: { actor: Profile owner, previousState: Enabled account, postState: Permitted fields updated, idempotency: Same representation is safe, transaction: Validate and update own user, auditEvent: NONE }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ProfileUpdate' } } } }
+      responses: { '200': { description: Updated profile, content: { application/json: { schema: { $ref: '#/components/schemas/UserProfile' } } } }, '422': { $ref: '#/components/responses/RuleViolation' } }
+    delete:
+      tags: [Profile]
+      summary: Elimina físicamente la cuenta propia
+      x-functional: { actor: Account owner, previousState: No open emergency, postState: Account and cascading data deleted, idempotency: Deleted account cannot repeat, transaction: Verify ownership/open SOS and delete users root, auditEvent: NONE }
+      responses: { '204': { description: Account deleted }, '409': { $ref: '#/components/responses/StateConflict' } }
+  /me/password:
+    patch:
+      tags: [Profile]
+      summary: Cambia la contraseña autenticada
+      x-functional: { actor: Account owner, previousState: Valid current password, postState: Password changed and all sessions revoked, idempotency: Reusing old password is rejected, transaction: Verify hash; update credential; revoke sessions, auditEvent: NONE }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PasswordChange' } } } }
+      responses: { '204': { description: Password changed }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /me/terms-acceptance:
+    post:
+      tags: [Profile]
+      summary: Acepta términos pendientes de cuenta creada por administración
+      x-functional: { actor: Authenticated ADMIN_CREATED USER with pending terms, previousState: Enabled account with accepted_terms_at null, postState: Terms accepted and normal operations enabled, idempotency: Repeating after acceptance returns 204, transaction: Lock own user and set accepted_terms_at once, auditEvent: NONE }
+      responses: { '204': { description: Terms accepted }, '403': { $ref: '#/components/responses/Forbidden' }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /me/contact-changes:
+    post:
+      tags: [Profile]
+      summary: Solicita cambio de correo o teléfono
+      x-functional: { actor: Account owner, previousState: Current contact value remains active, postState: PROFILE_CONTACT_CHANGE OTP pending, idempotency: Repeated request follows resend limit, transaction: Validate candidate and create OTP only, auditEvent: NONE }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ContactChangeRequest' } } } }
+      responses: { '201': { description: OTP issued, content: { application/json: { schema: { $ref: '#/components/schemas/OtpIssued' } } } }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /me/contact-changes/verify:
+    post:
+      tags: [Profile]
+      summary: Confirma cambio de correo o teléfono
+      x-functional: { actor: Account owner, previousState: Valid matching PROFILE_CONTACT_CHANGE OTP, postState: Contact updated; email revokes sessions, idempotency: Used OTP is rejected, transaction: Lock OTP; recheck uniqueness; update user; revoke if email, auditEvent: NONE }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ContactChangeVerify' } } } }
+      responses: { '204': { description: Contact updated }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /me/emergency-settings:
+    get:
+      tags: [Profile]
+      summary: Consulta el mensaje SOS propio
+      x-functional: { actor: Account owner, previousState: Authenticated, postState: No state change, idempotency: Safe read, transaction: Read own setting, auditEvent: NONE }
+      responses: { '200': { description: SOS message setting, content: { application/json: { schema: { $ref: '#/components/schemas/SosMessage' } } } } }
+    put:
+      tags: [Profile]
+      summary: Crea o reemplaza el mensaje SOS propio
+      x-functional: { actor: Account owner, previousState: Authenticated, postState: Nonblank message stored, idempotency: Same body is safe, transaction: Upsert own setting, auditEvent: NONE }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SosMessage' } } } }
+      responses: { '200': { description: Saved setting, content: { application/json: { schema: { $ref: '#/components/schemas/SosMessage' } } } }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /me/device-tokens:
+    post:
+      tags: [Profile]
+      summary: Registra o actualiza token FCM propio
+      x-functional: { actor: Account owner, previousState: Authenticated, postState: Active device token registered, idempotency: Same owner token updates last-seen data; another owner receives generic conflict, transaction: Upsert token owned by actor only, auditEvent: NONE }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/DeviceTokenInput' } } } }
+      responses: { '201': { description: Token registered }, '200': { description: Existing token refreshed }, '409': { $ref: '#/components/responses/StateConflict' }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /directory:
+    get:
+      tags: [Contacts]
+      summary: Busca usuarias elegibles en el directorio
+      x-functional: { actor: Authenticated user, previousState: Authenticated, postState: No state change, idempotency: Safe read, transaction: Read enabled USER directory only, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/Query' }, { $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }]
+      responses: { '200': { $ref: '#/components/responses/DirectoryPage' } }
+  /contact-invitations:
+    post:
+      tags: [Contacts]
+      summary: Envía una invitación de contacto
+      x-functional: { actor: USER owner, previousState: Eligible different target and no active duplicate, postState: PENDING invitation expires in 24h, idempotency: Existing PENDING is returned; EXPIRED row is reused, transaction: Lock canonical pair and create/update row, auditEvent: NONE }
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [username], properties: { username: { type: string } } } } } }
+      responses: { '201': { description: Invitation pending, content: { application/json: { schema: { $ref: '#/components/schemas/ContactInvitation' } } } }, '200': { description: Existing pending invitation, content: { application/json: { schema: { $ref: '#/components/schemas/ContactInvitation' } } } }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /contact-invitations/{contactId}/accept:
+    post:
+      tags: [Contacts]
+      summary: Acepta una invitación recibida
+      x-functional: { actor: Invitation recipient, previousState: PENDING unexpired invitation, postState: ACCEPTED bidirectional relationship, idempotency: Already accepted returns 204, transaction: Lock invitation and activate canonical relation, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/ContactId' }]
+      responses: { '204': { description: Invitation accepted }, '409': { $ref: '#/components/responses/StateConflict' } }
+  /contact-invitations/{contactId}/reject:
+    post:
+      tags: [Contacts]
+      summary: Rechaza una invitación recibida
+      x-functional: { actor: Invitation recipient, previousState: PENDING unexpired invitation, postState: REJECTED, idempotency: Already rejected returns 204, transaction: Lock and change invitation state, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/ContactId' }]
+      responses: { '204': { description: Invitation rejected }, '409': { $ref: '#/components/responses/StateConflict' } }
+  /contact-invitations/{contactId}/reinvite:
+    post:
+      tags: [Contacts]
+      summary: Reinvita una solicitud expirada
+      x-functional: { actor: Original invitation owner, previousState: EXPIRED invitation, postState: Same row becomes PENDING with new expiry, idempotency: PENDING invitation is returned; REJECTED is rejected, transaction: Lock canonical row and update only EXPIRED state, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/ContactId' }]
+      responses: { '200': { description: Invitation pending again, content: { application/json: { schema: { $ref: '#/components/schemas/ContactInvitation' } } } }, '409': { $ref: '#/components/responses/StateConflict' } }
+  /contacts:
+    get:
+      tags: [Contacts]
+      summary: Lista contactos propios
+      x-functional: { actor: USER owner, previousState: Authenticated, postState: No state change, idempotency: Safe read, transaction: Read actor contacts and current eligibility, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }]
+      responses: { '200': { $ref: '#/components/responses/ContactPage' } }
+  /emergencies:
+    post:
+      tags: [Emergencies]
+      summary: Crea o recupera el SOS abierto propio
+      x-functional: { actor: Enabled USER owner, previousState: Valid contact and initial coordinate; no or one open SOS, postState: ACTIVE emergency with first location/history persisted, idempotency: First request 201; retry or race returns 200 same emergency, transaction: Lock/check open SOS; persist root location history before response, auditEvent: NONE }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/EmergencyCreate' } } } }
+      responses: { '201': { description: SOS created, content: { application/json: { schema: { $ref: '#/components/schemas/Emergency' } } } }, '200': { description: Existing SOS recovered, content: { application/json: { schema: { $ref: '#/components/schemas/Emergency' } } } }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /emergencies/active:
+    get:
+      tags: [Emergencies]
+      summary: Recupera la emergencia abierta propia
+      x-functional: { actor: USER owner, previousState: Authenticated, postState: No state change, idempotency: Safe read, transaction: Read actor open emergency, auditEvent: NONE }
+      responses: { '200': { description: Active emergency, content: { application/json: { schema: { $ref: '#/components/schemas/Emergency' } } } }, '404': { $ref: '#/components/responses/NotFound' } }
+  /emergencies/{emergencyId}:
+    get:
+      tags: [Emergencies]
+      summary: Consulta una emergencia autorizada
+      x-functional: { actor: Owner or ENTITY_ADMIN, previousState: Authorized relationship, postState: No state change, idempotency: Safe read, transaction: Read permitted emergency, auditEvent: ALERT_VIEWED for administrator }
+      parameters: [{ $ref: '#/components/parameters/EmergencyId' }]
+      responses: { '200': { description: Emergency detail, content: { application/json: { schema: { $ref: '#/components/schemas/Emergency' } } } }, '403': { $ref: '#/components/responses/Forbidden' }, '404': { $ref: '#/components/responses/NotFound' } }
+  /emergencies/{emergencyId}/heartbeats:
+    post:
+      tags: [Emergencies]
+      summary: Registra latido y ubicación actual
+      x-functional: { actor: Emergency owner, previousState: ACTIVE or IN_PROGRESS or OFFLINE emergency, postState: Location persisted and OFFLINE recovers previous operational state, idempotency: Repeated coordinate is accepted once per request, transaction: Lock emergency; revalidate; append location/history if state changes, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/EmergencyId' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/LocationInput' } } } }
+      responses: { '204': { description: Heartbeat accepted }, '409': { $ref: '#/components/responses/StateConflict' } }
+  /emergencies/{emergencyId}/locations:
+    post:
+      tags: [Emergencies]
+      summary: Registra ubicación sin modificar estado
+      x-functional: { actor: Emergency owner, previousState: ACTIVE or IN_PROGRESS emergency, postState: Location appended, idempotency: Client does not retry with a new semantic event, transaction: Lock emergency and insert location, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/EmergencyId' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/LocationInput' } } } }
+      responses: { '201': { description: Location recorded }, '409': { $ref: '#/components/responses/StateConflict' } }
+  /emergencies/{emergencyId}/finish:
+    post:
+      tags: [Emergencies]
+      summary: Finaliza la emergencia propia
+      x-functional: { actor: Emergency owner, previousState: ACTIVE or IN_PROGRESS after connectivity is restored, postState: FINALIZED terminal state, idempotency: Repeated finalized request returns 204, transaction: Lock emergency; revalidate; update root and append history, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/EmergencyId' }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [confirmedSafe], properties: { confirmedSafe: { type: boolean, enum: [true] } } } } } }
+      responses: { '204': { description: Emergency finalized }, '409': { $ref: '#/components/responses/StateConflict' } }
+  /me/emergencies:
+    get:
+      tags: [Emergencies]
+      summary: Consulta historial propio
+      x-functional: { actor: USER owner, previousState: Authenticated, postState: No state change, idempotency: Safe read, transaction: Read only owner FINALIZED emergencies, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }]
+      responses: { '200': { $ref: '#/components/responses/EmergencyPage' } }
+  /emergencies/{emergencyId}/evidences:
+    post:
+      tags: [Evidence]
+      summary: Carga una fotografía de evidencia
+      x-functional: { actor: Emergency owner, previousState: Open authorized emergency with fewer than 10 evidences, postState: WebP metadata/reference persisted after file processing, idempotency: No automatic duplicate retry; client retries only after failure response, transaction: Validate/open state; store file; persist metadata; compensate file on DB failure, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/EmergencyId' }]
+      requestBody: { required: true, content: { multipart/form-data: { schema: { type: object, required: [file], properties: { file: { type: string, format: binary } } } } } }
+      responses: { '201': { description: Evidence metadata, content: { application/json: { schema: { $ref: '#/components/schemas/Evidence' } } } }, '409': { $ref: '#/components/responses/StateConflict' }, '422': { $ref: '#/components/responses/RuleViolation' } }
+    get:
+      tags: [Evidence]
+      summary: Lista evidencia autorizada
+      x-functional: { actor: Owner or ENTITY_ADMIN, previousState: Authorized emergency relationship, postState: No state change, idempotency: Safe read, transaction: Read evidence metadata only, auditEvent: ALERT_VIEWED for administrator }
+      parameters: [{ $ref: '#/components/parameters/EmergencyId' }]
+      responses: { '200': { description: Evidence metadata list, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Evidence' } } } } } }
+  /evidences/{evidenceId}/content:
+    get:
+      tags: [Evidence]
+      summary: Descarga evidencia autorizada
+      x-functional: { actor: Owner or ENTITY_ADMIN, previousState: Authorized evidence relation, postState: No state change, idempotency: Safe read, transaction: Authorize metadata then stream protected file, auditEvent: ALERT_VIEWED for administrator }
+      parameters: [{ $ref: '#/components/parameters/EvidenceId' }]
+      responses: { '200': { description: Protected WebP stream, content: { image/webp: { schema: { type: string, format: binary } } } }, '404': { $ref: '#/components/responses/NotFound' } }
+  /emergencies/{emergencyId}/messages:
+    get:
+      tags: [Emergencies]
+      summary: Recupera mensajes persistidos
+      x-functional: { actor: Authorized emergency participant, previousState: Authorized relationship, postState: No state change, idempotency: Safe read from last confirmed message, transaction: Read persisted ordered messages only, auditEvent: ALERT_VIEWED for administrator }
+      parameters: [{ $ref: '#/components/parameters/EmergencyId' }, { name: after, in: query, schema: { type: integer, format: int64, minimum: 1 }, description: Last confirmed server message id }, { $ref: '#/components/parameters/Size' }]
+      responses: { '200': { description: Persisted messages, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/ChatMessage' } } } } }, '409': { $ref: '#/components/responses/StateConflict' } }
+  /admin/dashboard:
+    get:
+      tags: [Administration]
+      summary: Consulta indicadores operativos
+      x-functional: { actor: ENTITY_ADMIN, previousState: Valid administrative session, postState: No state change, idempotency: Safe read, transaction: Read aggregate operational data, auditEvent: ALERT_VIEWED }
+      responses: { '200': { description: Dashboard summary, content: { application/json: { schema: { $ref: '#/components/schemas/Dashboard' } } } }, '403': { $ref: '#/components/responses/Forbidden' } }
+  /admin/emergencies:
+    get:
+      tags: [Administration]
+      summary: Lista alertas para operación
+      x-functional: { actor: ENTITY_ADMIN, previousState: Valid administrative session, postState: No state change, idempotency: Safe read, transaction: Read paginated alerts, auditEvent: ALERT_VIEWED }
+      parameters: [{ name: status, in: query, schema: { $ref: '#/components/schemas/EmergencyStatus' } }, { $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }]
+      responses: { '200': { $ref: '#/components/responses/EmergencyPage' } }
+  /admin/emergencies/{emergencyId}/attention:
+    post:
+      tags: [Administration]
+      summary: Inicia atención administrativa
+      x-functional: { actor: ENTITY_ADMIN, previousState: ACTIVE emergency, postState: IN_PROGRESS and audit row appended, idempotency: Repeating IN_PROGRESS returns 204, transaction: Lock emergency; revalidate; update state/history and write audit, auditEvent: ALERT_STATUS_CHANGED }
+      parameters: [{ $ref: '#/components/parameters/EmergencyId' }]
+      responses: { '204': { description: Attention started }, '409': { $ref: '#/components/responses/StateConflict' } }
+  /admin/users:
+    get:
+      tags: [Administration]
+      summary: Lista cuentas
+      x-functional: { actor: ENTITY_ADMIN, previousState: Valid administrative session, postState: No state change, idempotency: Safe read, transaction: Read paginated accounts, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }]
+      responses: { '200': { $ref: '#/components/responses/UserPage' } }
+    post:
+      tags: [Administration]
+      summary: Inicia alta de cuenta ordinaria
+      description: La persistencia de `account_origin` y `accepted_terms_at` de HU-DB-025 está integrada en `develop`; la operación continúa pendiente de implementación Backend.
+      x-availability: PENDING_BACKEND_IMPLEMENTATION
+      x-functional: { actor: ENTITY_ADMIN, previousState: Valid administrative session, postState: ADMIN_CREATED request awaits required verification and later terms acceptance, idempotency: Duplicate data returns 422, transaction: Create controlled registration flow with ADMIN_CREATED origin, auditEvent: NONE }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/AdminRegistrationRequestInput' } } } }
+      responses: { '201': { description: Account verification flow created }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /admin/users/{userId}:
+    get:
+      tags: [Administration]
+      summary: Consulta perfil de una usuaria
+      x-functional: { actor: ENTITY_ADMIN, previousState: Valid administrative session, postState: No state change, idempotency: Safe read, transaction: Read authorized user profile, auditEvent: USER_PROFILE_VIEWED }
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses: { '200': { description: User profile, content: { application/json: { schema: { $ref: '#/components/schemas/UserProfile' } } } }, '404': { $ref: '#/components/responses/NotFound' } }
+  /admin/users/{userId}/status:
+    patch:
+      tags: [Administration]
+      summary: Habilita o inhabilita una cuenta USER
+      x-functional: { actor: ENTITY_ADMIN, previousState: Target USER account, postState: Account status changed and audit row appended, idempotency: Same status returns 200, transaction: Lock target; revalidate role; update status and write audit, auditEvent: ACCOUNT_STATUS_CHANGED }
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [status], properties: { status: { type: string, enum: [ENABLED, DISABLED] } } } } } }
+      responses: { '200': { description: Status updated }, '403': { $ref: '#/components/responses/Forbidden' }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /admin/users/{userId}/deletion:
+    delete:
+      tags: [Administration]
+      summary: Elimina una cuenta inhabilitada elegible
+      x-functional: { actor: ENTITY_ADMIN, previousState: USER disabled at least 15 days and without open SOS, postState: Account and cascading data deleted, idempotency: Deleted account cannot repeat, transaction: Verify conditions and delete users root, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses: { '204': { description: Account deleted }, '409': { $ref: '#/components/responses/StateConflict' }, '422': { $ref: '#/components/responses/RuleViolation' } }
+  /admin/audit-logs:
+    get:
+      tags: [Administration]
+      summary: Consulta auditoría administrativa
+      x-functional: { actor: ENTITY_ADMIN, previousState: Valid administrative session, postState: No state change, idempotency: Safe read, transaction: Read append-only audit rows, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }]
+      responses: { '200': { description: Audit page, content: { application/json: { schema: { $ref: '#/components/schemas/AuditPage' } } } } }
+components:
+  securitySchemes: { bearerAuth: { type: http, scheme: bearer, bearerFormat: JWT } }
+  parameters:
+    RegistrationRequestId: { name: registrationRequestId, in: path, required: true, schema: { type: string, format: uuid } }
+    EmergencyId: { name: emergencyId, in: path, required: true, schema: { type: string, format: uuid } }
+    ContactId: { name: contactId, in: path, required: true, schema: { type: string, format: uuid } }
+    EvidenceId: { name: evidenceId, in: path, required: true, schema: { type: string, format: uuid } }
+    UserId: { name: userId, in: path, required: true, schema: { type: string, format: uuid } }
+    Query: { name: query, in: query, schema: { type: string, minLength: 1, maxLength: 50 } }
+    Page: { name: page, in: query, schema: { type: integer, minimum: 0, default: 0 } }
+    Size: { name: size, in: query, schema: { type: integer, minimum: 1, maximum: 50, default: 20 } }
+  responses:
+    ValidationError: { description: Invalid request format, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    Unauthorized: { description: Invalid or expired session, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    Forbidden: { description: Insufficient role or resource relation, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    NotFound: { description: Resource absent or not visible, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    StateConflict: { description: Invalid current domain state, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    RuleViolation: { description: Functional rule not satisfied, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    DirectoryPage: { description: Directory page, content: { application/json: { schema: { $ref: '#/components/schemas/DirectoryPage' } } } }
+    ContactPage: { description: Contact page, content: { application/json: { schema: { $ref: '#/components/schemas/ContactPage' } } } }
+    EmergencyPage: { description: Emergency page, content: { application/json: { schema: { $ref: '#/components/schemas/EmergencyPage' } } } }
+    UserPage: { description: User page, content: { application/json: { schema: { $ref: '#/components/schemas/UserPage' } } } }
+  schemas:
+    Error: { type: object, required: [code, message, requestId], properties: { code: { type: string }, message: { type: string }, requestId: { type: string, format: uuid }, fields: { type: array, items: { type: object, properties: { field: { type: string }, message: { type: string } } } } } }
+    RegistrationRequestInput: { type: object, required: [username, firstNames, lastNames, email, phone, password, acceptedTerms], properties: { username: { type: string, pattern: '^@[a-z0-9](?:[a-z0-9_]{1,18}[a-z0-9])?$' }, firstNames: { type: string }, lastNames: { type: string }, email: { type: string, format: email }, phone: { type: string, pattern: '^3[0-9]{9}$' }, password: { type: string, format: password, writeOnly: true, minLength: 12, pattern: '^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{12,}$' }, acceptedTerms: { type: boolean, enum: [true] } } }
+    AdminRegistrationRequestInput: { type: object, required: [username, firstNames, lastNames, email, phone, password], properties: { username: { type: string, pattern: '^@[a-z0-9](?:[a-z0-9_]{1,18}[a-z0-9])?$' }, firstNames: { type: string }, lastNames: { type: string }, email: { type: string, format: email }, phone: { type: string, pattern: '^3[0-9]{9}$' }, password: { type: string, format: password, writeOnly: true, minLength: 12, pattern: '^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{12,}$' } } }
+    RegistrationRequest: { type: object, required: [registrationRequestId, status], properties: { registrationRequestId: { type: string, format: uuid }, status: { type: string, enum: [PENDING] } } }
+    ChannelRequest: { type: object, required: [channel], properties: { channel: { type: string, enum: [EMAIL, SMS] } } }
+    OtpIssued: { type: object, required: [expiresAt], properties: { expiresAt: { type: string, format: date-time } } }
+    OtpVerification: { type: object, required: [channel, code], properties: { channel: { type: string, enum: [EMAIL, SMS] }, code: { type: string, pattern: '^[0-9]{6}$' } } }
+    RegistrationVerificationResult: { type: object, required: [status], properties: { status: { type: string, enum: [PENDING, COMPLETED] }, userId: { type: string, format: uuid } } }
+    LoginInput: { type: object, required: [identifier, password], properties: { identifier: { type: string }, password: { type: string, format: password, writeOnly: true } } }
+    RefreshInput: { type: object, required: [refreshToken], properties: { refreshToken: { type: string, writeOnly: true } } }
+    SessionResponse: { type: object, required: [accessToken, refreshToken, user, termsPending], properties: { accessToken: { type: string }, refreshToken: { type: string, writeOnly: true }, user: { $ref: '#/components/schemas/UserProfile' }, termsPending: { type: boolean } } }
+    PasswordResetConfirm: { type: object, required: [email, code, newPassword], properties: { email: { type: string, format: email }, code: { type: string, pattern: '^[0-9]{6}$' }, newPassword: { type: string, format: password, writeOnly: true, minLength: 12, pattern: '^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{12,}$' } } }
+    PasswordChange: { type: object, required: [currentPassword, newPassword], properties: { currentPassword: { type: string, format: password, writeOnly: true }, newPassword: { type: string, format: password, writeOnly: true, minLength: 12, pattern: '^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{12,}$' } } }
+    UserProfile: { type: object, required: [userId, username, firstNames, lastNames, email, phone, role, accountStatus], properties: { userId: { type: string, format: uuid }, username: { type: string }, firstNames: { type: string }, lastNames: { type: string }, email: { type: string, format: email }, phone: { type: string }, role: { type: string, enum: [USER, ENTITY_ADMIN] }, accountStatus: { type: string, enum: [ENABLED, DISABLED] } } }
+    ProfileUpdate: { type: object, properties: { username: { type: string, pattern: '^@[a-z0-9](?:[a-z0-9_]{1,18}[a-z0-9])?$' }, firstNames: { type: string }, lastNames: { type: string } }, minProperties: 1 }
+    ContactChangeRequest:
+      oneOf:
+        - type: object
+          required: [field, value]
+          properties: { field: { type: string, enum: [email] }, value: { type: string, format: email } }
+        - type: object
+          required: [field, value]
+          properties: { field: { type: string, enum: [phone] }, value: { type: string, pattern: '^3[0-9]{9}$' } }
+    ContactChangeVerify:
+      oneOf:
+        - type: object
+          required: [field, value, code]
+          properties: { field: { type: string, enum: [email] }, value: { type: string, format: email }, code: { type: string, pattern: '^[0-9]{6}$' } }
+        - type: object
+          required: [field, value, code]
+          properties: { field: { type: string, enum: [phone] }, value: { type: string, pattern: '^3[0-9]{9}$' }, code: { type: string, pattern: '^[0-9]{6}$' } }
+    SosMessage: { type: object, required: [message], properties: { message: { type: string, minLength: 1, maxLength: 500 } } }
+    DeviceTokenInput: { type: object, required: [token, platform], properties: { token: { type: string, writeOnly: true }, platform: { type: string, enum: [ANDROID] } } }
+    ContactInvitation: { type: object, required: [contactId, status, expiresAt], properties: { contactId: { type: string, format: uuid }, status: { type: string, enum: [PENDING, ACCEPTED, EXPIRED, REJECTED] }, expiresAt: { type: string, format: date-time, nullable: true } } }
+    DirectoryUser: { type: object, required: [username, firstNames, lastNames], properties: { username: { type: string }, firstNames: { type: string }, lastNames: { type: string } } }
+    DirectoryPage: { type: object, required: [items, page, size, total], properties: { items: { type: array, items: { $ref: '#/components/schemas/DirectoryUser' } }, page: { type: integer }, size: { type: integer }, total: { type: integer } } }
+    ContactPage: { type: object, required: [items, page, size, total], properties: { items: { type: array, items: { $ref: '#/components/schemas/ContactInvitation' } }, page: { type: integer }, size: { type: integer }, total: { type: integer } } }
+    LocationInput: { type: object, required: [latitude, longitude, capturedAt], properties: { latitude: { type: number, minimum: -90, maximum: 90 }, longitude: { type: number, minimum: -180, maximum: 180 }, accuracyMeters: { type: number, minimum: 0 }, capturedAt: { type: string, format: date-time } } }
+    EmergencyCreate: { allOf: [{ $ref: '#/components/schemas/LocationInput' }, { type: object, properties: { message: { type: string, maxLength: 500 } } }] }
+    EmergencyStatus: { type: string, enum: [ACTIVE, IN_PROGRESS, OFFLINE, FINALIZED] }
+    Emergency: { type: object, required: [emergencyId, status, startedAt], properties: { emergencyId: { type: string, format: uuid }, status: { $ref: '#/components/schemas/EmergencyStatus' }, previousOperationalStatus: { type: string, nullable: true, enum: [ACTIVE, IN_PROGRESS] }, startedAt: { type: string, format: date-time }, lastHeartbeatAt: { type: string, format: date-time, nullable: true }, finalizedAt: { type: string, format: date-time, nullable: true } } }
+    EmergencyPage: { type: object, required: [items, page, size, total], properties: { items: { type: array, items: { $ref: '#/components/schemas/Emergency' } }, page: { type: integer }, size: { type: integer }, total: { type: integer } } }
+    Evidence: { type: object, required: [evidenceId, mimeType, sizeBytes, receivedAt], properties: { evidenceId: { type: string, format: uuid }, mimeType: { type: string, enum: [image/webp] }, sizeBytes: { type: integer, maximum: 1048576 }, receivedAt: { type: string, format: date-time } } }
+    ChatMessage: { type: object, required: [messageId, clientMessageId, content, sentAt], properties: { messageId: { type: integer, format: int64, minimum: 1 }, clientMessageId: { type: string, format: uuid }, content: { type: string, maxLength: 500 }, sentAt: { type: string, format: date-time } } }
+    Dashboard: { type: object, properties: { activeCount: { type: integer }, inProgressCount: { type: integer }, offlineCount: { type: integer } } }
+    UserPage: { type: object, required: [items, page, size, total], properties: { items: { type: array, items: { $ref: '#/components/schemas/UserProfile' } }, page: { type: integer }, size: { type: integer }, total: { type: integer } } }
+    AuditPage: { type: object, required: [items, page, size, total], properties: { items: { type: array, items: { type: object, properties: { auditLogId: { type: string, format: uuid }, action: { type: string, enum: [ADMIN_LOGIN, ALERT_VIEWED, USER_PROFILE_VIEWED, ALERT_STATUS_CHANGED, ACCOUNT_STATUS_CHANGED] }, createdAt: { type: string, format: date-time } } } }, page: { type: integer }, size: { type: integer }, total: { type: integer } } }
+security: [{ bearerAuth: [] }]

@@ -1,0 +1,70 @@
+openapi: 3.1.0
+info:
+  title: "[Nombre del contrato]"
+  version: "0.1.0"
+  description: |
+    Estado: Pendiente
+    Copie este archivo; no edite la plantilla.
+    Relacione cada operación con un requisito o historia aprobada.
+servers:
+  - url: https://example.invalid/api/v1
+    description: Sustituir por un ambiente aprobado
+tags:
+  - name: Resource
+    description: "[Responsabilidad única]"
+paths:
+  /resources/{resourceId}:
+    get:
+      tags: [Resource]
+      operationId: getResource
+      summary: "[Resultado observable]"
+      description: "Trazabilidad: [RF/HU]"
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ResourceId'
+      responses:
+        '200':
+          description: Recurso encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    ResourceId:
+      name: resourceId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    Resource:
+      type: object
+      required: [id]
+      properties:
+        id:
+          type: string
+          format: uuid
+    Error:
+      type: object
+      required: [code, message, requestId]
+      properties:
+        code: { type: string }
+        message: { type: string }
+        requestId: { type: string, format: uuid }
+  responses:
+    Unauthorized:
+      description: Autenticación requerida o inválida
+    NotFound:
+      description: Recurso inexistente o no visible
