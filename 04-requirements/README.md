@@ -15,6 +15,7 @@ Declara qué debe hacer AlertaMujer, con qué calidad y cómo se traza desde la 
 | [user-stories.md](./user-stories.md) | ¿Cómo se organiza el backlog por ecosistema? | ⭐ |
 | [frontend-stories.md](./frontend-stories.md) | ¿Qué resultados cubren HU-AM-001 a HU-AM-020? | ⭐ |
 | [database-stories.md](./database-stories.md) | ¿Qué persistencia cubren HU-DB-001 a HU-DB-025? | ⭐ |
+| [backend-stories.md](./backend-stories.md) | ¿Qué entrega HU-API-001 a HU-API-019 y cuál es su estado? | ⭐ |
 | [non-functional.md](./non-functional.md) | ¿Qué atributos de calidad deben verificarse? | ⭐ |
 | [traceability-matrix.md](./traceability-matrix.md) | ¿Cómo se enlazan requisitos, componentes y pruebas? | ⭐ |
 | [_template-hu.md](./_template-hu.md) | Plantilla de historia | — |

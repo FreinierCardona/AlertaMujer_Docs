@@ -8,6 +8,8 @@ Los cambios siguen una estructura inspirada en Keep a Changelog y se agrupan por
 
 - Plantillas de retrospectiva, requisito, historia, ADR, API, módulo, prueba, pantalla, incidente, análisis, cambio arquitectónico, documento técnico y Pull Request.
 - Guías tecnológicas para Frontend, Backend y Database.
+- Catálogo de historias Backend `HU-API-001` a `HU-API-019` y su trazabilidad inicial.
+- Matriz de preparación Backend para priorizar contratos, seguridad, SOS e integraciones sin duplicar sus fuentes.
 
 ### Changed
 
@@ -16,6 +18,7 @@ Los cambios siguen una estructura inspirada en Keep a Changelog y se agrupan por
 - Cada documento adopta bloque `INSTRUCTIONS`, una pregunta central y pie `Relacionados`.
 - RF18 consolida español, inglés, portugués y francés.
 - HU-DB-025 se registra como integrada y aplicada.
+- El estado Backend distingue el scaffold integrado de las capacidades aún pendientes; Java 21, Spring Boot 4.1.1 y las dependencias efectivas quedan documentados.
 
 ### Removed
 

@@ -10,8 +10,11 @@ AlertaMujer_Frontend/
 ├── mobile/app/ + mobile/src/modules/
 └── web/src/modules/ + web/src/shared/
 
-AlertaMujer_Backend/                         Estado: Pendiente
-└── src/main/java/.../[module]/
+AlertaMujer_Backend/                         Scaffold HU-API-001 integrado
+└── src/main/java/com/alertamujer/
+    └── AlertaMujerApplication.java
+    # Los módulos siguientes son diseño pendiente:
+    [module]/
     ├── controller/
     ├── dto/request/ + dto/response/
     ├── service/ + service/impl/
@@ -32,6 +35,7 @@ AlertaMujer_Database/
 |---|---|---|
 | Frontend `app/` | rutas, layouts y composición | código Frontend |
 | Frontend `src/modules` | pantallas, estado e integración por capacidad | código Frontend |
+| Backend scaffold | aplicación raíz, perfiles y prueba de contexto | código Backend observado |
 | Backend módulo | contratos internos, caso de uso, persistencia y adaptadores | diseño hasta implementar |
 | Database carpetas | SQL forward por tipo y rollback espejo | código Database |
 

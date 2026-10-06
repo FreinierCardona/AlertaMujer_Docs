@@ -1,7 +1,7 @@
 # 07 — API y contratos
 
 > [!NOTE] INSTRUCTIONS
-> Mantenga los contratos alineados con Backend real. El archivo OpenAPI actual expresa diseño y estados pendientes; no prueba implementación.
+> Mantenga los contratos alineados con Backend real. El scaffold Backend no expone endpoints; el archivo OpenAPI actual expresa diseño y estados pendientes.
 
 ## Propósito
 
@@ -18,7 +18,7 @@ Definir cómo Frontend consume capacidades Backend y cómo se gobiernan los cont
 
 ## Autoridad
 
-El contrato aceptado y el código Backend implementado deben coincidir. Mientras Backend no contenga implementación verificable, los endpoints permanecen como objetivo documental.
+El contrato aceptado y el código Backend implementado deben coincidir. Mientras el scaffold no tenga controladores ni pruebas contractuales, los endpoints permanecen como objetivo documental.
 
 ## Dependencias
 

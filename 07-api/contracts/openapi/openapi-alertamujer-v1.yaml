@@ -296,7 +296,7 @@ paths:
     post:
       tags: [Administration]
       summary: Inicia alta de cuenta ordinaria
-      description: La persistencia de `account_origin` y `accepted_terms_at` de HU-DB-025 está integrada en `develop`; la operación continúa pendiente de implementación Backend.
+      description: HU-DB-025 ya persiste `account_origin` y `accepted_terms_at` en `registration_requests`; la operación continúa pendiente de implementación Backend.
       x-availability: PENDING_BACKEND_IMPLEMENTATION
       x-functional: { actor: ENTITY_ADMIN, previousState: Valid administrative session, postState: ADMIN_CREATED request awaits required verification and later terms acceptance, idempotency: Duplicate data returns 422, transaction: Create controlled registration flow with ADMIN_CREATED origin, auditEvent: NONE }
       requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/AdminRegistrationRequestInput' } } } }

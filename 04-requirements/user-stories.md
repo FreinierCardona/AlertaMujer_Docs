@@ -9,7 +9,7 @@
 |---|---|---|
 | Frontend | `HU-AM-NNN` | [frontend-stories.md](./frontend-stories.md) |
 | Database | `HU-DB-NNN` | [database-stories.md](./database-stories.md) |
-| Backend | Estado: Pendiente | Debe definirse antes de crear historias Backend. |
+| Backend | `HU-API-NNN` | [backend-stories.md](./backend-stories.md) |
 
 ## Backlog
 
@@ -17,7 +17,7 @@
 |---|---:|---|---|
 | HU-AM | 20 | Implementación local; integración servidor pendiente | Frontend |
 | HU-DB | 25 | Integradas; HU-DB-025 aplicada | Database |
-| HU Backend | 0 | Pendiente de nomenclatura y priorización | Backend |
+| HU-API | 19 | 001 integrada como scaffold; 002–019 pendientes | Backend |
 
 ## Escribir una historia
 

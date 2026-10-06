@@ -6,7 +6,7 @@
 
 - Un sistema distribuido en tres repositorios independientes: Frontend, Backend y Database.
 - Una aplicación Mobile Android, una Web pública y un panel administrativo dentro de Frontend.
-- Un Backend objetivo Java/Spring Boot, monolítico modular y todavía pendiente de implementación.
+- Un Backend Java/Spring Boot con scaffold integrado; sus módulos funcionales continúan pendientes de implementación.
 - Una base PostgreSQL gobernada exclusivamente mediante Liquibase desde Database.
 - Contratos REST y WSS/STOMP que coordinan clientes y servidor.
 - Documentación guiada por Software Design Documentation, trazabilidad y evidencia verificable.

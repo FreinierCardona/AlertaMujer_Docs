@@ -1,11 +1,11 @@
 # Backend
 
 > [!NOTE] INSTRUCTIONS
-> Estado: Pendiente. El repositorio consultado no contiene implementación funcional verificable; preserve esa distinción.
+> Estado: En refinamiento. Existe el scaffold de HU-API-001; no existen capacidades funcionales Backend verificables.
 
 ## Propósito
 
-Implementar servicios, seguridad, reglas de aplicación e integraciones del sistema.
+Guiar la evolución del scaffold Java/Spring Boot hacia servicios, seguridad, reglas de aplicación e integraciones del sistema.
 
 ## Responsabilidades
 
@@ -24,7 +24,7 @@ Implementar servicios, seguridad, reglas de aplicación e integraciones del sist
 | Dirección | Elemento | Contrato o fuente |
 |---|---|---|
 | Entrada | REST y WSS desde Frontend | [`../../07-api/README.md`](../../07-api/README.md) |
-| Salida | respuestas, eventos, SQL e integraciones | contratos pendientes |
+| Salida | respuestas, eventos, consultas e integraciones | contratos de `07-api` y HUs Backend |
 
 ## Dependencias
 
@@ -38,15 +38,16 @@ Implementar servicios, seguridad, reglas de aplicación e integraciones del sist
 
 | Aspecto | Estado | Evidencia |
 |---|---|---|
-| Implementación | Pendiente | README sin código funcional |
+| Scaffold | Integrada | Java 21, Spring Boot 4.1.1 y Maven Wrapper; sin datasource por defecto |
+| Capacidades funcionales | Pendiente | no hay endpoints, módulos de negocio ni integración Database |
 | Arquitectura | Diseño aceptado | documentos 05 |
 | Contratos | En refinamiento | OpenAPI objetivo |
 
 ## Criterio de cierre
 
-- Código, pruebas y contratos verifican cada capacidad.
+- Cada `HU-API` aporta código, pruebas y contratos verificables.
 - Límites modulares y controles de seguridad tienen evidencia.
 
 ---
 
-**Relacionados:** [`data-model.md`](data-model.md) · [`decisions.md`](decisions.md) · [`runbook.md`](runbook.md)
+**Relacionados:** [`../../04-requirements/backend-stories.md`](../../04-requirements/backend-stories.md) · [`../../_stacks/java-spring.md`](../../_stacks/java-spring.md) · [`data-model.md`](data-model.md) · [`decisions.md`](decisions.md) · [`readiness.md`](readiness.md) · [`runbook.md`](runbook.md)
