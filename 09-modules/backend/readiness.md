@@ -1,54 +1,51 @@
-# Backend — Preparación y decisiones abiertas
+# Backend — Estado de entrega y límites de evidencia
 
 > [!NOTE] INSTRUCTIONS
-> Estado: En refinamiento. Esta matriz registra definiciones documentales y trabajo pendiente; no acredita una implementación Backend.
+> Estado: Entrega de código completada y verificada localmente. Esta matriz no convierte pruebas locales en operación productiva.
 
-## Propósito
+## Corte confirmado
 
-Priorizar el paso del scaffold a verticales funcionales sin reabrir reglas ya resueltas en requisitos, contratos o Database. El detalle permanece en los documentos fuente enlazados.
+El 2026-10-08, develop contiene el merge d6b694e de la PR #19 y las HU-API-001 a HU-API-019. El procedimiento scripts/verify-integration.ps1 ejecutó 126 pruebas contra PostgreSQL 17.11 con 0 fallos, 0 errores y 0 omitidas.
 
-## Inconsistencias resueltas documentalmente
+## Capacidades verificadas
 
-| Tema | Regla vigente | Implementación pendiente |
+| Área | HUs | Resultado cubierto |
 |---|---|---|
-| OTP | Cinco intentos; propósito, canal y contexto restringidos | Servicio transaccional, reenvío, purga y pruebas |
-| SOS | Emergencia abierta de la usuaria: `201` inicial, `200` en reintento o carrera | Recuperación tras conflicto concurrente |
-| Auditoría | Solo acciones administrativas; finalización pertenece a la propietaria | Autorización, mapeo y saneamiento |
-| Administración | Reemplazo controlado, no endpoint público ni SQL manual de negocio | Operación interna, transacción y runbook |
-| Modelo y DCL | Modelo de 16 entidades y grants de HU-DB-024/025 | Mapeos y pruebas con rol app |
+| Plataforma | 001 a 006 | Boot, contenedor, módulos, errores, correlación, rol app y configuración |
+| Identidad | 007 a 010 | Registro, OTP, autenticación, sesión, perfil, términos y baja |
+| Contactos y SOS | 011 a 013 | Invitaciones, SOS idempotente, ubicación, estado, finalización e historial |
+| Integraciones funcionales | 014 a 016 | Intentos FCM, evidencia privada, REST y STOMP |
+| Administración | 017 | Dashboard, atención, gestión de usuarios y auditoría |
+| Mantenimiento y consumo web | 018 a 019 | Jobs acotados, CORS local y ejecución integrada reproducible |
 
-## Prioridad de implementación
+## Límites preservados
 
-| Prioridad | Historias / focos | Condición de cierre |
-|---|---|---|
-| P0 | API-003..005; contrato, JWT, RBAC, validación y administrador | filtros, errores seguros y pruebas de `401`/`403`/revocación |
-| P0 | API-012..013; SOS y transiciones | `201`/`200`, carrera y bloqueo de fila verificados |
-| P1 | API-007..011; registro, OTP, perfil y contactos | estados, límites, propiedad y concurrencia cubiertos |
-| P1 | API-014..017; FCM, evidencia, chat y auditoría | integración degradada, compensación y autorización comprobadas |
-| P2 | API-004/018/019; correlación, jobs y E2E | logs seguros, procesos idempotentes y matriz de evidencia |
-
-## Límites ya definidos
-
-| Área | Límite que debe preservar el código |
+| Área | Límite aplicado |
 |---|---|
-| Database | Solo `alertamujer_app`; no DDL, Liquibase ni credenciales de migración. |
-| JWT | HS256, `iss`, `aud`, `sub`, `role`, `sid`, vencimiento y sesión no revocada. |
-| FCM | Un intento, timeout de cinco segundos, sin cola ni reintento automático. |
-| WSS | `CONNECT`/suscripción autorizados; persistir antes de publicar; reconexión 1/2/5 s. |
-| Evidencia | Ruta privada, nombre aleatorio, compensación y reconciliación de huérfanos. |
-| Operación | Sin SSO, JWKS, Redis, RabbitMQ, cloud ni plataforma de telemetría. |
+| Database | Solo alertamujer_app; el Backend no posee DDL, Liquibase ni grants. |
+| JWT | HS256, issuer, audience, sesión vigente y rol revalidado. |
+| FCM | Un intento con timeout de cinco segundos, sin cola ni reintento automático. |
+| WSS | CONNECT, suscripción y envío autorizados; persistir antes de publicar. |
+| Evidencia | Ruta privada, nombre aleatorio, compensación y reconciliación controlada. |
+| CORS | Orígenes explícitos; sin comodines ni credenciales cross-site. |
 
-## Uso durante una HU
+## Pendientes operativos, no de implementación
 
-1. Tomar la regla del requisito y el contrato, no de esta síntesis.
-2. Verificar la tabla y grant de Database antes de escribir repositorio.
-3. Mantener la funcionalidad en estado pendiente hasta contar con pruebas y evidencia.
-4. Si contradice esta matriz, crear o actualizar ADR; no alterar la regla implícitamente.
+| Tema | Estado | Evidencia necesaria |
+|---|---|---|
+| SMTP | Código y prueba automatizada | Aceptación de proveedor y recepción en buzón de prueba |
+| FCM | Adaptador y resultados técnicos | Token de dispositivo real y notificación visible |
+| Docker | Configuración incluida | Arranque de imagen contra base migrada del ambiente objetivo |
+| TLS, SLO y alertas | Pendiente | Infraestructura, responsables y runbook ensayado |
+| Promoción | Pendiente | Pipeline, aprobadores, rollback y versionado de ambiente |
 
-## Revisión
+## Uso al cambiar el Backend
 
-Revisar antes de iniciar una vertical, al modificar OpenAPI/WSS y antes de declarar HU-API-019. Los valores de timeout, jobs y límites requieren prueba, no solo configuración.
+1. Verifique requisito, contrato, esquema y grants antes de modificar código.
+2. Ejecute la suite correspondiente y registre versión, comando y resultado.
+3. Actualice este documento solo con evidencia fechada.
+4. Si se agrega infraestructura o se cambia un límite, cree o revise el ADR aplicable.
 
 ---
 
-**Relacionados:** [../../04-requirements/backend-stories.md](../../04-requirements/backend-stories.md) · [../../05-architecture/security-architecture.md](../../05-architecture/security-architecture.md) · [../../07-api/README.md](../../07-api/README.md) · [decisions.md](decisions.md)
+**Relacionados:** [../../04-requirements/backend-stories.md](../../04-requirements/backend-stories.md) · [../../04-requirements/traceability-matrix.md](../../04-requirements/traceability-matrix.md) · [../../05-architecture/security-architecture.md](../../05-architecture/security-architecture.md) · [runbook.md](runbook.md)

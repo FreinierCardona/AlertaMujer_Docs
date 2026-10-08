@@ -1,56 +1,56 @@
 # 04 — Historias Backend
 
 > [!NOTE] INSTRUCTIONS
-> Catálogo adaptado del backlog técnico Backend. `Integrada` solo acredita integración Git; no equivale a validación funcional completa.
+> El catálogo conserva el alcance y las dependencias de las HU. Integrada acredita el merge en develop; Verificada exige evidencia de pruebas y no equivale a un despliegue productivo.
 
-## Propósito
+## Corte de entrega comprobado
 
-Ordenar el desarrollo de la API Java/Spring Boot contra contratos y datos ya aprobados. El detalle de rutas vive en `07-api`, las decisiones en `05-architecture` y la persistencia en `06-data`; este catálogo no los duplica.
+Al 2026-10-08, AlertaMujer_Backend está limpio en develop, en el merge d6b694e de la PR #19. Las HU-API-001 a HU-API-019 están integradas. La ejecución reproducible de scripts/verify-integration.ps1 contra PostgreSQL 17.11 y fixtures sintéticas terminó con 126 pruebas, 0 fallos, 0 errores y 0 omitidas.
 
-## Estado comprobado
-
-`hu-api-001` está integrada como scaffold en `AlertaMujer_Backend/develop`: Java 21, Spring Boot 4.1.1, Maven Wrapper, perfiles sin conexión por defecto, Liquibase deshabilitado y una prueba de contexto. No hay endpoints, entidades, conexión PostgreSQL ni lógica de negocio verificable. Las demás historias permanecen pendientes.
+El Backend consume únicamente el esquema migrado como alertamujer_app. Liquibase, DDL, grants y credenciales de migración siguen siendo propiedad de AlertaMujer_Database.
 
 ## Plataforma y transversal
 
-| Id | Resultado | Dependencias principales | Estado |
+| Id | Resultado implementado | Dependencias principales | Estado y evidencia |
 |---|---|---|---|
-| HU-API-001 | Scaffold Spring Boot mínimo | — | Integrada; alcance inicial |
-| HU-API-002 | Contenedor Backend y configuración externa | 001, Database migrada | Pendiente |
-| HU-API-003 | Paquetes modulares y capas | 001 | Pendiente |
-| HU-API-004 | Errores seguros y correlación | 001, 003 | Pendiente |
-| HU-API-005 | Persistencia con `alertamujer_app` | 002–004, HU-DB-001..025 | Pendiente |
-| HU-API-006 | Configuración versionada del sistema | 005, HU-DB-008 | Pendiente |
+| HU-API-001 | Base Java 21, Spring Boot y Maven Wrapper | — | Integrada y verificada; PR #1 |
+| HU-API-002 | Contenedor Backend y configuración externa | 001, Database migrada | Integrada y verificada; PR #2 |
+| HU-API-003 | Paquetes por módulo y capas | 001 | Integrada y verificada; PR #3 |
+| HU-API-004 | Error HTTP seguro, UTC, paginación y X-Request-Id | 001, 003 | Integrada y verificada; pruebas de contrato HTTP |
+| HU-API-005 | Validación de PostgreSQL con alertamujer_app | 002 a 004, HU-DB-001 a 025 | Integrada y verificada; prueba de rol y esquema real |
+| HU-API-006 | Carga inmutable de configuración del sistema | 005, HU-DB-008 | Integrada y verificada; validación de singleton |
+| HU-API-018 | Jobs internos acotados e idempotentes | 008, 010, 013, 015, 017 | Integrada y verificada; pruebas de jobs y PostgreSQL |
+| HU-API-019 | CORS de orígenes locales y procedimiento de integración | 001 a 018 | Integrada y verificada; PR #19 y suite reproducible |
 
 ## Verticales funcionales
 
-| Id | Resultado | Módulo dueño | Dependencias principales | Estado |
+| Id | Resultado implementado | Módulo dueño | Dependencias principales | Estado y evidencia |
 |---|---|---|---|---|
-| HU-API-007 | Registro y alta administrativa iniciada | Identity | 004–006, HU-DB-009..012/025 | Pendiente |
-| HU-API-008 | OTP, verificación y purga | Identity | 007, HU-DB-009/011/012/024 | Pendiente |
-| HU-API-009 | Login, JWT, renovación y cierre | Identity / Security | 005, 008, HU-DB-010..013 | Pendiente |
-| HU-API-010 | Perfil, términos, mensaje SOS y baja | Identity | 008–009, HU-DB-010/014/024/025 | Pendiente |
-| HU-API-011 | Directorio e invitaciones | Contacts | 009, HU-DB-010/015 | Pendiente |
-| HU-API-012 | SOS idempotente y primera ubicación | Emergency | 009–011, HU-DB-014/015/017..019 | Pendiente |
-| HU-API-013 | Latidos, estados, finalización e historial | Emergency | 012, HU-DB-017..019 | Pendiente |
-| HU-API-014 | Tokens FCM e intentos trazables | Notification | 009, 012, HU-DB-016/022 | Pendiente |
-| HU-API-015 | Evidencia fotográfica local | Evidence | 012, HU-DB-020 | Pendiente |
-| HU-API-016 | Chat REST y WSS/STOMP | Chat | 009, 012–013, HU-DB-021 | Pendiente |
-| HU-API-017 | Operación administrativa y auditoría | Administration | 009–013, HU-DB-023/025 | Pendiente |
-| HU-API-018 | Jobs internos controlados | Transversal | 008, 010, 013, 015, 017 | Pendiente |
-| HU-API-019 | Integración E2E y evidencia de release | Transversal | 001–018 | Pendiente |
+| HU-API-007 | Solicitud de registro y alta administrativa | Identity | 004 a 006, HU-DB-009 a 012/025 | Integrada y verificada; MVC, servicio y PostgreSQL |
+| HU-API-008 | OTP, verificación, SMTP y purga | Identity | 007, HU-DB-009/011/012/024 | Integrada y verificada; reglas, hash y PostgreSQL |
+| HU-API-009 | Login, JWT, refresh, logout y reset | Identity / Security | 005, 008, HU-DB-010 a 013 | Integrada y verificada; sesiones revocables |
+| HU-API-010 | Perfil, términos, mensaje SOS y baja | Identity | 008 a 009, HU-DB-010/014/024/025 | Integrada y verificada; perfil y PostgreSQL |
+| HU-API-011 | Directorio e invitaciones | Contacts | 009, HU-DB-010/015 | Integrada y verificada; estados y concurrencia |
+| HU-API-012 | SOS idempotente y primera ubicación | Emergency | 009 a 011, HU-DB-014/015/017 a 019 | Integrada y verificada; 201/200 y carrera real |
+| HU-API-013 | Latidos, estados, finalización e historial | Emergency | 012, HU-DB-017 a 019 | Integrada y verificada; transiciones e historial |
+| HU-API-014 | Tokens FCM e intentos trazables | Notification | 009, 012, HU-DB-016/022 | Integrada y verificada; adapter simulado y PostgreSQL |
+| HU-API-015 | Evidencia fotográfica privada | Evidence | 012, HU-DB-020 | Integrada y verificada; archivos, compensación y PostgreSQL |
+| HU-API-016 | Chat REST y WSS/STOMP | Chat | 009, 012 a 013, HU-DB-021 | Integrada y verificada; autorización e idempotencia |
+| HU-API-017 | Panel administrativo y auditoría | Administration | 009 a 013, HU-DB-023/025 | Integrada y verificada; HTTP, RBAC y auditoría |
 
-## Reglas de inicio y cierre
+## Límites de la evidencia
 
-- Antes de una HU, enlazar requisito, OpenAPI/WSS, datos y criterios de [Definition of Ready](../00-governance/definition-of-ready.md).
-- Backend consume únicamente PostgreSQL ya migrado mediante `alertamujer_app`; no incorpora Liquibase, DDL ni credenciales de migración.
-- Una operación de estado debe probar autorización, conflicto, transacción y, cuando aplique, concurrencia contra PostgreSQL real.
-- Una HU se valida solo con pruebas, evidencia del entorno y trazabilidad actualizada; una clase o controlador aislado no basta.
+- La suite validó código, contratos internos, controladores, servicios y persistencia real; no aplicó Liquibase ni modificó el esquema.
+- SMTP aceptado por un proveedor no acredita la llegada a una bandeja. FCM aceptado no acredita lectura ni recepción en un dispositivo.
+- La imagen y Compose pertenecen al código integrado, pero este corte no sustituye una prueba de despliegue, una política de promoción ni operación productiva.
+- El contrato OpenAPI y WSS conserva autoridad para consumidores; cualquier diferencia se corrige en el mismo cambio que la implementación.
 
-## Riesgos previos
+## Reglas de mantenimiento
 
-La resolución de conflictos de OTP, idempotencia SOS, autorización administrativa y chat debe mantenerse en refinamiento hasta que contrato, modelo físico y pruebas converjan. No se fija una regla nueva desde esta tabla.
+- Antes de una nueva HU, enlazar requisito, OpenAPI/WSS, datos y criterios de [Definition of Ready](../00-governance/definition-of-ready.md).
+- Una operación de estado prueba autorización, conflicto, transacción y concurrencia cuando aplique.
+- Una HU futura se marca Verificada solo después de preservar prueba y evidencia actualizada.
 
 ---
 
-**Relacionados:** [user-stories.md](./user-stories.md) · [traceability-matrix.md](./traceability-matrix.md) · [../_stacks/java-spring.md](../_stacks/java-spring.md) · [../09-modules/backend/README.md](../09-modules/backend/README.md)
+**Relacionados:** [functional.md](./functional.md) · [traceability-matrix.md](./traceability-matrix.md) · [../09-modules/backend/README.md](../09-modules/backend/README.md) · [../_stacks/java-spring.md](../_stacks/java-spring.md)

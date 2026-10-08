@@ -20,7 +20,7 @@ AlertaMujer distribuye presentación, servicios y persistencia en repositorios i
 | Restricción | Fuente |
 |---|---|
 | Frontend contiene Mobile y Web | Repositorio Frontend |
-| Backend expone servicios e integraciones | Diseño Backend vigente |
+| Backend expone servicios e integraciones | Implementación Backend integrada y verificada localmente |
 | Database gobierna PostgreSQL y Liquibase | Repositorio Database |
 
 ## Decisión

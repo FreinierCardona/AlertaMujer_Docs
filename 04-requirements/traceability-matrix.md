@@ -1,43 +1,45 @@
 # 04 — Matriz de Trazabilidad
 
 > [!NOTE] INSTRUCTIONS
-> Cada fila debe terminar en prueba y evidencia. Un guion indica un vacío que se registra en “Brechas”.
+> Cada fila termina en prueba y evidencia. Un guion indica un vacío que se registra en Brechas.
 
 ## Cómo leer las tablas
 
 La cadena mínima es necesidad → RF/RNF → HU → ADR/contrato → módulo → prueba → evidencia. El documento enlaza fuentes; no copia sus definiciones completas.
 
-## Historias
+## Cobertura funcional Backend
 
-| Capacidad | RF | HU | Decisión/contrato | Módulo | Prueba esperada |
+| Capacidad | RF | HU Backend | Decisión o contrato | Módulo | Evidencia actual |
 |---|---|---|---|---|---|
-| Identidad | RF1 | AM-001/002; DB-008..013/025; API-007..010 | OpenAPI; ADR-002/003 | Identity | registro, OTP, JWT y revocación |
-| Contactos | RF2, RF10 | AM-003; DB-015/022; API-011/014 | OpenAPI | Contacts / Notification | estados, concurrencia y FCM |
-| SOS | RF4, RF5 | AM-006..008; DB-017..019; API-012/013 | ADR-004 | Emergency / Location | idempotencia, estados y ubicación |
-| Evidencia | RF8 | AM-009/018; DB-020; API-015 | ADR-005 | Evidence | límites, archivo, hash y autorización |
-| Historial | RF9 | AM-011; DB-017..021; API-013 | OpenAPI | Emergency | detalle propio en lectura |
-| Chat | RF16 | AM-010/018; DB-021; API-016 | WSS/STOMP | Chat | auth, idempotencia y persistencia |
-| Administración | RF11..14 | AM-014..020; DB-023/025; API-017 | OpenAPI; ADR-002 | Administration | RBAC, atención y auditoría |
-| Experiencia | RF15, RF18, RF19 | AM-005/013/015 | Design system | Frontend | cuatro idiomas, tema y accesibilidad |
+| Identidad y perfil | RF1, RF3, RF16 | API-007 a 010, 018 | OpenAPI, ADR-002/003 | Identity / Shared | Registro, OTP, JWT, sesión, perfil y PostgreSQL |
+| Contactos y aviso | RF2, RF9 | API-011, 014 | OpenAPI | Contacts / Notification | Estados, concurrencia, token y resultado FCM trazable |
+| SOS, ubicación e historial | RF4, RF5, RF8 | API-012, 013, 018 | ADR-004, OpenAPI | Emergency | 201/200, carrera, bloqueo, transición e historial |
+| Evidencia | RF7 | API-015, 018 | ADR-005 | Evidence | Límites, archivo privado, compensación y autorización |
+| Chat | RF15 | API-016 | WSS/STOMP | Chat | JWT, destino autorizado, idempotencia y persistencia |
+| Administración y auditoría | RF10 a RF13 | API-009, 017, 018 | OpenAPI, ADR-002 | Administration | RBAC, atención, usuarios y auditoría inmutable |
+| CORS y consumo web | RF1 a RF16 que usan API | API-019 | REST conventions | Shared / Security | Orígenes locales explícitos y prueba CORS |
+| Marcador, sitio, idioma y tema | RF6, RF14, RF17, RF18 | No aplica | Design system y Frontend | Frontend | El Backend no es el dueño funcional |
+
+Corte de evidencia: scripts/verify-integration.ps1 ejecutado el 2026-10-08 sobre PostgreSQL 17.11 con 126 pruebas, 0 fallos, 0 errores y 0 omitidas. Las pruebas usan fixtures sintéticas y no acreditan un despliegue ni entrega física SMTP/FCM.
 
 ## Requisitos no funcionales
 
-| RNF | ADR/diseño | Prueba | Evidencia |
+| RNF | ADR o diseño | Prueba | Evidencia actual |
 |---|---|---|---|
-| RNF3 | flujo SOS / timeouts por definir | integración degradada | EV-SOS pendiente |
-| RNF4 | ADR-002/003; security policy | authz, sesión, grants | suite Backend pendiente; Database disponible |
-| RNF5 | design system | teclado, contraste, idiomas | catálogo transversal pendiente |
-| RNF7 | module boundaries / migrations | boundary + release gate | `test-release.ps1` para Database |
-| RNF9 | observability | correlación de request | Backend pendiente |
+| RNF3 | Flujo SOS y timeouts | Emergencia y job interno | Transiciones y PostgreSQL verificados; métricas de tiempo siguen en refinamiento |
+| RNF4 | ADR-002/003, security policy | Authz, JWT, sesión, grants y hashes | Suite Backend y PostgreSQL aprobadas |
+| RNF5 | Design system | Teclado, contraste e idiomas | Evidencia propiedad de Frontend |
+| RNF7 | Module boundaries y migrations | Límites, rol app y release Database | Backend no ejecuta DDL/Liquibase; Database conserva su release test |
+| RNF9 | Observability | Correlación HTTP y logs seguros | X-Request-Id y contrato de error cubiertos; alertas/SLO pendientes |
 
 ## Brechas
 
 | Id | Brecha | Criterio de cierre |
 |---|---|---|
-| GAP-01 | Solo existe prueba de contexto Backend; faltan suites por vertical | API implementada y pruebas de integración/contrato |
-| GAP-02 | No existe catálogo TC/EV transversal | IDs, propietario y repositorio de evidencia |
-| GAP-03 | Umbrales RNF incompletos | valor, fuente y prueba aprobados |
+| GAP-01 | No hay evidencia de despliegue o promoción compartida | Ambiente, versión desplegada, rollback y responsables aprobados |
+| GAP-02 | SMTP/FCM reales no se validaron con buzón y dispositivo | Prueba controlada sin secretos ni datos personales |
+| GAP-03 | No existe catálogo transversal TC/EV con propietario | IDs, responsable y repositorio de evidencia |
 
 ---
 
-**Relacionados:** [`./user-stories.md`](./user-stories.md) · [`./non-functional.md`](./non-functional.md)
+**Relacionados:** [functional.md](./functional.md) · [backend-stories.md](./backend-stories.md) · [non-functional.md](./non-functional.md)

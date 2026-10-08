@@ -3,32 +3,32 @@
 > [!NOTE] INSTRUCTIONS
 > Actualice esta fotografía solo con evidencia fechada. No la use como reemplazo de las fuentes principales.
 
-## Corte verificado
+## Corte verificado: 2026-10-08
 
-| Ecosistema | Implementación observada | Diseño sin implementación |
+| Ecosistema | Implementación observada | Límite o pendiente operativo |
 |---|---|---|
-| Frontend | Mobile React Native/Expo y Web React/Vite; veinte HU-AM representadas localmente | Integración real con Backend, FCM, WSS y archivos |
-| Backend | Scaffold Spring Boot en `develop`: Java 21, Boot 4.1.1, Maven Wrapper, perfiles sin datasource y prueba de contexto | API, seguridad funcional, Database, contenedor y pruebas por vertical |
-| Database | 25 HU-DB, 7 schemas, 16 entidades, 62 changesets; HU-DB-025 aplicada | Ningún vacío de aplicación identificado para HU-DB-025 |
-| Docs | Secciones `00`–`13`, stacks y plantillas por dominio | Segunda revisión humana de cada documento |
+| Frontend | Mobile React Native/Expo y Web React/Vite; veinte HU-AM representadas localmente | Integración real con Backend, FCM, WSS y archivos requiere evidencia Frontend |
+| Backend | HU-API-001 a 019 integradas en develop, merge d6b694e; 126 pruebas aprobadas contra PostgreSQL 17.11 | Despliegue, TLS, SMTP/FCM reales, SLO y promoción no verificados |
+| Database | 25 HU-DB, 7 schemas, 16 entidades y 62 changesets; HU-DB-025 aplicada | El Backend consume el esquema sin poseer migraciones |
+| Docs | Secciones 00 a 13, stacks y plantillas por dominio | Segunda revisión humana de cada documento |
 
 ## Inconsistencias reconciliadas
 
 | Antes | Evidencia | Resolución |
 |---|---|---|
-| Web se describía ausente | `web/` existe en Frontend | Se documenta implementación local sin integración Backend |
-| HU-DB-025 figuraba pendiente | Merge y migraciones presentes; usuario confirma aplicación | Se registra aplicada y se retira bloqueo Database |
-| Inventario indicaba 60 changesets | Estado actual contiene 62 | Conteo vigente actualizado |
-| Idioma confirmaba dos catálogos | Frontend implementa cuatro | RF18 consolida español, inglés, portugués y francés |
-| Backend podía leerse como inexistente o implementado | Scaffold real sin capacidades funcionales | Se distingue HU-API-001 integrada de las historias pendientes |
-| Modelo histórico tenía 13 entidades | Modelo vigente y Database tienen 16 | Solo el modelo de 16 guía nuevas decisiones |
+| Backend se describía como scaffold sin rutas | develop contiene merges de las PR #1 a #19 | Se documentan capacidades y pruebas reales, sin declarar producción |
+| HU-API-019 se resumía solo como evidencia de release | Commit 70d9fdb incorpora CORS y el procedimiento de integración | Se registra CORS local y suite reproducible, con límites de operación |
+| Secuencia RF saltaba de RF6 a RF8 | Se aprobó renumerar los requisitos activos | RF1 a RF18 queda continua y todas las referencias se actualizan |
+| Integración externa podía confundirse con código | FCM/SMTP producen resultados técnicos | Se separa aceptación técnica de entrega a persona o dispositivo |
+| Backend y Database podían confundirse en propiedad | Pruebas usan alertamujer_app, Liquibase permanece fuera | Se preserva el límite de ecosistemas |
 
 ## Controles ejecutados
 
-- Enlaces relativos, archivos huérfanos, pies `Relacionados`, títulos y estructura de README.
-- Referencias OpenAPI, términos retirados, estados pendientes y separación de ecosistemas.
-- `git diff --check` y estado limpio de Frontend, Backend y Database antes de modificar Docs.
+- Revisión del estado Git y merges de Backend hasta la PR #19.
+- Ejecución de scripts/verify-integration.ps1 con PostgreSQL 17.11: 126 pruebas, 0 fallos, 0 errores y 0 omitidas.
+- Revisión de módulos, rutas REST, STOMP, jobs y configuración CORS del checkout Backend.
+- Validación documental y enlaces del repositorio Docs pendiente de ejecutar al cierre de esta actualización.
 
 ---
 
-**Relacionados:** [`documentation-rules.md`](./documentation-rules.md) · [`../09-modules/module-catalog.md`](../09-modules/module-catalog.md)
+**Relacionados:** [documentation-rules.md](./documentation-rules.md) · [../04-requirements/traceability-matrix.md](../04-requirements/traceability-matrix.md) · [../09-modules/module-catalog.md](../09-modules/module-catalog.md)

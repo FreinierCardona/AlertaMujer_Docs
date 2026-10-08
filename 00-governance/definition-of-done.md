@@ -12,7 +12,7 @@
 - [ ] Migraciones incluyen forward, rollback explícito, grants mínimos y evidencia aislada.
 - [ ] La documentación principal y sus enlaces cambiaron en el mismo Pull Request.
 - [ ] La matriz enlaza necesidad, requisito, historia, componente, prueba y evidencia.
-- [ ] El resultado final incluye commit, ambiente, comando/procedimiento y código de salida.
+- [ ] El resultado final incluye commit, ambiente, comando o procedimiento y código de salida.
 - [ ] No hay secretos, credenciales, datos personales o evidencia sensible en Git.
 - [ ] El cambio fue revisado antes de integrar en la rama acordada.
 
@@ -21,12 +21,12 @@
 | Ecosistema | Umbral vigente |
 |---|---|
 | Frontend | Estado: En refinamiento; typecheck, lint, build y pruebas aplicables son obligatorios cuando existen. |
-| Backend | Estado: Pendiente hasta que exista implementación y estrategia ejecutable. |
-| Database | Ciclo `test-release.ps1` con código cero y `Release validation passed`. |
+| Backend | Verificar con Maven sin estado incremental y, cuando aplique, scripts/verify-integration.ps1 contra Database migrada. Corte 2026-10-08: 126 pruebas aprobadas. |
+| Database | Ciclo scripts/test-release.ps1 con código cero y Release validation passed. |
 | Documentación | Validador sin enlaces rotos, huérfanos ni violaciones estructurales. |
 
-Un proceso largo o una captura parcial no es evidencia de cierre. Una interfaz local no acredita una integración de extremo a extremo.
+Un proceso largo o una captura parcial no es evidencia de cierre. Una interfaz local no acredita una integración de extremo a extremo ni una operación productiva.
 
 ---
 
-**Relacionados:** [`definition-of-ready.md`](./definition-of-ready.md) · [`../11-quality/testing-strategy.md`](../11-quality/testing-strategy.md)
+**Relacionados:** [definition-of-ready.md](./definition-of-ready.md) · [../11-quality/testing-strategy.md](../11-quality/testing-strategy.md)

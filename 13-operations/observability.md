@@ -1,7 +1,7 @@
 # 13 — Observabilidad
 
 > [!NOTE] INSTRUCTIONS
-> Estado: Pendiente. La taxonomía objetivo debe validarse contra infraestructura y código antes de aprobarla.
+> Estado: Parcialmente implementado. La taxonomía operativa debe validarse contra infraestructura y código antes de aprobarla.
 
 ## Objetivo
 
@@ -11,14 +11,15 @@ Responder si el sistema está disponible, qué falló, a quién afectó y qué c
 
 | Señal | Ejemplo de uso | Estado |
 |---|---|---|
-| logs | diagnóstico con correlación | Pendiente Backend |
-| métricas | tasa, latencia, errores y saturación | Pendiente |
-| trazas | recorrido entre módulos e integraciones | Pendiente |
-| auditoría | acción sensible y actor | modelo Database implementado |
+| Logs | Diagnóstico seguro con requestId | Implementado en Backend; retención pendiente |
+| Salud técnica | Actuator health | Implementado; SMTP puede afectar salud agregada |
+| Métricas | Tasa, latencia, errores y saturación | Pendiente |
+| Trazas | Recorrido entre módulos e integraciones | Pendiente |
+| Auditoría | Acción sensible y actor | Implementada para operaciones administrativas |
 
 ## Correlación
 
-Toda solicitud crítica debe poder relacionar cliente, operación Backend e intento de integración mediante identificador seguro. No se usa un token o dato personal como correlación.
+X-Request-Id correlaciona solicitudes HTTP y respuestas de error. No se usa token, OTP, ubicación o dato personal como correlación. El Backend genera un UUID cuando el cliente no aporta uno válido.
 
 ## Eventos prioritarios
 
@@ -34,12 +35,8 @@ No registrar contraseñas, OTP, tokens, cuerpos de evidencia, ubicación precisa
 
 ## Alertas y SLO
 
-Umbrales, ventanas, destinatarios, presupuesto de error y guardias: **Pendiente**.
-
-## Criterio de cierre
-
-Instrumentación implementada, tableros y alertas probados, responsables asignados y runbook enlazado.
+Umbrales, ventanas, destinatarios, presupuesto de error y guardias: Pendiente.
 
 ---
 
-**Relacionados:** [`./runbook.md`](./runbook.md) · [`../06-data/models.md`](../06-data/models.md)
+**Relacionados:** [runbook.md](./runbook.md) · [../06-data/models.md](../06-data/models.md) · [../09-modules/backend/runbook.md](../09-modules/backend/runbook.md)

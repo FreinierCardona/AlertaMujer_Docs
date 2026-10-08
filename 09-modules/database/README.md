@@ -23,24 +23,25 @@ Gobernar el modelo PostgreSQL, migraciones Liquibase, roles técnicos y validaci
 
 | Dirección | Elemento | Contrato o fuente |
 |---|---|---|
-| Entrada | HU-DB y modelo aprobado | [`../../04-requirements/database-stories.md`](../../04-requirements/database-stories.md) |
-| Salida | esquema migrado y evidencia | changelog y prueba release |
+| Entrada | HU-DB y modelo aprobado | [../../04-requirements/database-stories.md](../../04-requirements/database-stories.md) |
+| Salida | Esquema migrado y evidencia | Changelog y prueba release |
 
 ## Dependencias
 
 | Dependencia | Motivo | Tipo |
 |---|---|---|
-| PostgreSQL | motor persistente | runtime |
-| Liquibase 4.33 | migraciones | build/runtime |
-| Docker Compose | validación aislada | local |
+| PostgreSQL | Motor persistente | Runtime |
+| Liquibase 4.33 | Migraciones | Build/runtime |
+| Docker Compose | Validación aislada | Local |
 
 ## Estado
 
 | Aspecto | Estado | Evidencia |
 |---|---|---|
-| HU-DB-001 a HU-DB-025 | Integradas en `develop` | repositorio oficial |
-| HU-DB-025 | Aplicada | migración y merge verificados |
-| Integración Backend | Pendiente | Backend sin código funcional |
+| HU-DB-001 a HU-DB-025 | Integradas en develop | Repositorio oficial |
+| HU-DB-025 | Aplicada | Migración y merge verificados |
+| Consumo Backend | Verificado localmente | Suite Backend del 2026-10-08 contra PostgreSQL 17.11 con alertamujer_app |
+| Propiedad de esquema | Database | Backend no ejecuta DDL, Liquibase ni grants |
 
 ## Criterio de cierre
 
@@ -49,4 +50,4 @@ Gobernar el modelo PostgreSQL, migraciones Liquibase, roles técnicos y validaci
 
 ---
 
-**Relacionados:** [`data-model.md`](data-model.md) · [`decisions.md`](decisions.md) · [`runbook.md`](runbook.md)
+**Relacionados:** [data-model.md](data-model.md) · [decisions.md](decisions.md) · [runbook.md](runbook.md)

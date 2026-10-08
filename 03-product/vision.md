@@ -27,7 +27,7 @@ La visión se revisa cuando cambia el actor principal, el límite de responsabil
 | ¿Garantiza respuesta institucional? | No. |
 | ¿Garantiza entrega FCM? | No. |
 | ¿La usuaria conserva control del cierre? | Sí. |
-| ¿El sistema opera en cuatro idiomas? | Sí, bajo RF18. |
+| ¿El sistema opera en cuatro idiomas? | Sí, bajo RF17. |
 
 ---
 

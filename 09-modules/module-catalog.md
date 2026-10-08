@@ -7,31 +7,31 @@
 
 | Ecosistema | Repositorio | Responsabilidad | Estado verificado |
 |---|---|---|---|
-| Frontend | [AlertaMujer_Frontend](https://github.com/FreinierCardona/AlertaMujer_Frontend) | Mobile, Web, interacción, accesibilidad e i18n | Implementación local/mocks |
-| Backend | [AlertaMujer_Backend](https://github.com/FreinierCardona/AlertaMujer_Backend) | API, seguridad, reglas e integraciones | Sin código funcional verificado |
+| Frontend | [AlertaMujer_Frontend](https://github.com/FreinierCardona/AlertaMujer_Frontend) | Mobile, Web, interacción, accesibilidad e i18n | Implementación local y mocks; consumo real requiere evidencia Frontend |
+| Backend | [AlertaMujer_Backend](https://github.com/FreinierCardona/AlertaMujer_Backend) | API, seguridad, reglas e integraciones | HU-API-001 a 019 integradas; 126 pruebas aprobadas contra PostgreSQL local |
 | Database | [AlertaMujer_Database](https://github.com/FreinierCardona/AlertaMujer_Database) | PostgreSQL, Liquibase, grants y validación | 25 HU-DB integradas; HU-DB-025 aplicada |
 
-## Capacidades Backend objetivo
+## Capacidades Backend
 
 | Capacidad | Responsabilidad | Datos principales |
 |---|---|---|
-| Identity | registro, OTP, sesiones y acceso | `identity.*` |
-| Profile | perfil y preferencias SOS | `profile.*` |
-| Contacts | contactos de emergencia | `contacts.*` |
-| Emergency | ciclo SOS, estado y ubicación | `emergency.*` |
-| Evidence | carga y acceso autorizado | metadata `emergency_evidences` |
-| Chat | historial y canal en tiempo real | `emergency_chat_messages` |
-| Notification | dispositivos e intentos FCM | `notification.*` |
-| Administration | operación autorizada y auditoría | `audit.*` |
+| Identity | Registro, OTP, sesiones, acceso y perfil | identity.* y profile.* |
+| Contacts | Contactos de emergencia | contacts.* |
+| Emergency | Ciclo SOS, estado, ubicación e historial | emergency.* |
+| Evidence | Carga y acceso autorizado | emergency_evidences y almacenamiento privado |
+| Chat | Historial y canal en tiempo real | emergency_chat_messages |
+| Notification | Dispositivos e intentos FCM | notification.* y emergency attempts |
+| Administration | Operación autorizada y auditoría | audit.* y consultas controladas |
+| Shared | Configuración, seguridad y correlación | configuration.* |
 
 ## Matriz de dependencias
 
 | Consumidor | Proveedor | Interfaz |
 |---|---|---|
-| Frontend | Backend | REST y WSS/STOMP pendientes de implementación |
-| Backend | Database | SQL mediante rol `alertamujer_app` |
-| Database | PostgreSQL | changelog Liquibase |
-| Backend | FCM | integración pendiente |
+| Frontend | Backend | REST y WSS/STOMP implementados; integración Frontend pendiente de evidencia |
+| Backend | Database | SQL mediante rol alertamujer_app |
+| Database | PostgreSQL | Changelog Liquibase |
+| Backend | FCM | Adaptador e intento técnico implementados; entrega real pendiente |
 
 ## Regla
 
@@ -39,4 +39,4 @@ Una capacidad no adopta tablas, pantallas o despliegues de otro ecosistema. Los 
 
 ---
 
-**Relacionados:** [`./frontend/README.md`](./frontend/README.md) · [`./backend/README.md`](./backend/README.md) · [`./database/README.md`](./database/README.md)
+**Relacionados:** [frontend/README.md](./frontend/README.md) · [backend/README.md](./backend/README.md) · [database/README.md](./database/README.md)

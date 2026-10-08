@@ -1,7 +1,7 @@
 # 13 — Operación
 
 > [!NOTE] INSTRUCTIONS
-> Estado operativo global: Pendiente. Conserve solo procedimientos verificables y marque lo que depende de infraestructura no aprobada.
+> Estado operativo global: Pendiente. Conserve procedimientos verificables y marque lo que depende de infraestructura no aprobada.
 
 ## Propósito
 
@@ -11,17 +11,17 @@ Definir observabilidad, respuesta operativa y formato de incidentes para sostene
 
 | Documento | Pregunta |
 |---|---|
-| [`observability.md`](observability.md) | ¿Qué señales permiten detectar y explicar fallos? |
-| [`runbook.md`](runbook.md) | ¿Cómo se diagnostica y recupera el sistema? |
-| [`_template-incident.md`](_template-incident.md) | ¿Cómo se registra un incidente? |
+| [observability.md](observability.md) | ¿Qué señales permiten detectar y explicar fallos? |
+| [runbook.md](runbook.md) | ¿Cómo se diagnostica y recupera el sistema? |
+| [_template-incident.md](_template-incident.md) | ¿Cómo se registra un incidente? |
 
 ## Alcance por ecosistema
 
 | Ecosistema | Operación disponible |
 |---|---|
-| Frontend | validación local y diagnóstico de cliente |
-| Backend | Pendiente hasta implementación |
-| Database | runbook local de release validado |
+| Frontend | Validación local y diagnóstico de cliente |
+| Backend | Runbook y pruebas locales contra PostgreSQL; sin despliegue operativo verificado |
+| Database | Runbook local de release validado |
 
 ## Fuera de alcance
 
@@ -33,10 +33,10 @@ Definir observabilidad, respuesta operativa y formato de incidentes para sostene
 ## Listo cuando
 
 - SLO, señales, responsables y escalamiento están aprobados.
-- Runbooks fueron ensayados.
+- Runbooks fueron ensayados en ambiente objetivo.
 - Incidentes conservan línea de tiempo y acciones.
 - Datos sensibles están redactados.
 
 ---
 
-**Relacionados:** [`../10-devops/README.md`](../10-devops/README.md) · [`../00-governance/security-policy.md`](../00-governance/security-policy.md)
+**Relacionados:** [../10-devops/README.md](../10-devops/README.md) · [../00-governance/security-policy.md](../00-governance/security-policy.md)

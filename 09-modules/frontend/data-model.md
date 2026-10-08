@@ -14,7 +14,7 @@ Frontend posee estado efímero de presentación y preferencias de interfaz. Cons
 | sesión visible | habilitar navegación autenticada | contexto Frontend |
 | preferencias | tema, idioma y presentación | contexto Frontend |
 | formularios | captura y validación inmediata | pantallas |
-| SOS visible | representar progreso del flujo | mocks/contrato objetivo |
+| SOS visible | representar progreso del flujo | mocks o respuesta del contrato Backend |
 
 ## Relaciones
 
@@ -22,7 +22,7 @@ Frontend posee estado efímero de presentación y preferencias de interfaz. Cons
 flowchart LR
   UI[Pantalla] --> CTX[Estado Frontend]
   CTX --> API[Cliente de contrato]
-  API -.-> BE[Backend pendiente]
+  API -.-> BE[Backend API implementada]
 ```
 
 ## Reglas de integridad

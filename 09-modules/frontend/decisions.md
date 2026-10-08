@@ -27,7 +27,7 @@
 
 ## Conflictos
 
-No se conserva ningún alcance asociado al requisito funcional eliminado. La numeración vigente salta de RF6 a RF8.
+El requisito funcional eliminado no conserva alcance. La secuencia vigente se renumeró de forma continua y continúa con RF7.
 
 ## Revisión
 

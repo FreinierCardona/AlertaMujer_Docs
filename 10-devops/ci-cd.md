@@ -1,27 +1,21 @@
 # 10 — Integración y entrega continua
 
 > [!NOTE] INSTRUCTIONS
-> Estado: Pendiente. No existe autorización para agregar workflows; este documento define el mínimo a decidir.
+> Estado: Pendiente de workflow aprobado. Los gates locales existentes no equivalen a CI/CD.
 
 ## Estado actual
 
 | Ecosistema | Automatización confirmada | Gate local |
 |---|---|---|
-| Frontend | no documentada como oficial | scripts del repositorio |
-| Backend | no aplicable todavía | Pendiente |
-| Database | no documentada como workflow | `scripts/test-release.ps1` |
+| Frontend | No documentada como oficial | Scripts del repositorio |
+| Backend | No existe workflow oficial | Maven verify e integración PostgreSQL reproducible |
+| Database | No documentada como workflow | scripts/test-release.ps1 |
+
+El gate Backend ejecutado el 2026-10-08 produjo 126 pruebas, 0 fallos, 0 errores y 0 omitidas. No existe evidencia de un workflow remoto, publicación de artefactos ni promoción automática.
 
 ## Pipeline objetivo mínimo
 
-```mermaid
-flowchart LR
-  PR[Pull Request] --> STATIC[Formato y análisis]
-  STATIC --> TEST[Pruebas]
-  TEST --> BUILD[Build]
-  BUILD --> SECURITY[Controles de seguridad]
-  SECURITY --> APPROVE[Aprobación]
-  APPROVE --> DEPLOY[Despliegue autorizado]
-```
+Pull Request → análisis estático → pruebas → build → controles de seguridad → aprobación → despliegue autorizado.
 
 ## Decisiones pendientes
 
@@ -41,10 +35,6 @@ flowchart LR
 - Ningún secreto aparece en logs o artefactos.
 - La documentación se valida como parte del cambio cuando se apruebe automatización.
 
-## Criterio de aprobación
-
-ADR, responsables, diagrama de promoción, gates reproducibles y prueba de rollback.
-
 ---
 
-**Relacionados:** [`../00-governance/definition-of-done.md`](../00-governance/definition-of-done.md) · [`./environments.md`](./environments.md)
+**Relacionados:** [../00-governance/definition-of-done.md](../00-governance/definition-of-done.md) · [./environments.md](./environments.md)

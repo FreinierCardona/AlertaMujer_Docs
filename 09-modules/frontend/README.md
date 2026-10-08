@@ -24,13 +24,13 @@ Entregar la experiencia Mobile para usuarias y la experiencia Web para operació
 | Dirección | Elemento | Contrato o fuente |
 |---|---|---|
 | Entrada | respuestas y eventos Backend | [`../../07-api/README.md`](../../07-api/README.md) |
-| Salida | solicitudes REST y mensajes STOMP | contrato en refinamiento |
+| Salida | solicitudes REST y mensajes STOMP | contrato Backend implementado; consumo Frontend por verificar |
 
 ## Dependencias
 
 | Dependencia | Motivo | Tipo |
 |---|---|---|
-| Backend | capacidades y seguridad | runtime pendiente |
+| Backend | capacidades y seguridad | API disponible; integración Frontend pendiente de evidencia |
 | Expo/React Native | aplicación Mobile | build/runtime |
 | React/Vite | aplicación Web | build/runtime |
 
@@ -39,7 +39,7 @@ Entregar la experiencia Mobile para usuarias y la experiencia Web para operació
 | Aspecto | Estado | Evidencia |
 |---|---|---|
 | Implementación | Confirmada con estado local/mocks | repositorio oficial |
-| Contratos reales | Pendiente | Backend sin implementación |
+| Contratos reales | Pendiente de integración Frontend | Backend implementado y validado localmente |
 | Cuatro idiomas | Confirmado | recursos i18n Frontend |
 
 ## Criterio de cierre

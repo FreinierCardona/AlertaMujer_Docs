@@ -7,7 +7,7 @@
 
 | Capa | Frontend | Backend | Database |
 |---|---|---|---|
-| Estática | tipos, lint, formato | Pendiente | sintaxis y changelog |
+| Estática | tipos, lint, formato | build Maven y revisión de formato | sintaxis y changelog |
 | Unidad | componentes, hooks, servicios | dominio y aplicación objetivo | funciones donde aplique |
 | Integración | navegación y adaptadores | repositorios y proveedores | update/grants/constraints |
 | Contrato | cliente contra especificación | OpenAPI/WSS | compatibilidad física |
@@ -42,7 +42,7 @@ Usar datos sintéticos. Limpiar dependencias antes de rollback y nunca incluir i
 
 ## Estado
 
-La estrategia es normativa; suites Backend y E2E integradas permanecen **Pendiente**.
+La estrategia sigue siendo normativa, pero el Backend ya tiene suites unitarias, MVC e integración PostgreSQL. El 2026-10-08, scripts/verify-integration.ps1 terminó con 126 pruebas, 0 fallos, 0 errores y 0 omitidas. Una integración de Frontend, SMTP/FCM reales, Docker de ambiente y producción sigue requiriendo evidencia propia.
 
 ---
 

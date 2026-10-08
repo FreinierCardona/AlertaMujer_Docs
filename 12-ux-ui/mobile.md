@@ -28,7 +28,7 @@ Mobile acompaña a la usuaria en registro, sesión, configuración, contactos y 
 
 ## Localización
 
-Los cuatro idiomas implementados —español, inglés, portugués y francés— pertenecen al mismo requisito funcional RF18. La selección no altera permisos ni lógica.
+Los cuatro idiomas implementados —español, inglés, portugués y francés— pertenecen al mismo requisito funcional RF17. La selección no altera permisos ni lógica.
 
 ## Accesibilidad
 

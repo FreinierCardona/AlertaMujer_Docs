@@ -1,53 +1,59 @@
 # Backend
 
 > [!NOTE] INSTRUCTIONS
-> Estado: En refinamiento. Existe el scaffold de HU-API-001; no existen capacidades funcionales Backend verificables.
+> Estado: Implementado e integrado en develop. Este documento distingue la evidencia automatizada local de la operación en ambientes reales.
 
 ## Propósito
 
-Guiar la evolución del scaffold Java/Spring Boot hacia servicios, seguridad, reglas de aplicación e integraciones del sistema.
+Exponer la API Java/Spring Boot, seguridad, reglas transaccionales e integraciones de servidor sin asumir la propiedad de PostgreSQL, Liquibase o interfaces de cliente.
 
 ## Responsabilidades
 
-- Autenticación, autorización y sesiones.
-- Orquestación de SOS, contactos, ubicación, evidencia, chat y notificación.
-- Acceso a Database mediante permisos de aplicación.
+- Identidad, autorización, sesiones, perfil y contactos.
+- Orquestación de SOS, ubicación, estados, evidencia, chat, notificaciones y administración.
+- Acceso al esquema Database mediante el rol de mínimo privilegio alertamujer_app.
+- Correlación HTTP y configuración de orígenes CORS para el Frontend local.
 
 ## Fuera de alcance
 
 - Pantallas y experiencia de cliente.
-- DDL, changeSets y propiedad de PostgreSQL.
-- Reglas no aprobadas por requisitos o decisiones.
+- DDL, changeSets, grants o credenciales de migración.
+- Afirmar entrega final SMTP/FCM, operación productiva o CI/CD sin evidencia específica.
 
 ## Entradas y salidas
 
 | Dirección | Elemento | Contrato o fuente |
 |---|---|---|
-| Entrada | REST y WSS desde Frontend | [`../../07-api/README.md`](../../07-api/README.md) |
-| Salida | respuestas, eventos, consultas e integraciones | contratos de `07-api` y HUs Backend |
+| Entrada | REST y WSS desde Frontend | [../../07-api/README.md](../../07-api/README.md) |
+| Salida | respuestas, eventos, consultas e integraciones | contratos de 07-api y HU-API |
 
 ## Dependencias
 
-| Dependencia | Motivo | Tipo |
+| Dependencia | Motivo | Estado comprobado |
 |---|---|---|
-| Database | persistencia | runtime |
-| FCM | notificación push | integración pendiente |
-| almacenamiento evidencia | archivos | decisión pendiente |
+| Database | Persistencia PostgreSQL y funciones protegidas | Validada con PostgreSQL 17.11 |
+| FCM | Intento de notificación por contacto elegible | Adaptador y resultados técnicos implementados |
+| SMTP | Envío de OTP | Integración de código implementada; entrega de buzón no probada aquí |
+| Almacenamiento privado | Evidencias fotográficas | Implementado bajo EVIDENCE_STORAGE_PATH |
 
-## Estado
+## Estado de entrega
 
 | Aspecto | Estado | Evidencia |
 |---|---|---|
-| Scaffold | Integrada | Java 21, Spring Boot 4.1.1 y Maven Wrapper; sin datasource por defecto |
-| Capacidades funcionales | Pendiente | no hay endpoints, módulos de negocio ni integración Database |
-| Arquitectura | Diseño aceptado | documentos 05 |
-| Contratos | En refinamiento | OpenAPI objetivo |
+| HU-API-001 a 019 | Integradas | develop, merge d6b694e de PR #19 |
+| Pruebas | Verificadas | 126 pruebas, 0 fallos, 0 errores y 0 omitidas el 2026-10-08 |
+| Persistencia | Verificada | PostgreSQL 17.11 con fixtures sintéticas y alertamujer_app |
+| REST y WSS/STOMP | Implementados | Controladores, seguridad y pruebas por módulo |
+| Docker | Configurado en código | Requiere validación de ambiente antes de una promoción |
+| Operación productiva | Pendiente | No hay evidencia de despliegue, SLO ni promoción aprobada |
 
-## Criterio de cierre
+## Criterio de mantenimiento
 
-- Cada `HU-API` aporta código, pruebas y contratos verificables.
-- Límites modulares y controles de seguridad tienen evidencia.
+- Cada cambio conserva capas controller, service, repository y DTO por módulo.
+- El Backend no incorpora migrations ejecutables ni conexiones con usuarios propietarios.
+- Los contratos y la trazabilidad se actualizan con el cambio de código.
+- Las pruebas declaran con precisión sus límites: simulación de proveedor no equivale a entrega externa.
 
 ---
 
-**Relacionados:** [`../../04-requirements/backend-stories.md`](../../04-requirements/backend-stories.md) · [`../../_stacks/java-spring.md`](../../_stacks/java-spring.md) · [`data-model.md`](data-model.md) · [`decisions.md`](decisions.md) · [`readiness.md`](readiness.md) · [`runbook.md`](runbook.md)
+**Relacionados:** [../../04-requirements/backend-stories.md](../../04-requirements/backend-stories.md) · [data-model.md](data-model.md) · [decisions.md](decisions.md) · [readiness.md](readiness.md) · [runbook.md](runbook.md)

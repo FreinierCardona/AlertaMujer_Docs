@@ -87,7 +87,6 @@ $forbidden = @(
     @{ Pattern = '(?i)\bMVP\b'; Label = 'terminología no permitida' },
     @{ Pattern = '(?i)proyecto (acad[eé]mico|estudiantil|demostrativo)'; Label = 'clasificación no permitida' },
     @{ Pattern = '(?i)ejercicio acad[eé]mico|aplicaci[oó]n de pr[aá]ctica'; Label = 'clasificación no permitida' },
-    @{ Pattern = '(?i)RF[- ]?0*7\b|requisito funcional (n[uú]mero )?0*7\b'; Label = 'requisito retirado' },
     @{ Pattern = '(?i)activaci[oó]n discreta'; Label = 'funcionalidad retirada' },
     @{ Pattern = '(?i)monolith-governance-framework'; Label = 'referencia al repositorio modelo' }
 )

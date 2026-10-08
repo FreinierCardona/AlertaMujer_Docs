@@ -30,7 +30,7 @@ El flujo se considera eficaz cuando una usuaria preparada puede crear una única
 
 | Indicador | Estado |
 |---|---|
-| Flujo funcional completo | Definido; integración Backend pendiente. |
+| Flujo funcional completo | Backend integrado y verificado localmente; consumo real Frontend pendiente de evidencia. |
 | Métricas cuantitativas de tiempo/éxito | Estado: En refinamiento. |
 
 ---

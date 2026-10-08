@@ -1,56 +1,44 @@
 # 07 — Convenciones REST
 
 > [!NOTE] INSTRUCTIONS
-> Estado: vigente como diseño. La implementación y las pruebas Backend permanecen pendientes.
+> Estado: Implementado en Backend y vigente para nuevas rutas. Revise el contrato OpenAPI y las pruebas cuando se cambie una operación.
 
 ## Recursos
 
 | Regla | Aplicación |
 |---|---|
-| URI | sustantivos plurales y minúsculos |
-| Versión | prefijo `/api/v1` |
-| Formato | JSON UTF-8 |
-| Identificador | UUID opaco |
-| Fecha/hora | ISO 8601 con zona |
+| URI | Sustantivos plurales y minúsculos |
+| Versión | Prefijo /api/v1 |
+| Formato | JSON UTF-8; multipart solo para evidencia |
+| Identificador | UUID opaco, salvo messageId consecutivo de chat |
+| Fecha/hora | ISO 8601 con zona UTC |
 
 ## Métodos
 
 | Método | Uso | Repetición esperada |
 |---|---|---|
-| `GET` | consultar | segura e idempotente |
-| `POST` | crear o ejecutar acción | definida por operación |
-| `PUT` | reemplazar | idempotente |
-| `PATCH` | modificar parcialmente | definida por contrato |
-| `DELETE` | eliminar o desactivar | idempotencia documentada |
+| GET | Consultar | Segura e idempotente |
+| POST | Crear o ejecutar acción | Definida por operación; SOS recupera la emergencia abierta |
+| PUT | Reemplazar | Idempotente cuando se incluya |
+| PATCH | Modificar parcialmente | Definida por contrato |
+| DELETE | Eliminar o desactivar | Idempotencia documentada por operación |
 
-## Respuestas
+## Respuestas y correlación
 
-Los códigos HTTP expresan resultado del protocolo; el cuerpo de error aporta código estable, mensaje comprensible, correlación y detalles seguros.
-
-```json
-{
-  "code": "VALIDATION_ERROR",
-  "message": "La solicitud contiene datos inválidos",
-  "requestId": "uuid",
-  "fields": []
-}
-```
-
-## Paginación
-
-Las colecciones usan `page` desde cero y `size` entre 1 y 50, con valor predeterminado 20. La respuesta incluye `items`, `page`, `size` y `total`.
+Los errores comunes contienen code, message, requestId y fields cuando corresponde. X-Request-Id acepta un UUID válido o se genera en Backend, se devuelve al cliente y no transporta información sensible. Las colecciones usan page desde cero y size entre 1 y 50 con valor predeterminado 20.
 
 ## Seguridad
 
-- Autenticación mediante mecanismo aprobado por Backend.
-- Autorización por operación y propiedad del recurso.
-- Ningún secreto o dato sensible en URL, log o ejemplo.
-- Operaciones críticas con `requestId` y evento auditable cuando corresponda.
+- Las rutas públicas se limitan a registro, verificación y flujos de autenticación definidos.
+- Las demás rutas requieren Bearer JWT, sesión vigente, rol, propiedad y estado aplicables.
+- Administración requiere ENTITY_ADMIN.
+- CORS permite solo los orígenes exactos de CORS_ALLOWED_ORIGINS, sin comodines ni credenciales cross-site.
+- Ningún secreto o dato sensible se registra en URL, log o ejemplo.
 
 ## Compatibilidad
 
-Los cambios incompatibles requieren ADR, versión y plan de transición. Agregar un campo opcional no exime la revisión de consumidores.
+Los cambios incompatibles requieren ADR, versión y plan de transición. Agregar un campo opcional no exime la revisión de consumidores ni de la matriz de trazabilidad.
 
 ---
 
-**Relacionados:** [`./contracts/openapi/openapi-alertamujer-v1.yaml`](./contracts/openapi/openapi-alertamujer-v1.yaml) · [`../00-governance/definition-of-done.md`](../00-governance/definition-of-done.md)
+**Relacionados:** [contracts/openapi/openapi-alertamujer-v1.yaml](contracts/openapi/openapi-alertamujer-v1.yaml) · [README.md](README.md) · [../00-governance/definition-of-done.md](../00-governance/definition-of-done.md)

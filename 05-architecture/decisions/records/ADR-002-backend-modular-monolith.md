@@ -1,7 +1,7 @@
 # ADR-002 — Organizar Backend como monolito modular
 
 > [!NOTE] INSTRUCTIONS
-> Esta decisión describe arquitectura objetivo; no la presente como código implementado mientras el repositorio Backend carezca de evidencia.
+> Esta decisión describe la arquitectura implementada en Backend. La evidencia local no sustituye un despliegue operativo.
 
 ## Identificación
 
@@ -25,9 +25,9 @@ El Backend debe coordinar identidad, emergencias, evidencia, chat y notificacion
 
 ## Decisión
 
-**Decidimos:** implementar el Backend objetivo como una aplicación Spring Boot modularizada por capacidades de negocio.
+**Decidimos:** implementar el Backend como una aplicación Spring Boot modularizada por capacidades de negocio.
 
-Los módulos publicarán interfaces internas y ocultarán repositorios, entidades y detalles de integración.
+Los módulos mantienen límites internos y ocultan repositorios, entidades y detalles de integración.
 
 ## Alternativas evaluadas
 
@@ -46,6 +46,10 @@ Los módulos publicarán interfaces internas y ocultarán repositorios, entidade
 | Riesgo | Dependencias cruzadas pueden erosionar los módulos |
 
 **Documentos a actualizar:** estructura modular y catálogo Backend.
+
+## Evidencia de implementación
+
+Los módulos shared, identity, contacts, emergency, notification, evidence, chat y administration están integrados en develop a través de las HU-API-001 a 019. La suite integrada ejecutada el 2026-10-08 aprobó 126 pruebas contra PostgreSQL 17.11, sin fallos, errores ni omisiones.
 
 ## Revisión futura
 

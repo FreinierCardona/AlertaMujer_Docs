@@ -1,7 +1,7 @@
 # ADR-004 — Definir idempotencia del inicio SOS
 
 > [!NOTE] INSTRUCTIONS
-> La decisión está aprobada documentalmente; su implementación y prueba Backend permanecen pendientes.
+> La decisión está implementada y validada contra PostgreSQL local. No representa por sí sola un despliegue productivo.
 
 ## Identificación
 
@@ -20,7 +20,7 @@ El inicio SOS puede repetirse por latencia, reintento o interacción duplicada. 
 | Restricción | Fuente |
 |---|---|
 | Evitar emergencias duplicadas | Flujo SOS |
-| Mantener respuesta observable | Contrato REST vigente como diseño |
+| Mantener respuesta observable | Contrato REST implementado |
 | Preservar auditoría | RNF de trazabilidad |
 
 ## Decisión
@@ -28,6 +28,10 @@ El inicio SOS puede repetirse por latencia, reintento o interacción duplicada. 
 **Decidimos:** usar como clave natural la usuaria autenticada y su emergencia abierta; la primera creación responde `201` y un reintento o carrera devuelve `200` con la misma emergencia.
 
 No se agrega cabecera, token, ventana temporal ni tabla de idempotencia.
+
+## Evidencia de implementación
+
+HU-API-012 crea SOS con 201 y recupera la emergencia abierta con 200 ante reintento o carrera. La suite integrada del 2026-10-08 ejerció la persistencia PostgreSQL y terminó con 126 pruebas, 0 fallos, 0 errores y 0 omitidas.
 
 ## Alternativas evaluadas
 

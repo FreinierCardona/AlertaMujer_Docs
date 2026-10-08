@@ -1,7 +1,7 @@
 # 07 — API y contratos
 
 > [!NOTE] INSTRUCTIONS
-> Mantenga los contratos alineados con Backend real. El scaffold Backend no expone endpoints; el archivo OpenAPI actual expresa diseño y estados pendientes.
+> Mantenga los contratos alineados con Backend real. REST y WSS/STOMP están implementados; una modificación exige actualizar código, contrato, pruebas y trazabilidad juntos.
 
 ## Propósito
 
@@ -11,38 +11,36 @@ Definir cómo Frontend consume capacidades Backend y cómo se gobiernan los cont
 
 | Documento | Pregunta que responde | Estado |
 |---|---|---|
-| [`rest-conventions.md`](rest-conventions.md) | ¿Cómo se diseñan endpoints y errores? | Vigente como diseño |
-| [`wss-stomp.md`](wss-stomp.md) | ¿Cómo funciona el canal de chat? | Vigente como diseño |
-| [`contracts/openapi/openapi-alertamujer-v1.yaml`](contracts/openapi/openapi-alertamujer-v1.yaml) | ¿Cuál es el contrato aprobado? | Vigente como diseño |
-| [`contracts/openapi/_template-api.yaml`](contracts/openapi/_template-api.yaml) | ¿Cómo se inicia un contrato nuevo? | Plantilla |
+| [rest-conventions.md](rest-conventions.md) | ¿Cómo se diseñan endpoints y errores? | Implementado y vigente |
+| [wss-stomp.md](wss-stomp.md) | ¿Cómo funciona el canal de chat? | Implementado y vigente |
+| [contracts/openapi/openapi-alertamujer-v1.yaml](contracts/openapi/openapi-alertamujer-v1.yaml) | ¿Cuál es el contrato REST aprobado? | Fuente de contrato mantenida |
+| [contracts/openapi/_template-api.yaml](contracts/openapi/_template-api.yaml) | ¿Cómo se inicia un contrato nuevo? | Plantilla |
 
-## Autoridad
+## Estado comprobado
 
-El contrato aceptado y el código Backend implementado deben coincidir. Mientras el scaffold no tenga controladores ni pruebas contractuales, los endpoints permanecen como objetivo documental.
+El Backend integrado expone las familias de rutas de identidad, perfil, contactos, emergencias, evidencia, chat, dispositivo y administración bajo /api/v1, además de /ws para STOMP. El corte del 2026-10-08 ejecutó 126 pruebas sin fallos, errores ni omisiones contra PostgreSQL local.
 
-## Dependencias
-
-```mermaid
-flowchart LR
-  FE[Frontend] -->|REST JSON| API[Backend API]
-  FE -->|WSS STOMP| CHAT[Chat Backend]
-  API --> DB[(Database)]
-  CHAT --> DB
-```
+La evidencia confirma la implementación y las pruebas de los flujos, no una integración ya realizada por el Frontend ni un despliegue TLS. Los consumidores conservan OpenAPI y WSS/STOMP como fuente para cuerpos, restricciones, códigos y destinos.
 
 ## Fuera de alcance
 
-- Componentes visuales.
-- Tablas y SQL.
-- Credenciales o secretos.
-- Contratos de proveedores no confirmados.
+- Definir pantallas, almacenamiento local del cliente o migraciones Database.
+- Declarar entrega SMTP/FCM a una persona, TLS desplegado o una promoción productiva.
+- Publicar nuevos contratos de proveedor sin evidencia y decisión aprobada.
+
+## Reglas de cambio
+
+- Cada operación se traza a un RF o HU.
+- El código no expone entidades, secretos, hashes ni rutas privadas.
+- Los cambios incompatibles requieren ADR, versión y plan de transición.
+- La disponibilidad de proveedor externo se declara como resultado técnico, no como entrega a una persona.
 
 ## Listo cuando
 
-- Operaciones, errores, seguridad y ejemplos son coherentes.
-- Cada operación se traza a un requisito o historia.
-- La implementación Backend y las pruebas contractuales coinciden.
+- Cada operación conserva requisito, contrato, implementación y prueba trazables.
+- Los consumidores relevantes revisan cambios incompatibles.
+- La evidencia declara su ambiente y límites sin incluir secretos.
 
 ---
 
-**Relacionados:** [`../05-architecture/integrations.md`](../05-architecture/integrations.md) · [`../09-modules/backend/README.md`](../09-modules/backend/README.md)
+**Relacionados:** [rest-conventions.md](rest-conventions.md) · [wss-stomp.md](wss-stomp.md) · [../04-requirements/traceability-matrix.md](../04-requirements/traceability-matrix.md) · [../09-modules/backend/README.md](../09-modules/backend/README.md)
