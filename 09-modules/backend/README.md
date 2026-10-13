@@ -18,7 +18,7 @@ Exponer la API Java/Spring Boot, seguridad, reglas transaccionales e integracion
 
 - Pantallas y experiencia de cliente.
 - DDL, changeSets, grants o credenciales de migración.
-- Afirmar entrega final SMTP/FCM, operación productiva o CI/CD sin evidencia específica.
+- Afirmar entrega final SMTP, operación productiva o CI/CD sin evidencia específica; FCM es legado en retiro.
 
 ## Entradas y salidas
 
@@ -32,7 +32,8 @@ Exponer la API Java/Spring Boot, seguridad, reglas transaccionales e integracion
 | Dependencia | Motivo | Estado comprobado |
 |---|---|---|
 | Database | Persistencia PostgreSQL y funciones protegidas | Validada con PostgreSQL 17.11 |
-| FCM | Intento de notificación por contacto elegible | Adaptador y resultados técnicos implementados |
+| FCM legado | Intento por contacto elegible | Implementado actualmente; retiro aprobado por ADR-006/HU-API-021 |
+| Panel interno | Consulta de alertas/evidencias para contactos | Propuesto en HU-API-022 |
 | SMTP | Envío de OTP | Integración de código implementada; entrega de buzón no probada aquí |
 | Almacenamiento privado | Evidencias fotográficas | Implementado bajo EVIDENCE_STORAGE_PATH |
 

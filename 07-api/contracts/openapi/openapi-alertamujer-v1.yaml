@@ -206,7 +206,7 @@ paths:
       summary: Consulta una emergencia autorizada
       x-functional: { actor: Owner or ENTITY_ADMIN, previousState: Authorized relationship, postState: No state change, idempotency: Safe read, transaction: Read permitted emergency, auditEvent: ALERT_VIEWED for administrator }
       parameters: [{ $ref: '#/components/parameters/EmergencyId' }]
-      responses: { '200': { description: Emergency detail, content: { application/json: { schema: { $ref: '#/components/schemas/Emergency' } } } }, '403': { $ref: '#/components/responses/Forbidden' }, '404': { $ref: '#/components/responses/NotFound' } }
+      responses: { '200': { description: Authorized emergency detail, content: { application/json: { schema: { $ref: '#/components/schemas/EmergencyDetail' } } } }, '403': { $ref: '#/components/responses/Forbidden' }, '404': { $ref: '#/components/responses/NotFound' } }
   /emergencies/{emergencyId}/heartbeats:
     post:
       tags: [Emergencies]
@@ -394,6 +394,8 @@ components:
     EmergencyCreate: { allOf: [{ $ref: '#/components/schemas/LocationInput' }, { type: object, properties: { message: { type: string, maxLength: 500 } } }] }
     EmergencyStatus: { type: string, enum: [ACTIVE, IN_PROGRESS, OFFLINE, FINALIZED] }
     Emergency: { type: object, required: [emergencyId, status, startedAt], properties: { emergencyId: { type: string, format: uuid }, status: { $ref: '#/components/schemas/EmergencyStatus' }, previousOperationalStatus: { type: string, nullable: true, enum: [ACTIVE, IN_PROGRESS] }, startedAt: { type: string, format: date-time }, lastHeartbeatAt: { type: string, format: date-time, nullable: true }, finalizedAt: { type: string, format: date-time, nullable: true } } }
+    EmergencyLocation: { type: object, required: [latitude, longitude, capturedAt, receivedAt], properties: { latitude: { type: number, minimum: -90, maximum: 90 }, longitude: { type: number, minimum: -180, maximum: 180 }, accuracyMeters: { type: number, minimum: 0, nullable: true }, capturedAt: { type: string, format: date-time }, receivedAt: { type: string, format: date-time } } }
+    EmergencyDetail: { allOf: [{ $ref: '#/components/schemas/Emergency' }, { type: object, required: [messageSnapshot], properties: { messageSnapshot: { type: string, maxLength: 500 }, lastConfirmedLocation: { allOf: [{ $ref: '#/components/schemas/EmergencyLocation' }], nullable: true } } }] }
     EmergencyPage: { type: object, required: [items, page, size, total], properties: { items: { type: array, items: { $ref: '#/components/schemas/Emergency' } }, page: { type: integer }, size: { type: integer }, total: { type: integer } } }
     Evidence: { type: object, required: [evidenceId, mimeType, sizeBytes, receivedAt], properties: { evidenceId: { type: string, format: uuid }, mimeType: { type: string, enum: [image/webp] }, sizeBytes: { type: integer, maximum: 1048576 }, receivedAt: { type: string, format: date-time } } }
     ChatMessage: { type: object, required: [messageId, clientMessageId, content, sentAt], properties: { messageId: { type: integer, format: int64, minimum: 1 }, clientMessageId: { type: string, format: uuid }, content: { type: string, maxLength: 500 }, sentAt: { type: string, format: date-time } } }

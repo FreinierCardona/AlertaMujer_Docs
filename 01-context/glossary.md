@@ -13,7 +13,8 @@
 | Contacto de emergencia | Relación aceptada entre usuarias. | rol, autoridad |
 | Administrador de entidad | Cuenta funcional `ENTITY_ADMIN`. | rol PostgreSQL |
 | Evidencia | Fotografía WebP asociada a una emergencia. | video, archivo genérico |
-| Intento FCM | Solicitud aceptada o rechazada por el proveedor. | entrega, lectura |
+| Intento FCM legado | Solicitud técnica del código actual, aprobada para retiro por ADR-006. | entrega, lectura, arquitectura objetivo |
+| Notificación interna | Vista derivada de alertas abiertas vinculadas; no crea estado leído/no leído. | push remoto |
 | OTP | Código de un solo uso persistido como hash. | contraseña temporal |
 | Sesión | Credencial renovable y revocable asociada a una cuenta. | JWT aislado |
 | Changeset | Unidad inmutable de cambio Liquibase. | script manual |
@@ -22,7 +23,7 @@
 
 ## Por qué importan los sinónimos prohibidos
 
-Confundir contacto con rol altera autorización; confundir FCM aceptado con entrega crea promesas falsas; confundir ecosistema con módulo mezcla ciclos de cambio y responsabilidades.
+Confundir contacto con rol altera autorización; tratar FCM legado como entrega o arquitectura objetivo crea promesas falsas; confundir ecosistema con módulo mezcla ciclos de cambio y responsabilidades.
 
 ## Agregar un término
 

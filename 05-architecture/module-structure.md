@@ -11,7 +11,7 @@ La raíz Java contiene AlertaMujerApplication y el paquete backend. Dentro de ba
 - identity concentra registro, OTP, sesiones y perfil.
 - contacts administra directorio e invitaciones.
 - emergency administra SOS, ubicaciones, estados e historial.
-- notification registra tokens e intentos FCM.
+- notification expone el panel interno derivado; tokens e intentos FCM son legado pendiente de retiro por ADR-006.
 - evidence persiste metadatos y mantiene almacenamiento privado.
 - chat ofrece REST, STOMP y publicación posterior al commit.
 - administration agrupa panel, atención, usuarios y auditoría.

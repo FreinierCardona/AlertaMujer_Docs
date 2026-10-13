@@ -18,6 +18,7 @@ Mobile acompaña a la usuaria en registro, sesión, configuración, contactos y 
 | ubicación | comunicar estado y permisos | requisito correspondiente |
 | evidencia | capturar con consentimiento y estado | decisión pendiente de archivos |
 | chat | intercambiar mensajes asociados al evento | contrato WSS pendiente |
+| notificaciones internas | campana, indicador, listado y detalle de alertas vinculadas | ADR-006 y HU-AM-030/031 |
 
 ## Estados obligatorios
 
@@ -37,6 +38,15 @@ Probar lector de pantalla, foco, tamaño de texto, contraste, orientación aplic
 ## Integración
 
 Mientras Backend no esté disponible, cada flujo que use mocks lo indica en evidencia y no atribuye persistencia real.
+
+## Decisiones de cambio aprobadas
+
+- La campana vive en Home y el punto rojo se deriva de alertas abiertas autorizadas; no representa leído/no leído.
+- El contacto ve información mínima, Maps y evidencia de una alerta abierta vinculada; no ve perfil completo, chat administrativo ni controles de estado.
+- Mobile convierte la captura a WebP antes de la carga y valida un máximo de 10 MB.
+- Push remoto y registro de token se retiran. El aviso foreground requerido por ubicación en segundo plano es un mecanismo local distinto.
+
+Estado: estas decisiones están documentadas, pero sus HUs siguen propuestas. El código actual todavía contiene FCM y la configuración Expo está ubicada fuera de `mobile/`, hallazgo que debe corregir HU-AM-028.
 
 ---
 

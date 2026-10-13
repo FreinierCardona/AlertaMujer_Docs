@@ -12,7 +12,7 @@
 | `repository` | consultas y persistencia mediante rol app | reglas de negocio |
 | `model` | representación persistente controlada | generación de esquema |
 
-Integraciones FCM, archivos y WSS permanecen en adaptadores del módulo que las usa; no se convierten en capas globales con lógica de negocio.
+Archivos y WSS permanecen en adaptadores del módulo que los usa; no se convierten en capas globales con lógica de negocio. El adaptador FCM actual conserva esa regla mientras se retira por ADR-006.
 
 ## Dirección de dependencia
 
@@ -38,7 +38,7 @@ Si Identity, Emergency o Administration comparten paquetes internos, nombres o t
 1. Crear esqueleto modular con Identity.
 2. Implementar vertical de sesión y pruebas.
 3. Añadir Contacts y Emergency respetando interfaces.
-4. Integrar FCM, archivos y WSS solo tras contratos.
+4. Integrar archivos y WSS solo tras contratos; sustituir FCM legado por las consultas internas de ADR-006.
 
 ---
 

@@ -13,6 +13,7 @@ Definir observabilidad, respuesta operativa y formato de incidentes para sostene
 |---|---|
 | [observability.md](observability.md) | ¿Qué señales permiten detectar y explicar fallos? |
 | [runbook.md](runbook.md) | ¿Cómo se diagnostica y recupera el sistema? |
+| [project-status-2026-10-13.md](project-status-2026-10-13.md) | ¿Cuál es el avance verificable, qué falla y qué sigue? |
 | [_template-incident.md](_template-incident.md) | ¿Cómo se registra un incidente? |
 
 ## Alcance por ecosistema

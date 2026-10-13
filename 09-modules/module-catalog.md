@@ -20,7 +20,7 @@
 | Emergency | Ciclo SOS, estado, ubicación e historial | emergency.* |
 | Evidence | Carga y acceso autorizado | emergency_evidences y almacenamiento privado |
 | Chat | Historial y canal en tiempo real | emergency_chat_messages |
-| Notification | Dispositivos e intentos FCM | notification.* y emergency attempts |
+| Notification | Panel interno derivado de alertas abiertas y contactos aceptados | Emergency / Contacts / Evidence; transición ADR-006 |
 | Administration | Operación autorizada y auditoría | audit.* y consultas controladas |
 | Shared | Configuración, seguridad y correlación | configuration.* |
 
@@ -31,7 +31,7 @@
 | Frontend | Backend | REST y WSS/STOMP implementados; integración Frontend pendiente de evidencia |
 | Backend | Database | SQL mediante rol alertamujer_app |
 | Database | PostgreSQL | Changelog Liquibase |
-| Backend | FCM | Adaptador e intento técnico implementados; entrega real pendiente |
+| Backend | FCM | Implementado en el estado actual, pero aprobado para retiro por ADR-006; no es arquitectura objetivo |
 
 ## Regla
 

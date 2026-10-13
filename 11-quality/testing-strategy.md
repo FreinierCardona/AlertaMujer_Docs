@@ -42,7 +42,7 @@ Usar datos sintéticos. Limpiar dependencias antes de rollback y nunca incluir i
 
 ## Estado
 
-La estrategia sigue siendo normativa, pero el Backend ya tiene suites unitarias, MVC e integración PostgreSQL. El 2026-10-08, scripts/verify-integration.ps1 terminó con 126 pruebas, 0 fallos, 0 errores y 0 omitidas. Una integración de Frontend, SMTP/FCM reales, Docker de ambiente y producción sigue requiriendo evidencia propia.
+La estrategia sigue siendo normativa, pero el Backend ya tiene suites unitarias, MVC e integración PostgreSQL. El 2026-10-13, `scripts/verify-integration.ps1` terminó con 138 pruebas, 0 fallos, 0 errores y 0 omitidas. Frontend, SMTP real, Mobile/dispositivo, el retiro FCM y el panel interno siguen requiriendo evidencia propia.
 
 ---
 

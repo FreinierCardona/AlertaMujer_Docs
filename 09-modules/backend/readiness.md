@@ -14,7 +14,8 @@ El 2026-10-08, develop contiene el merge d6b694e de la PR #19 y las HU-API-001 a
 | Plataforma | 001 a 006 | Boot, contenedor, módulos, errores, correlación, rol app y configuración |
 | Identidad | 007 a 010 | Registro, OTP, autenticación, sesión, perfil, términos y baja |
 | Contactos y SOS | 011 a 013 | Invitaciones, SOS idempotente, ubicación, estado, finalización e historial |
-| Integraciones funcionales | 014 a 016 | Intentos FCM, evidencia privada, REST y STOMP |
+| Integraciones funcionales actuales | 014 a 016 | FCM legado, evidencia privada, REST y STOMP |
+| Cambio aprobado | 020 a 022 | WebP 10 MB, retiro FCM y consultas seguras para contactos |
 | Administración | 017 | Dashboard, atención, gestión de usuarios y auditoría |
 | Mantenimiento y consumo web | 018 a 019 | Jobs acotados, CORS local y ejecución integrada reproducible |
 
@@ -24,7 +25,7 @@ El 2026-10-08, develop contiene el merge d6b694e de la PR #19 y las HU-API-001 a
 |---|---|
 | Database | Solo alertamujer_app; el Backend no posee DDL, Liquibase ni grants. |
 | JWT | HS256, issuer, audience, sesión vigente y rol revalidado. |
-| FCM | Un intento con timeout de cinco segundos, sin cola ni reintento automático. |
+| FCM legado | Un intento con timeout de cinco segundos, sin cola ni reintento; retirar por HU-API-021. |
 | WSS | CONNECT, suscripción y envío autorizados; persistir antes de publicar. |
 | Evidencia | Ruta privada, nombre aleatorio, compensación y reconciliación controlada. |
 | CORS | Orígenes explícitos; sin comodines ni credenciales cross-site. |
@@ -34,7 +35,7 @@ El 2026-10-08, develop contiene el merge d6b694e de la PR #19 y las HU-API-001 a
 | Tema | Estado | Evidencia necesaria |
 |---|---|---|
 | SMTP | Código y prueba automatizada | Aceptación de proveedor y recepción en buzón de prueba |
-| FCM | Adaptador y resultados técnicos | Token de dispositivo real y notificación visible |
+| Panel interno | Contrato propuesto | Recorrido Mobile real con contacto autorizado |
 | Docker | Configuración incluida | Arranque de imagen contra base migrada del ambiente objetivo |
 | TLS, SLO y alertas | Pendiente | Infraestructura, responsables y runbook ensayado |
 | Promoción | Pendiente | Pipeline, aprobadores, rollback y versionado de ambiente |

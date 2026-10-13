@@ -15,11 +15,11 @@
 
 | Grupo | Cantidad | Estado | Fuente técnica |
 |---|---:|---|---|
-| HU-AM | 20 | Implementación local; integración servidor pendiente de evidencia propia | Frontend |
-| HU-DB | 25 | Integradas; HU-DB-025 aplicada | Database |
-| HU-API | 19 | Integradas en develop y verificadas contra PostgreSQL local el 2026-10-08 | Backend |
+| HU-AM | 31 | 001–027 con código integrado; 028–031 propuestas | Frontend |
+| HU-DB | 27 | 001–025 integradas; 026–027 propuestas | Database |
+| HU-API | 22 | 001–019 integradas y verificadas; 020–022 propuestas | Backend |
 
-La evidencia actual del Backend es 126 pruebas automáticas, sin fallos, errores ni omisiones, ejecutadas con fixtures sintéticas sobre PostgreSQL 17.11. Esto no declara una entrega productiva ni la recepción en buzón SMTP o dispositivo FCM real.
+La evidencia actual del Backend es 138 pruebas automáticas, sin fallos, errores ni omisiones, ejecutadas el 2026-10-13 con fixtures sintéticas sobre PostgreSQL 17.11. Frontend pasa typecheck/lint/build, pero Playwright solo pasa 3/10 y no existe prueba Mobile en dispositivo. Las HUs propuestas no están implementadas.
 
 ## Escribir una historia
 
@@ -43,4 +43,4 @@ La evidencia actual del Backend es 126 pruebas automáticas, sin fallos, errores
 
 ---
 
-**Relacionados:** [_template-hu.md](./_template-hu.md) · [backend-stories.md](./backend-stories.md) · [traceability-matrix.md](./traceability-matrix.md)
+**Relacionados:** [_template-hu.md](./_template-hu.md) · [change-package-evidence-internal-notifications.md](./change-package-evidence-internal-notifications.md) · [backend-stories.md](./backend-stories.md) · [traceability-matrix.md](./traceability-matrix.md)

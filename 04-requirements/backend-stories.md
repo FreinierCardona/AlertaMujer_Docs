@@ -5,7 +5,7 @@
 
 ## Corte de entrega comprobado
 
-Al 2026-10-08, AlertaMujer_Backend está limpio en develop, en el merge d6b694e de la PR #19. Las HU-API-001 a HU-API-019 están integradas. La ejecución reproducible de scripts/verify-integration.ps1 contra PostgreSQL 17.11 y fixtures sintéticas terminó con 126 pruebas, 0 fallos, 0 errores y 0 omitidas.
+Al 2026-10-13, `develop` está en `f2edcb5`. Las HU-API-001 a HU-API-019 están integradas. La ejecución reproducible de `scripts/verify-integration.ps1` contra PostgreSQL 17.11 y fixtures sintéticas terminó con 138 pruebas, 0 fallos, 0 errores y 0 omitidas.
 
 El Backend consume únicamente el esquema migrado como alertamujer_app. Liquibase, DDL, grants y credenciales de migración siguen siendo propiedad de AlertaMujer_Database.
 
@@ -38,10 +38,20 @@ El Backend consume únicamente el esquema migrado como alertamujer_app. Liquibas
 | HU-API-016 | Chat REST y WSS/STOMP | Chat | 009, 012 a 013, HU-DB-021 | Integrada y verificada; autorización e idempotencia |
 | HU-API-017 | Panel administrativo y auditoría | Administration | 009 a 013, HU-DB-023/025 | Integrada y verificada; HTTP, RBAC y auditoría |
 
+## Cambio aprobado y pendiente
+
+| Id | Resultado propuesto | Módulo dueño | Dependencias principales | Estado |
+|---|---|---|---|---|
+| HU-API-020 | Evidencia WebP validada y almacenada hasta 10 MB | Evidence | ADR-007, HU-DB-026 | Propuesta |
+| HU-API-021 | Retiro de endpoint, listener, adaptador, dependencia y secretos FCM | Notification / Emergency | ADR-006, HU-DB-027 | Propuesta |
+| HU-API-022 | Listado, detalle y evidencias de alertas abiertas para contactos aceptados | Emergency / Contacts / Evidence | ADR-006, HU-AM-030/031 | Propuesta |
+
+El detalle completo, criterios Gherkin, validaciones y archivos candidatos están en [change-package-evidence-internal-notifications.md](./change-package-evidence-internal-notifications.md).
+
 ## Límites de la evidencia
 
 - La suite validó código, contratos internos, controladores, servicios y persistencia real; no aplicó Liquibase ni modificó el esquema.
-- SMTP aceptado por un proveedor no acredita la llegada a una bandeja. FCM aceptado no acredita lectura ni recepción en un dispositivo.
+- SMTP aceptado por un proveedor no acredita la llegada a una bandeja. La implementación FCM actual solo acredita el intento técnico y será retirada por HU-API-021.
 - La imagen y Compose pertenecen al código integrado, pero este corte no sustituye una prueba de despliegue, una política de promoción ni operación productiva.
 - El contrato OpenAPI y WSS conserva autoridad para consumidores; cualquier diferencia se corrige en el mismo cambio que la implementación.
 

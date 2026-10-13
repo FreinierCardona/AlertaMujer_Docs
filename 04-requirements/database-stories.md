@@ -38,6 +38,15 @@
 
 Las 25 historias están integradas en `develop`; HU-DB-025 está aplicada y aporta `account_origin` y `accepted_terms_at` a solicitudes de registro.
 
+## Cambio aprobado y pendiente
+
+| Id | Resultado propuesto | Dependencia | Estado |
+|---|---|---|---|
+| HU-DB-026 | Elevar a 10 MB el límite de metadata WebP y la configuración correspondiente | ADR-007, HU-DB-020 | Propuesta |
+| HU-DB-027 | Retirar tablas, índices, grants y schema exclusivos de FCM sin crear tabla de notificación interna | ADR-006, HU-DB-016/022 | Propuesta |
+
+La estructura física actual todavía conserva 16 entidades y siete schemas; el objetivo posterior a HU-DB-027 es 14 entidades y seis schemas. Detalle y Gherkin: [change-package-evidence-internal-notifications.md](./change-package-evidence-internal-notifications.md).
+
 ---
 
 **Relacionados:** [`./user-stories.md`](./user-stories.md) · [`../09-modules/database/README.md`](../09-modules/database/README.md)

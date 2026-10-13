@@ -21,13 +21,15 @@ El modelo Database persiste metadata de evidencia sin guardar binarios. El Backe
 |---|---|
 | Metadata en `emergency_evidences` | Modelo Database |
 | Acceso restringido | Arquitectura de seguridad |
-| WebP final, máximo 1 MB y 10 por emergencia | RF7 y reglas de evidencia |
+| WebP final, máximo 10 MB y 10 por emergencia | ADR-007 y RF7 actualizado |
 
 ## Decisión
 
 **Decidimos:** guardar el WebP final en almacenamiento local controlado por Backend y montar un volumen persistente cuando se use Docker.
 
 PostgreSQL guarda referencia y metadata; la ruta física nunca se expone por HTTP.
+
+ADR-007 modifica el límite y exige conversión WebP previa en Mobile, pero no cambia esta decisión de almacenamiento local privado.
 
 ## Alternativas evaluadas
 
@@ -53,4 +55,4 @@ Revisar si cambian alcance operativo, durabilidad o infraestructura aprobada.
 
 ---
 
-**Relacionados:** [`../../integrations.md`](../../integrations.md) · [`../../../06-data/models.md`](../../../06-data/models.md)
+**Relacionados:** [`../../integrations.md`](../../integrations.md) · [`../../../06-data/models.md`](../../../06-data/models.md) · [ADR-007](./ADR-007-webp-evidence-up-to-10mb.md)

@@ -7,6 +7,8 @@
 
 El modelo físico confirmado contiene 16 entidades distribuidas en siete esquemas PostgreSQL. La historia HU-DB-025 ya está aplicada y no se clasifica en refinamiento.
 
+ADR-006 define un modelo objetivo de 14 entidades y seis esquemas al retirar las dos entidades exclusivas de FCM. Ese cambio todavía no está aplicado: requiere HU-DB-027 y una release verificada. Hasta entonces, las filas `notification.*` de la tabla siguiente describen el estado físico real.
+
 | Esquema | Entidad | Responsabilidad |
 |---|---|---|
 | `configuration` | `system_configuration` | parámetros operativos globales |
@@ -47,7 +49,8 @@ Database posee estructura, constraints, índices y privilegios. Backend será re
 
 - Retención temporal por tipo de dato: **Pendiente**.
 - Clasificación formal de sensibilidad por columna: **En refinamiento**.
-- Estrategia de archivo físico de evidencias: **Pendiente**.
+- Aplicar HU-DB-026 para elevar a 10 MB el límite físico todavía vigente de 1 MB: **Pendiente**.
+- Aplicar HU-DB-027 para retirar tablas, índices, grants y schema exclusivos de FCM: **Pendiente**.
 
 ---
 

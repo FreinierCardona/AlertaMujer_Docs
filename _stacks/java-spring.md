@@ -23,7 +23,7 @@
 | Seguridad | Spring Security, BCrypt, JWT HS256 y sesiones revocables |
 | WebSocket | STOMP para chat y eventos de estado posteriores al commit |
 | Correo | JavaMailSender para OTP |
-| FCM | Firebase HTTP v1 con timeout acotado |
+| FCM legado | Firebase HTTP v1 existente; retirar dependencia/adaptador por HU-API-021 |
 | Operación | Actuator health y jobs programados |
 | Pruebas | JUnit, Mockito, MVC e integración contra PostgreSQL migrado |
 

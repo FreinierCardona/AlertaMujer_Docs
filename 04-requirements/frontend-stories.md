@@ -1,7 +1,7 @@
 # 04 — Historias Frontend
 
 > [!NOTE] INSTRUCTIONS
-> El estado “representada localmente” no acredita Backend, FCM, WSS o persistencia remota.
+> Un merge o una validación estática no acredita dispositivo físico ni recorrido integrado. Las HU-AM-028 a 031 son propuestas nuevas y se detallan en el paquete de cambio.
 
 ## Catálogo HU-AM
 
@@ -27,11 +27,22 @@
 | HU-AM-018 | Evidencias y chat administrativos | Web | RF7, RF15 | Evidence / Chat |
 | HU-AM-019 | Consulta y gestión de usuarias | Web | RF11 | Administration / Identity |
 | HU-AM-020 | Reporte básico y auditoría visual | Web | RF13 | Audit API |
+| HU-AM-021 | Integración de identidad, sesión y cuenta propia | Mobile | RF1, RF3, RF16 | Identity API |
+| HU-AM-022 | Integración de contactos y preparación SOS | Mobile | RF2, RF5 | Contacts API |
+| HU-AM-023 | Integración de emergencia, ubicación e historial | Mobile | RF4, RF5, RF8 | Emergency API |
+| HU-AM-024 | Integración de evidencia y chat | Mobile / Web | RF7, RF15 | Evidence / WSS |
+| HU-AM-025 | Sesión y shell administrativo protegido | Web | RF10, RF17, RF18 | Auth / RBAC |
+| HU-AM-026 | Monitoreo y atención administrativa | Web | RF12 | Administration / Emergency |
+| HU-AM-027 | Gestión de usuarias y auditoría | Web | RF11, RF13 | Administration / Audit |
+| HU-AM-028 | Captura y carga WebP de hasta 10 MB | Mobile | RF7 | ADR-007, API-020 |
+| HU-AM-029 | Retiro de push remoto | Mobile | RF5, RF9 | ADR-006, API-021 |
+| HU-AM-030 | Campana, indicador y listado vinculado | Mobile | RF9 | ADR-006, API-022 |
+| HU-AM-031 | Detalle y evidencia para contacto | Mobile | RF7, RF9 | ADR-006/007, API-022 |
 
 ## Estado de implementación
 
-Las veinte historias tienen representación local en Frontend. Ninguna que dependa de servidor puede declararse integrada de extremo a extremo mientras Backend no exista.
+HU-AM-001 a 027 tienen código integrado en `develop`. El 2026-10-13, Mobile y Web aprobaron typecheck/lint y Web aprobó build; la suite Playwright aprobó 3 de 10 casos y falló en siete casos asociados a login/mocks desactualizados. No hubo prueba de cámara, conversión, ubicación en segundo plano, APK o dispositivo físico. HU-AM-028 a 031 permanecen propuestas.
 
 ---
 
-**Relacionados:** [`./user-stories.md`](./user-stories.md) · [`../09-modules/frontend/README.md`](../09-modules/frontend/README.md)
+**Relacionados:** [change-package-evidence-internal-notifications.md](./change-package-evidence-internal-notifications.md) · [`./user-stories.md`](./user-stories.md) · [`../09-modules/frontend/README.md`](../09-modules/frontend/README.md)

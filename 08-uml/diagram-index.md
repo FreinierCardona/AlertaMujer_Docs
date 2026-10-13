@@ -13,7 +13,7 @@ flowchart LR
   W -->|REST / WSS| B
   B -->|SQL| D[(PostgreSQL)]
   L[Liquibase] --> D
-  B -.-> F[FCM pendiente de integración]
+  B -.-> F[FCM legado pendiente de retiro]
 ```
 
 Fuente: [arquitectura](../05-architecture/README.md).

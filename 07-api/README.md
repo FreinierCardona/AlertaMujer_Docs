@@ -44,3 +44,4 @@ La evidencia confirma la implementación y las pruebas de los flujos, no una int
 ---
 
 **Relacionados:** [rest-conventions.md](rest-conventions.md) · [wss-stomp.md](wss-stomp.md) · [../04-requirements/traceability-matrix.md](../04-requirements/traceability-matrix.md) · [../09-modules/backend/README.md](../09-modules/backend/README.md)
+Consulte [contact-alerts-contract-proposal.md](./contact-alerts-contract-proposal.md) para el contrato objetivo todavía no implementado del panel interno de contactos. El OpenAPI v1 conserva el contrato ejecutable vigente hasta que HU-API-020 a 022 se integren.

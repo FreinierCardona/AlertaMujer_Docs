@@ -8,10 +8,9 @@
 | Integración | Consumidor | Uso | Fallo controlado |
 |---|---|---|---|
 | GPS Android | Mobile | coordenada inicial y seguimiento | bloquear creación o conservar última confirmada |
-| Cámara Android | Mobile | fotografía WebP | error aislado; no bloquea SOS |
-| Notificaciones Android | Mobile | permiso y aviso persistente | requisito visible; no inventar habilitación |
+| Cámara/conversión Android | Mobile | captura y WebP previo de hasta 10 MB | error aislado; no bloquea SOS |
+| Aviso foreground Android | Mobile | informar ubicación activa en segundo plano | conservar solo el mecanismo local requerido; no confundir con push remoto |
 | Marcador Android | Mobile | abrir aplicación Teléfono | informar indisponibilidad |
-| FCM | Backend | un intento por contacto elegible | registrar resultado; SOS no revierte |
 | Google Maps | Web | mostrar coordenadas | conservar valores textuales |
 | Sistema de archivos | Backend | almacenar fotografías privadas | compensación y reconciliación de huérfanos |
 | PostgreSQL | Backend / Liquibase | datos operativos / migraciones | separar app y migrator |
@@ -19,7 +18,7 @@
 ## Responsabilidad
 
 - Mobile produce coordenadas y fotografía; Maps solo presenta.
-- Backend decide elegibilidad FCM y registra el intento.
+- Backend autoriza las consultas internas del contacto desde emergencias y relaciones aceptadas.
 - Database no llama proveedores externos ni almacena archivos.
 - Frontend no contiene credenciales de servidor.
 
@@ -27,12 +26,11 @@
 
 | Integración | Límite definido |
 |---|---|
-| FCM | timeout 5 s, un intento, sin cola ni reintento automático |
 | WSS | tres reconexiones: 1, 2 y 5 s; recuperación REST |
-| Archivos | limpieza inmediata + un reintento; reconciliación >24 h |
+| Archivos | WebP <=10 MB; limpieza inmediata + un reintento; reconciliación >24 h |
 | GPS | precisión y frecuencia sujetas a permisos y dispositivo |
 
-Estado: Pendiente para cuotas, cuentas técnicas, dominios y configuración por ambiente de FCM y Maps.
+Estado de transición: el código vigente aún integra FCM; ADR-006 ordena retirarlo mediante HU-AM-029, HU-API-021 y HU-DB-027. Maps y el aviso foreground Android permanecen. La operación de Maps sigue pendiente de configuración por ambiente.
 
 ---
 

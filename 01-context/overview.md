@@ -25,7 +25,7 @@ AlertaMujer permite preparar contactos, activar una emergencia SOS con ubicació
 
 ## Problema que resuelve
 
-Reduce la fricción entre reconocer riesgo, crear una alerta trazable y disponer de contexto para atención. No garantiza conectividad, lectura FCM ni respuesta institucional.
+Reduce la fricción entre reconocer riesgo, crear una alerta trazable y disponer de contexto para atención. No garantiza conectividad, aviso con la aplicación cerrada ni respuesta institucional. El FCM todavía presente en código es legado en retiro por ADR-006.
 
 ## Restricciones
 

@@ -13,9 +13,11 @@
 | Emergencia | SOS, estados, ubicación y cierre | emergencia, historial, ubicaciones | Todos |
 | Evidencias | Captura, archivo y metadatos | fotografías y referencias | Todos |
 | Chat | Mensajes asociados a emergencia | mensajes | Frontend / Backend / Database |
-| Notificaciones | Tokens e intentos FCM | dispositivos e intentos | Backend / Database / Mobile |
+| Notificaciones internas | Alertas abiertas vinculadas y detalle autorizado | emergencias, contactos y evidencias | Mobile / Backend / Database |
 | Administración | Atención, cuentas y auditoría | eventos administrativos | Web / Backend / Database |
 | Experiencia | Idiomas, tema, navegación y accesibilidad | preferencias locales | Frontend |
+
+El módulo FCM del código actual es legado y se retira coordinadamente mediante ADR-006; no se crea persistencia paralela para el panel interno.
 
 ## Leyenda de relaciones
 
