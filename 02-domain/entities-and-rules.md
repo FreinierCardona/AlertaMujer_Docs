@@ -26,7 +26,7 @@
 | BR-05 | El reintento SOS devuelve la misma emergencia abierta. | Emergencia |
 | BR-06 | Contacto es relación, no rol; no permite autocontacto ni duplicado. | Contactos |
 | BR-07 | FCM realiza un intento y no acredita entrega o lectura. | Notificaciones |
-| BR-08 | Evidencia es WebP, máximo 1 MB y 10 fotografías por emergencia. | Evidencias |
+| BR-08 | En el código actual la evidencia es WebP, máximo 1 MB y 10 fotografías por emergencia; ADR-007/HU-DB-026 reducen el objetivo a 500 KB (500 000 bytes). | Evidencias |
 | BR-09 | Chat no acepta mensajes después de `FINALIZED`. | Chat |
 | BR-10 | Los cuatro idiomas cambian interfaz, no datos aportados por actores. | Experiencia |
 

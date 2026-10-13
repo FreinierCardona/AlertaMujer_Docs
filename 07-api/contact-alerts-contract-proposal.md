@@ -47,7 +47,7 @@ Estados admitidos: `ACTIVE`, `IN_PROGRESS`, `OFFLINE`. La respuesta se elimina d
     {
       "evidenceId": "uuid",
       "mimeType": "image/webp",
-      "sizeBytes": 10485760,
+      "sizeBytes": 500000,
       "receivedAt": "2026-10-13T12:02:00Z"
     }
   ]
@@ -70,7 +70,7 @@ Si alguna condición falla, el recurso individual responde `404` para no revelar
 
 ## Evidencia WebP
 
-HU-API-020 cambia el upload existente: Mobile envía `image/webp`; tamaño máximo 10 485 760 bytes; máximo 10 evidencias; solo la propietaria puede cargar. El contacto es lector, nunca cargador.
+HU-API-020 cambia el upload existente: Mobile envía `image/webp`; tamaño máximo 500 KB (500 000 bytes); máximo 10 evidencias; solo la propietaria puede cargar. El contacto es lector, nunca cargador.
 
 ---
 

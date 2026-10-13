@@ -1,4 +1,4 @@
-# ADR-007 — Normalizar evidencia WebP de hasta 10 MB antes de transferirla
+# ADR-007 — Normalizar evidencia WebP de hasta 500 KB antes de transferirla
 
 > [!NOTE] INSTRUCTIONS
 > Esta decisión modifica el límite de ADR-005, pero conserva el almacenamiento local privado y la separación entre archivo y metadata. No declararla implementada sin pruebas de los tres ecosistemas.
@@ -22,14 +22,14 @@ El Backend actual admite una solicitud multipart de hasta 10 MB, pero convierte 
 | Solo fotografías tomadas con cámara durante una alerta abierta | RF7 y flujo de emergencia |
 | Máximo 10 evidencias confirmadas por emergencia | Regla vigente |
 | Formato transferido y almacenado `image/webp` | Decisión 2026-10-13 |
-| Tamaño máximo del WebP transferido y final: 10 485 760 bytes | Decisión 2026-10-13 |
+| Tamaño máximo del WebP transferido y final: 500 KB (500 000 bytes) | Decisión actualizada |
 | Archivo privado fuera de PostgreSQL | ADR-005 |
 
 ## Decisión
 
-**Decidimos:** Mobile convierte la captura a WebP antes de enviarla y rechaza una salida WebP superior a 10 MB; Backend valida firma, MIME, dimensiones y tamaño, puede re-encodear para normalizar, y nunca persiste un archivo final superior a 10 MB.
+**Decidimos:** Mobile convierte la captura a WebP antes de enviarla y rechaza una salida WebP superior a 500 KB (500 000 bytes); Backend valida firma, MIME, dimensiones y tamaño, puede re-encodear para normalizar, y nunca persiste un archivo final superior a ese límite.
 
-La solicitud multipart admite el archivo WebP y un margen de protocolo suficiente. PostgreSQL conserva solo metadata y valida `file_size_bytes` entre 1 y 10 485 760. No se distribuye el archivo original JPEG/PNG y no se crea una fila si falla la conversión, validación o escritura.
+La solicitud multipart admite el archivo WebP y un margen de protocolo suficiente. PostgreSQL conserva solo metadata y valida `file_size_bytes` entre 1 y 500 000. No se distribuye el archivo original JPEG/PNG y no se crea una fila si falla la conversión, validación o escritura.
 
 ## Alternativas evaluadas
 
@@ -46,7 +46,7 @@ La solicitud multipart admite el archivo WebP y un margen de protocolo suficient
 | Positiva | Formato y límite son coherentes desde captura hasta almacenamiento y consulta. |
 | Costo | Frontend, Backend, Database, contratos y pruebas deben cambiar juntos. |
 | Riesgo | Equipos de gama baja pueden tardar en convertir; la UI debe mostrar progreso, cancelación segura y reintento manual. |
-| Riesgo | Diez archivos de 10 MB por alerta aumentan disco y transferencia; la operación debe vigilar capacidad y retención. |
+| Riesgo | La conversión puede requerir compresión agresiva; la UI debe explicar el rechazo y permitir una nueva captura. |
 
 ## Revisión futura
 

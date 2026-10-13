@@ -49,7 +49,7 @@ Database posee estructura, constraints, índices y privilegios. Backend será re
 
 - Retención temporal por tipo de dato: **Pendiente**.
 - Clasificación formal de sensibilidad por columna: **En refinamiento**.
-- Aplicar HU-DB-026 para elevar a 10 MB el límite físico todavía vigente de 1 MB: **Pendiente**.
+- Aplicar HU-DB-026 para reducir a 500 KB (500 000 bytes) el límite físico todavía vigente de 1 MB: **Pendiente**.
 - Aplicar HU-DB-027 para retirar tablas, índices, grants y schema exclusivos de FCM: **Pendiente**.
 
 ---

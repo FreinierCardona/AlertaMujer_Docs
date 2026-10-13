@@ -21,7 +21,7 @@ El modelo Database persiste metadata de evidencia sin guardar binarios. El Backe
 |---|---|
 | Metadata en `emergency_evidences` | Modelo Database |
 | Acceso restringido | Arquitectura de seguridad |
-| WebP final, máximo 10 MB y 10 por emergencia | ADR-007 y RF7 actualizado |
+| WebP final, máximo 500 KB (500 000 bytes) y 10 por emergencia | ADR-007 y RF7 actualizado |
 
 ## Decisión
 

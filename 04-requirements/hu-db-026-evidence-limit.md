@@ -1,4 +1,4 @@
-# HU-DB-026 — Elevar límite de evidencia a 10 MB
+# HU-DB-026 — Reducir límite de evidencia a 500 KB
 
 > [!NOTE] INSTRUCTIONS
 > Historia Propuesta. Implementar solo mediante nuevo changeset Liquibase con rollback verificable.
@@ -9,27 +9,27 @@
 |---|---|
 | Ecosistema | Database |
 | Módulo | Emergency evidence / system configuration |
-| Objetivo | Permitir metadata WebP final entre 1 y 10 485 760 bytes. |
+| Objetivo | Permitir metadata WebP final entre 1 y 500 000 bytes. |
 | Alcance | Constraint, configuración semilla, comentarios, grants si cambian y pruebas release. |
 | Precondiciones | ADR-007 y nombre real del constraint identificados. |
 | Dependencias | HU-API-020; release anterior aplicada. |
 | Candidatos | Nuevo changeset, master changelog, test/rollback de release. |
-| Resultado | `alertamujer_app` inserta <=10 MB y PostgreSQL rechaza >10 MB. |
+| Resultado | `alertamujer_app` inserta <=500 KB y PostgreSQL rechaza >500 KB. |
 
 ## Descripción
 
-Reemplazar el constraint de 1 048 576 bytes y actualizar el valor de configuración sin editar migrations ya aplicadas.
+Reemplazar el constraint de 1 048 576 bytes por 500 000 bytes y actualizar el valor de configuración sin editar migrations ya aplicadas.
 
 ## Criterios de aceptación
 
 ```gherkin
 Escenario: límite válido
   Dado el release migrado
-  Cuando se inserta file_size_bytes = 10485760
+  Cuando se inserta file_size_bytes = 500000
   Entonces PostgreSQL acepta la metadata
 
 Escenario: límite excedido
-  Cuando se inserta file_size_bytes = 10485761
+  Cuando se inserta file_size_bytes = 500001
   Entonces PostgreSQL rechaza por constraint
 
 Escenario: rollback
@@ -39,7 +39,7 @@ Escenario: rollback
 
 ## Validaciones
 
-- Funcionales: valores 1, 10 MB y 10 MB + 1.
+- Funcionales: valores 1, 500 000 y 500 001 bytes.
 - Técnicas: validate, update, rollback/update, checksum, grants y prueba con rol aplicación.
 
 ---

@@ -7,7 +7,7 @@ Los cambios siguen una estructura inspirada en Keep a Changelog y se agrupan por
 ### Added
 
 - ADR-006 para retirar notificaciones push y usar un panel interno derivado de alertas abiertas.
-- ADR-007 para convertir a WebP antes de transferir y admitir archivos finales de hasta 10 MB.
+- ADR-007 para convertir a WebP antes de transferir y admitir archivos finales de hasta 500 KB.
 - Paquete detallado HU-AM-028 a 031, HU-API-020 a 022 y HU-DB-026/027.
 - Estado técnico del 2026-10-13 con porcentajes, diagnóstico fotográfico y brechas verificadas.
 - Trazabilidad explícita RF a HU-API y límites de evidencia de proveedores externos.

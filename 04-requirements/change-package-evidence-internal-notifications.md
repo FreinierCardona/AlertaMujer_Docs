@@ -10,21 +10,21 @@ Corregir el flujo fotográfico de extremo a extremo, retirar las notificaciones 
 ## Decisiones rectoras
 
 - ADR-006 retira FCM, tokens e intentos push; el reemplazo consulta emergencias abiertas y contactos `ACCEPTED` sin tabla paralela de notificaciones.
-- ADR-007 exige conversión WebP previa en Mobile y un máximo de 10 485 760 bytes tanto en transferencia como en almacenamiento final.
+- ADR-007 exige conversión WebP previa en Mobile y un máximo de 500 KB (500 000 bytes) tanto en transferencia como en almacenamiento final.
 - El contacto es un `USER` vinculado, no un rol global; nunca modifica, atiende ni finaliza una alerta ajena.
 
 ## Historias del incremento
 
 | HU | Ecosistema | Resultado comprobable | Ficha |
 |---|---|---|---|
-| HU-AM-028 | Frontend Mobile | Captura configurada, WebP y carga <=10 MB | [Detalle](./hu-am-028-evidence-webp.md) |
+| HU-AM-028 | Frontend Mobile | Captura configurada, WebP y carga <=500 KB | [Detalle](./hu-am-028-evidence-webp.md) |
 | HU-AM-029 | Frontend Mobile | Push remoto retirado sin romper aviso local de ubicación | [Detalle](./hu-am-029-remove-push.md) |
 | HU-AM-030 | Frontend Mobile | Campana, punto rojo y listado vinculado | [Detalle](./hu-am-030-internal-notification-panel.md) |
 | HU-AM-031 | Frontend Mobile | Detalle seguro, Maps y galería | [Detalle](./hu-am-031-contact-alert-detail.md) |
-| HU-API-020 | Backend | Evidencia WebP coherente con 10 MB | [Detalle](./hu-api-020-evidence-webp.md) |
+| HU-API-020 | Backend | Evidencia WebP coherente con 500 KB | [Detalle](./hu-api-020-evidence-webp.md) |
 | HU-API-021 | Backend | Endpoint, adaptador y eventos FCM retirados | [Detalle](./hu-api-021-remove-fcm.md) |
 | HU-API-022 | Backend | Consultas seguras para contactos | [Detalle](./hu-api-022-contact-alert-api.md) |
-| HU-DB-026 | Database | Constraint/configuración de evidencia a 10 MB | [Detalle](./hu-db-026-evidence-limit.md) |
+| HU-DB-026 | Database | Constraint/configuración de evidencia a 500 KB | [Detalle](./hu-db-026-evidence-limit.md) |
 | HU-DB-027 | Database | Persistencia FCM retirada de forma reversible | [Detalle](./hu-db-027-remove-fcm-storage.md) |
 
 ## Precondiciones compartidas
@@ -46,7 +46,7 @@ No se añade leído/no leído, tabla de notificaciones, chat para contactos, dat
 
 ## Resultado esperado
 
-Docs, Obsidian, contratos y los tres ecosistemas de implementación describen el mismo límite de 10 MB, el mismo modelo de autorización y la ausencia de push remoto.
+Docs, Obsidian, contratos y los tres ecosistemas de implementación describen el mismo límite de 500 KB (500 000 bytes), el mismo modelo de autorización y la ausencia de push remoto.
 
 ---
 

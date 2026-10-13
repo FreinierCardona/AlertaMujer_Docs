@@ -1,4 +1,4 @@
-# HU-API-020 — Aceptar y normalizar evidencia WebP hasta 10 MB
+# HU-API-020 — Aceptar y normalizar evidencia WebP hasta 500 KB
 
 > [!NOTE] INSTRUCTIONS
 > Historia Propuesta. Backend no cambia DDL; exige la release HU-DB-026 antes de validarse.
@@ -9,12 +9,12 @@
 |---|---|
 | Ecosistema | Backend |
 | Módulo | Evidence |
-| Objetivo | Unificar validación y persistencia de WebP final hasta 10 485 760 bytes. |
+| Objetivo | Unificar validación y persistencia de WebP final hasta 500 000 bytes. |
 | Alcance | Multipart, MIME/firma, dimensiones, almacenamiento, compensación y DTO. |
 | Precondiciones | Alerta propia abierta; máximo diez evidencias; directorio privado escribible. |
 | Dependencias | ADR-007, HU-DB-026, HU-AM-028. |
 | Candidatos | `EvidenceController`, `EvidenceService`, `LocalEvidenceStorage`, properties y pruebas. |
-| Resultado | Ningún archivo/registro final supera 10 MB ni queda huérfano por fallo. |
+| Resultado | Ningún archivo/registro final supera 500 KB ni queda huérfano por fallo. |
 
 ## Descripción
 
@@ -24,7 +24,7 @@ Aceptar solo WebP del cliente, verificar contenido real, re-encodear si se neces
 
 ```gherkin
 Escenario: evidencia válida
-  Dado alerta propia abierta y WebP válido <=10 MB
+  Dado alerta propia abierta y WebP válido <=500 KB
   Cuando se carga
   Entonces se almacena privado, se persiste metadata y se responde 201
 
@@ -41,7 +41,7 @@ Escenario: fallo transaccional
 
 ## Validaciones
 
-- Funcionales: 10 MB exactos, 10 MB + 1 byte, décima/undécima evidencia y estado finalizado.
+- Funcionales: 500 000 bytes exactos, 500 001 bytes, décima/undécima evidencia y estado finalizado.
 - Técnicas: pruebas unitarias, HTTP multipart y PostgreSQL real; rutas no expuestas y `Cache-Control: no-store`.
 
 ---

@@ -42,7 +42,7 @@ El Backend consume únicamente el esquema migrado como alertamujer_app. Liquibas
 
 | Id | Resultado propuesto | Módulo dueño | Dependencias principales | Estado |
 |---|---|---|---|---|
-| HU-API-020 | Evidencia WebP validada y almacenada hasta 10 MB | Evidence | ADR-007, HU-DB-026 | Propuesta |
+| HU-API-020 | Evidencia WebP validada y almacenada hasta 500 KB | Evidence | ADR-007, HU-DB-026 | Propuesta |
 | HU-API-021 | Retiro de endpoint, listener, adaptador, dependencia y secretos FCM | Notification / Emergency | ADR-006, HU-DB-027 | Propuesta |
 | HU-API-022 | Listado, detalle y evidencias de alertas abiertas para contactos aceptados | Emergency / Contacts / Evidence | ADR-006, HU-AM-030/031 | Propuesta |
 

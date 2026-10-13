@@ -15,7 +15,7 @@ El 2026-10-08, develop contiene el merge d6b694e de la PR #19 y las HU-API-001 a
 | Identidad | 007 a 010 | Registro, OTP, autenticación, sesión, perfil, términos y baja |
 | Contactos y SOS | 011 a 013 | Invitaciones, SOS idempotente, ubicación, estado, finalización e historial |
 | Integraciones funcionales actuales | 014 a 016 | FCM legado, evidencia privada, REST y STOMP |
-| Cambio aprobado | 020 a 022 | WebP 10 MB, retiro FCM y consultas seguras para contactos |
+| Cambio aprobado | 020 a 022 | WebP 500 KB, retiro FCM y consultas seguras para contactos |
 | Administración | 017 | Dashboard, atención, gestión de usuarios y auditoría |
 | Mantenimiento y consumo web | 018 a 019 | Jobs acotados, CORS local y ejecución integrada reproducible |
 

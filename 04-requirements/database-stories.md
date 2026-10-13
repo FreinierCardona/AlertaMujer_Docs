@@ -42,10 +42,10 @@ Las 25 historias están integradas en `develop`; HU-DB-025 está aplicada y apor
 
 | Id | Resultado propuesto | Dependencia | Estado |
 |---|---|---|---|
-| HU-DB-026 | Elevar a 10 MB el límite de metadata WebP y la configuración correspondiente | ADR-007, HU-DB-020 | Propuesta |
+| HU-DB-026 | Reducir a 500 KB el límite de metadata WebP y la configuración correspondiente | ADR-007, HU-DB-020 | Propuesta |
 | HU-DB-027 | Retirar tablas, índices, grants y schema exclusivos de FCM sin crear tabla de notificación interna | ADR-006, HU-DB-016/022 | Propuesta |
 
-La estructura física actual todavía conserva 16 entidades y siete schemas; el objetivo posterior a HU-DB-027 es 14 entidades y seis schemas. Detalle y Gherkin: [change-package-evidence-internal-notifications.md](./change-package-evidence-internal-notifications.md).
+La estructura física actual todavía conserva 16 entidades y siete schemas; el objetivo posterior a HU-DB-027 es 14 entidades y seis schemas. HU-DB-026 reduce el límite físico actual de 1 MB a 500 KB (500 000 bytes). Detalle y Gherkin: [change-package-evidence-internal-notifications.md](./change-package-evidence-internal-notifications.md).
 
 ---
 

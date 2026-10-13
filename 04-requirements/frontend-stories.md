@@ -34,7 +34,7 @@
 | HU-AM-025 | Sesión y shell administrativo protegido | Web | RF10, RF17, RF18 | Auth / RBAC |
 | HU-AM-026 | Monitoreo y atención administrativa | Web | RF12 | Administration / Emergency |
 | HU-AM-027 | Gestión de usuarias y auditoría | Web | RF11, RF13 | Administration / Audit |
-| HU-AM-028 | Captura y carga WebP de hasta 10 MB | Mobile | RF7 | ADR-007, API-020 |
+| HU-AM-028 | Captura y carga WebP de hasta 500 KB | Mobile | RF7 | ADR-007, API-020 |
 | HU-AM-029 | Retiro de push remoto | Mobile | RF5, RF9 | ADR-006, API-021 |
 | HU-AM-030 | Campana, indicador y listado vinculado | Mobile | RF9 | ADR-006, API-022 |
 | HU-AM-031 | Detalle y evidencia para contacto | Mobile | RF7, RF9 | ADR-006/007, API-022 |

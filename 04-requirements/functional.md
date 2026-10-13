@@ -17,7 +17,7 @@ Los requisitos funcionales activos se renumeran de forma continua de RF1 a RF18.
 | RF4 | Ubicación | Usuaria | Capturar y compartir coordenadas confirmadas durante una alerta. | HU-API-012 y 013 |
 | RF5 | SOS | Usuaria | Crear una única emergencia abierta y seguir su estado. | HU-API-012, 013 y 018 |
 | RF6 | Marcador | Usuaria | Abrir el marcador Android sin llamada automática. | No aplica: cliente Android |
-| RF7 | Evidencia | Usuaria / contacto autorizado / administrador | Capturar, convertir antes de transferir y consultar fotografías WebP autorizadas de hasta 10 MB. | HU-API-015, 018, 020 y 022 |
+| RF7 | Evidencia | Usuaria / contacto autorizado / administrador | Capturar, convertir antes de transferir y consultar fotografías WebP autorizadas de hasta 500 KB (500 000 bytes). | HU-API-015, 018, 020 y 022 |
 | RF8 | Historial | Usuaria | Consultar emergencias finalizadas y datos asociados. | HU-API-013 |
 | RF9 | Notificaciones internas | Contacto | Consultar desde Home las alertas abiertas vinculadas, con campana, indicador, listado y detalle seguro. | HU-API-022; sustituye HU-API-014 cuando se implemente HU-API-021 |
 | RF10 | Acceso administrativo | Administrador | Autenticarse y acceder solo con rol vigente. | HU-API-009 y 017 |

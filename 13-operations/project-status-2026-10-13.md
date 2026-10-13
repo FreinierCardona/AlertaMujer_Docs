@@ -33,7 +33,7 @@ No se demostró una causa única en dispositivo. Se verificaron cuatro bloqueado
 
 ## Cambios aprobados
 
-- WebP 10 MB: restaurar configuración Expo; convertir/validar antes de enviar; timeout específico; validar firma/MIME/dimensiones en Backend; migrar constraint/configuración a 10 485 760 con rollback.
+- WebP 500 KB: restaurar configuración Expo; convertir/validar antes de enviar; timeout específico; validar firma/MIME/dimensiones en Backend; migrar constraint/configuración a 500 000 bytes con rollback.
 - Retiro push: eliminar dependencias, tokens, endpoint, listener, adaptador/secretos FCM, tablas, índices y grants; conservar solo el aviso local foreground que Android requiera.
 - Panel interno: campana/punto rojo, listado y detalle con nombre, estado, activación, coordenadas, Maps y evidencia; relación `ACCEPTED`, cuentas habilitadas y alerta abierta; sin chat, PII innecesaria ni acciones de estado.
 
@@ -41,7 +41,7 @@ No se demostró una causa única en dispositivo. Se verificaron cuatro bloqueado
 
 - Documentado no implementado: ADR-006/007 y HU-AM-028 a 031, HU-API-020 a 022, HU-DB-026/027; dispositivo, Maps, despliegue, TLS y operación.
 - Implementado antes desactualizado: HU-AM-021 a 027, HU-API-013/019, 138 pruebas Backend y clientes Mobile/Web.
-- Por definir: retención/capacidad de 10 x 10 MB, refresco del panel, forma del nombre, tratamiento histórico FCM y matriz Android.
+- Por definir: retención/capacidad de 10 x 500 KB, refresco del panel, forma del nombre, tratamiento histórico FCM y matriz Android.
 
 ## Evidencia del corte
 

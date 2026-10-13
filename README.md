@@ -15,7 +15,7 @@
 
 El corte del 2026-10-13 verificó `develop` en `f2edcb5`. La suite integrada contra PostgreSQL 17.11 terminó con 138 pruebas, 0 fallos, 0 errores y 0 omitidas. El Backend implementa identidad, contactos, SOS, estados, evidencia, chat, FCM vigente, administración, jobs y CORS local.
 
-Esto acredita código integrado y pruebas locales con fixtures sintéticas. No acredita un despliegue productivo, la llegada de SMTP a un buzón, Mobile en dispositivo, TLS, SLO ni un pipeline de promoción. ADR-006 aprueba retirar FCM y ADR-007 aprueba WebP previo de hasta 10 MB; ambas decisiones siguen pendientes de implementación.
+Esto acredita código integrado y pruebas locales con fixtures sintéticas. No acredita un despliegue productivo, la llegada de SMTP a un buzón, Mobile en dispositivo, TLS, SLO ni un pipeline de promoción. ADR-006 aprueba retirar FCM y ADR-007 aprueba WebP previo de hasta 500 KB (500 000 bytes); ambas decisiones siguen pendientes de implementación.
 
 Consulte [el estado técnico del 2026-10-13](./13-operations/project-status-2026-10-13.md) y [el paquete detallado de HUs](./04-requirements/change-package-evidence-internal-notifications.md).
 

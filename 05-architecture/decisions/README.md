@@ -30,7 +30,7 @@
 | [ADR-004](./records/ADR-004-sos-idempotency.md) | Emergencia abierta como idempotencia SOS | Accepted |
 | [ADR-005](./records/ADR-005-local-evidence-files.md) | Archivos de evidencia en almacenamiento local controlado | Accepted |
 | [ADR-006](./records/ADR-006-retire-push-notifications.md) | Retirar push y usar panel interno derivado de alertas | Accepted |
-| [ADR-007](./records/ADR-007-webp-evidence-up-to-10mb.md) | Convertir antes de transferir y admitir WebP de hasta 10 MB | Accepted |
+| [ADR-007](./records/ADR-007-webp-evidence-up-to-10mb.md) | Convertir antes de transferir y admitir WebP de hasta 500 KB | Accepted |
 
 ## Nombres
 

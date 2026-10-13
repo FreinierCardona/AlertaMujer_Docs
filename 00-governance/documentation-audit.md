@@ -24,7 +24,7 @@
 ## Decisiones y brechas del 2026-10-13
 
 - ADR-006 reemplaza push por un panel interno para contactos; no está implementado.
-- ADR-007 eleva a 10 MB el WebP transferido/final y exige conversión previa en Mobile; el código y la BD siguen en 1 MB final.
+- ADR-007 reduce a 500 KB (500 000 bytes) el WebP transferido/final y exige conversión previa en Mobile; el código y la BD siguen en 1 MB final.
 - La configuración Expo está ubicada en `web/src/shared/api/app.json` y debe volver a Mobile.
 - Las fuentes oficiales quedan alineadas en alcance y backlog; la continuidad histórica puede conservar referencias FCM solo como estado anterior.
 | Backend y Database podían confundirse en propiedad | Pruebas usan alertamujer_app, Liquibase permanece fuera | Se preserva el límite de ecosistemas |
