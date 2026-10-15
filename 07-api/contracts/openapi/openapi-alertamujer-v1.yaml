@@ -238,6 +238,34 @@ paths:
       x-functional: { actor: USER owner, previousState: Authenticated, postState: No state change, idempotency: Safe read, transaction: Read only owner FINALIZED emergencies, auditEvent: NONE }
       parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }]
       responses: { '200': { $ref: '#/components/responses/EmergencyPage' } }
+  /me/contact-alerts:
+    get:
+      tags: [Contacts]
+      summary: Lista las alertas internas abiertas vinculadas al contacto autenticado
+      x-functional: { actor: Enabled USER contact, previousState: ACCEPTED relation and enabled owner, postState: No state change, idempotency: Safe read, transaction: Derive the internal notification panel from non-FINALIZED emergencies through the accepted relation; no notification row, read state or push dispatch is created, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }]
+      responses: { '200': { $ref: '#/components/responses/ContactAlertPage' }, '401': { $ref: '#/components/responses/Unauthorized' }, '403': { $ref: '#/components/responses/Forbidden' } }
+  /me/contact-alerts/{emergencyId}:
+    get:
+      tags: [Contacts]
+      summary: Consulta el detalle mínimo de una alerta vinculada
+      x-functional: { actor: Enabled USER contact, previousState: ACCEPTED relation, enabled owner and non-FINALIZED emergency, postState: No state change, idempotency: Safe read, transaction: Apply the same contact authorization predicate, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/EmergencyId' }]
+      responses: { '200': { description: Minimal authorized alert detail, content: { application/json: { schema: { $ref: '#/components/schemas/ContactAlertDetail' } } } }, '401': { $ref: '#/components/responses/Unauthorized' }, '403': { $ref: '#/components/responses/Forbidden' }, '404': { $ref: '#/components/responses/NotFound' } }
+  /me/contact-alerts/{emergencyId}/evidences:
+    get:
+      tags: [Contacts]
+      summary: Lista metadata de evidencia de una alerta vinculada
+      x-functional: { actor: Enabled USER contact, previousState: Same authorization as contact alert detail, postState: No state change, idempotency: Safe read, transaction: Apply the common authorization predicate before returning evidence metadata, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/EmergencyId' }]
+      responses: { '200': { description: Authorized evidence metadata, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Evidence' } } } } }, '401': { $ref: '#/components/responses/Unauthorized' }, '403': { $ref: '#/components/responses/Forbidden' }, '404': { $ref: '#/components/responses/NotFound' } }
+  /me/contact-alerts/{emergencyId}/evidences/{evidenceId}/content:
+    get:
+      tags: [Contacts]
+      summary: Descarga evidencia de una alerta vinculada
+      x-functional: { actor: Enabled USER contact, previousState: Same authorization as contact alert detail and evidence belongs to emergency, postState: No state change, idempotency: Safe read, transaction: Authorize evidence and stream protected WebP, auditEvent: NONE }
+      parameters: [{ $ref: '#/components/parameters/EmergencyId' }, { $ref: '#/components/parameters/EvidenceId' }]
+      responses: { '200': { description: Protected WebP stream with Cache-Control no-store, content: { image/webp: { schema: { type: string, format: binary } } } }, '401': { $ref: '#/components/responses/Unauthorized' }, '403': { $ref: '#/components/responses/Forbidden' }, '404': { $ref: '#/components/responses/NotFound' } }
   /emergencies/{emergencyId}/evidences:
     post:
       tags: [Evidence]
@@ -350,6 +378,7 @@ components:
     RuleViolation: { description: Functional rule not satisfied, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
     DirectoryPage: { description: Directory page, content: { application/json: { schema: { $ref: '#/components/schemas/DirectoryPage' } } } }
     ContactPage: { description: Contact page, content: { application/json: { schema: { $ref: '#/components/schemas/ContactPage' } } } }
+    ContactAlertPage: { description: Contact emergency-alert page, content: { application/json: { schema: { $ref: '#/components/schemas/ContactAlertPage' } } } }
     EmergencyPage: { description: Emergency page, content: { application/json: { schema: { $ref: '#/components/schemas/EmergencyPage' } } } }
     UserPage: { description: User page, content: { application/json: { schema: { $ref: '#/components/schemas/UserPage' } } } }
   schemas:
@@ -390,6 +419,10 @@ components:
     DirectoryUser: { type: object, required: [username, firstNames, lastNames], properties: { username: { type: string }, firstNames: { type: string }, lastNames: { type: string } } }
     DirectoryPage: { type: object, required: [items, page, size, total], properties: { items: { type: array, items: { $ref: '#/components/schemas/DirectoryUser' } }, page: { type: integer }, size: { type: integer }, total: { type: integer } } }
     ContactPage: { type: object, required: [items, page, size, total], properties: { items: { type: array, items: { $ref: '#/components/schemas/ContactInvitation' } }, page: { type: integer }, size: { type: integer }, total: { type: integer } } }
+    ContactAlert: { type: object, required: [emergencyId, title, status, userDisplayName, message, startedAt], properties: { emergencyId: { type: string, format: uuid }, title: { type: string, enum: ['Alerta de Emergencia'] }, status: { type: string, enum: [ACTIVE, IN_PROGRESS, OFFLINE] }, userDisplayName: { type: string }, message: { type: string }, startedAt: { type: string, format: date-time } } }
+    ContactAlertPage: { type: object, required: [items, page, size, total], properties: { items: { type: array, items: { $ref: '#/components/schemas/ContactAlert' } }, page: { type: integer, minimum: 0 }, size: { type: integer, minimum: 1, maximum: 50 }, total: { type: integer, format: int64, minimum: 0 } } }
+    ContactAlertLocation: { type: object, required: [latitude, longitude, capturedAt], properties: { latitude: { type: number, minimum: -90, maximum: 90 }, longitude: { type: number, minimum: -180, maximum: 180 }, capturedAt: { type: string, format: date-time } } }
+    ContactAlertDetail: { type: object, required: [emergencyId, status, userDisplayName, startedAt, messageSnapshot, evidences], properties: { emergencyId: { type: string, format: uuid }, status: { type: string, enum: [ACTIVE, IN_PROGRESS, OFFLINE] }, userDisplayName: { type: string }, startedAt: { type: string, format: date-time }, messageSnapshot: { type: string, maxLength: 500 }, lastConfirmedLocation: { allOf: [{ $ref: '#/components/schemas/ContactAlertLocation' }], nullable: true }, evidences: { type: array, items: { $ref: '#/components/schemas/Evidence' } } } }
     LocationInput: { type: object, required: [latitude, longitude, capturedAt], properties: { latitude: { type: number, minimum: -90, maximum: 90 }, longitude: { type: number, minimum: -180, maximum: 180 }, accuracyMeters: { type: number, minimum: 0 }, capturedAt: { type: string, format: date-time } } }
     EmergencyCreate: { allOf: [{ $ref: '#/components/schemas/LocationInput' }, { type: object, properties: { message: { type: string, maxLength: 500 } } }] }
     EmergencyStatus: { type: string, enum: [ACTIVE, IN_PROGRESS, OFFLINE, FINALIZED] }
