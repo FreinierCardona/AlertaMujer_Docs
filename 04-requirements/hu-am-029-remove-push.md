@@ -1,7 +1,7 @@
 # HU-AM-029 — Retirar notificaciones push de Mobile
 
 > [!NOTE] INSTRUCTIONS
-> Historia Propuesta. Distinguir push remoto del aviso local foreground requerido por ubicación Android.
+> Estado observado: No se encontró Firebase ni `expo-notifications` en `mobile/package.json`; falta validar los criterios y el aviso foreground en dispositivo.
 
 ## Identificación
 

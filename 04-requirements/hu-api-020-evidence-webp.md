@@ -1,7 +1,7 @@
-# HU-API-020 — Aceptar y normalizar evidencia WebP hasta 500 KB
+# HU-API-020 — Aceptar evidencia WebP hasta 500 KB
 
 > [!NOTE] INSTRUCTIONS
-> Historia Propuesta. Backend no cambia DDL; exige la release HU-DB-026 antes de validarse.
+> Estado observado: Código de límite WebP presente en `LocalEvidenceStorage`; la validación integral y la aplicación de HU-DB-026 al ambiente siguen pendientes.
 
 ## Identificación
 
@@ -10,15 +10,15 @@
 | Ecosistema | Backend |
 | Módulo | Evidence |
 | Objetivo | Unificar validación y persistencia de WebP final hasta 500 000 bytes. |
-| Alcance | Multipart, MIME/firma, dimensiones, almacenamiento, compensación y DTO. |
-| Precondiciones | Alerta propia abierta; máximo diez evidencias; directorio privado escribible. |
+| Alcance | Multipart, MIME y estructura RIFF/WebP, tamaño, almacenamiento, compensación y DTO. |
+| Precondiciones | Alerta propia abierta, incluida `OFFLINE`; directorio privado escribible; límite de cantidad solo si la configuración es positiva. |
 | Dependencias | ADR-007, HU-DB-026, HU-AM-028. |
 | Candidatos | `EvidenceController`, `EvidenceService`, `LocalEvidenceStorage`, properties y pruebas. |
-| Resultado | Ningún archivo/registro final supera 500 KB ni queda huérfano por fallo. |
+| Resultado | La carga confirmada no supera 500 KB; se compensa un fallo de persistencia y se reconcilian archivos huérfanos. |
 
 ## Descripción
 
-Aceptar solo WebP del cliente, verificar contenido real, re-encodear si se necesita normalización y persistir metadata únicamente después de escritura válida.
+Aceptar WebP del cliente y validar MIME, tamaño y estructura RIFF/WebP antes de persistir metadata. `LocalEvidenceStorage` no decodifica píxeles, no valida dimensiones ni recodifica la imagen.
 
 ## Criterios de aceptación
 
@@ -29,19 +29,19 @@ Escenario: evidencia válida
   Entonces se almacena privado, se persiste metadata y se responde 201
 
 Escenario: archivo inválido
-  Dado MIME, firma, dimensiones o tamaño inválido
+  Dado MIME, estructura RIFF/WebP o tamaño inválido
   Cuando se procesa
   Entonces se rechaza sin metadata ni archivo permanente
 
 Escenario: fallo transaccional
   Dado que archivo o base de datos falla
   Cuando se compensa
-  Entonces no queda una evidencia parcial utilizable
+  Entonces se intenta compensar el archivo; la reconciliación posterior atiende huérfanos
 ```
 
 ## Validaciones
 
-- Funcionales: 500 000 bytes exactos, 500 001 bytes, décima/undécima evidencia y estado finalizado.
+- Funcionales: 500 000 bytes exactos, 500 001 bytes, undécima evidencia con límite cero, OFFLINE y estado finalizado.
 - Técnicas: pruebas unitarias, HTTP multipart y PostgreSQL real; rutas no expuestas y `Cache-Control: no-store`.
 
 ---

@@ -1,7 +1,7 @@
 # ADR-006 — Retirar notificaciones push y usar panel interno
 
 > [!NOTE] INSTRUCTIONS
-> Decisión funcional y técnica aprobada para el siguiente incremento. Mantener separados el código FCM actual y el estado objetivo hasta completar las HUs relacionadas.
+> Decisión funcional y técnica aprobada. Su contexto es histórico; el estado observado posteriormente distingue el retiro del código de aplicación y la permanencia de scripts físicos en Database.
 
 ## Identificación
 
@@ -15,7 +15,7 @@
 
 ## Contexto
 
-El producto implementa actualmente registro de tokens, un intento FCM por contacto y trazabilidad del resultado técnico. La entrega real a un dispositivo no está validada y depende de credenciales, servicios externos y configuración nativa. El nuevo alcance requiere que un contacto autenticado consulte dentro de la aplicación las alertas activas con las que tiene una relación aceptada, sin depender de push.
+En el momento de esta decisión el producto implementaba registro de tokens, un intento FCM por contacto y trazabilidad del resultado técnico. En la revisión posterior del código principal ya no se encontró el adaptador FCM; Database conserva los scripts de tablas históricas. La entrega real a un dispositivo no está validada y depende de credenciales, servicios externos y configuración nativa. El nuevo alcance requiere que un contacto autenticado consulte dentro de la aplicación las alertas activas con las que tiene una relación aceptada, sin depender de push.
 
 | Restricción | Fuente |
 |---|---|

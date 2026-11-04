@@ -1,7 +1,7 @@
 # 04 — Historias Frontend
 
 > [!NOTE] INSTRUCTIONS
-> Un merge o una validación estática no acredita dispositivo físico ni recorrido integrado. Las HU-AM-028 a 031 son propuestas nuevas y se detallan en el paquete de cambio.
+> Un merge o una validación estática no acredita dispositivo físico ni recorrido integrado. Las HU-AM-028 a 031 tienen componentes presentes en código; su cierre requiere evidencia por criterio.
 
 ## Catálogo HU-AM
 
@@ -41,7 +41,7 @@
 
 ## Estado de implementación
 
-HU-AM-001 a 027 tienen código integrado en `develop`. El 2026-10-13, Mobile y Web aprobaron typecheck/lint y Web aprobó build; la suite Playwright aprobó 3 de 10 casos y falló en siete casos asociados a login/mocks desactualizados. No hubo prueba de cámara, conversión, ubicación en segundo plano, APK o dispositivo físico. HU-AM-028 a 031 permanecen propuestas.
+HU-AM-001 a 027 tienen código integrado en `develop`. El 2026-10-13, Mobile y Web aprobaron typecheck/lint y Web aprobó build; la suite Playwright aprobó 3 de 10 casos y falló en siete casos asociados a login/mocks desactualizados. No hubo prueba de cámara, conversión, ubicación en segundo plano, APK o dispositivo físico. El código posterior incluye componentes de HU-AM-028 a 031; su validación integral y en dispositivo no se efectuó en esta revisión.
 
 ---
 

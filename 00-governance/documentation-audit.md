@@ -3,6 +3,8 @@
 > [!NOTE] INSTRUCTIONS
 > Actualice esta fotografía solo con evidencia fechada. No la use como reemplazo de las fuentes principales.
 
+Este documento conserva una fotografía histórica de octubre de 2026. Las afirmaciones de ese corte sobre FCM, WebP y HUs pendientes no describen necesariamente el código actual; consulte [módulos](../09-modules/module-catalog.md) y [modelo de datos](../06-data/models.md).
+
 ## Corte verificado: 2026-10-08
 
 | Ecosistema | Implementación observada | Límite o pendiente operativo |
@@ -35,6 +37,10 @@
 - Ejecución de scripts/verify-integration.ps1 con PostgreSQL 17.11: 126 pruebas, 0 fallos, 0 errores y 0 omitidas.
 - Revisión de módulos, rutas REST, STOMP, jobs y configuración CORS del checkout Backend.
 - Validación documental y enlaces del repositorio Docs pendiente de ejecutar al cierre de esta actualización.
+
+## Actualización de fuentes — 2026-11-04
+
+Se contrastó Backend `d56ba31`, Frontend `4d0a266` y Database `243ccb0`, todos en `develop`. Se actualizaron heartbeat con ubicación opcional, WebP de 500 000 bytes, captura automática en primer plano y HU-DB-030. El 2026-11-03 se observó almacenamiento local y el usuario confirmó visualización por contacto y administrador en Expo Go. Esto no acredita APK, segundo plano, despliegue productivo ni todos los escenarios de red.
 
 ---
 

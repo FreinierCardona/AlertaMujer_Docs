@@ -1,0 +1,182 @@
+openapi: 3.1.0
+info:
+  title: AlertaMujer API - Registro escalonado
+  version: 2.0.0
+  description: |
+    Contrato de HU-API-023 y HU-AM-032. Convive con /api/v1 sin modificarlo.
+    El flujo no usa SMS, permisos de SMS ni proveedor telefónico. PHONE_SIMULATOR
+    solo se habilita explícitamente por entorno para pruebas controladas.
+servers:
+  - url: https://api.alertamujer.local/api/v2
+tags:
+  - name: Identity
+paths:
+  /registration-requests:
+    post:
+      tags: [Identity]
+      operationId: startPhoneFirstRegistration
+      summary: Inicia el registro con datos personales y teléfono
+      description: Crea una solicitud temporal PHONE_PENDING. No crea usuario, credencial ni sesión.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PhoneFirstRegistrationInput' }
+      responses:
+        '201':
+          description: Solicitud temporal creada; la prueba opaca se entrega una única vez.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PhoneFirstRegistrationResponse' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '422': { $ref: '#/components/responses/RuleViolation' }
+  /registration-requests/{registrationRequestId}/verification-codes:
+    post:
+      tags: [Identity]
+      operationId: issuePhoneFirstRegistrationCode
+      summary: Emite o reenvía el OTP permitido por la fase
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/RegistrationRequestId'
+        - $ref: '#/components/parameters/RegistrationProof'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PhoneFirstChannelRequest' }
+      responses:
+        '201':
+          description: OTP emitido para la fase vigente; invalida el anterior del mismo canal.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RegistrationStageResponse' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '422': { $ref: '#/components/responses/RuleViolation' }
+  /registration-requests/{registrationRequestId}/verification-codes/verify:
+    post:
+      tags: [Identity]
+      operationId: verifyPhoneFirstRegistrationCode
+      summary: Consume el OTP de teléfono simulado o correo
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/RegistrationRequestId'
+        - $ref: '#/components/parameters/RegistrationProof'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PhoneFirstOtpVerification' }
+      responses:
+        '200':
+          description: PHONE_SIMULATOR responde PHONE_VERIFIED; EMAIL crea la cuenta atómicamente y responde COMPLETED.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RegistrationVerificationResult' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '422': { $ref: '#/components/responses/RuleViolation' }
+  /registration-requests/{registrationRequestId}/credentials:
+    put:
+      tags: [Identity]
+      operationId: completePhoneFirstRegistrationCredentials
+      summary: Guarda las credenciales después de PHONE_VERIFIED
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/RegistrationRequestId'
+        - $ref: '#/components/parameters/RegistrationProof'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegistrationCredentialsInput' }
+      responses:
+        '200':
+          description: Solicitud EMAIL_PENDING y OTP de correo emitido; no entrega contraseña ni OTP de correo.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RegistrationStageResponse' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '422': { $ref: '#/components/responses/RuleViolation' }
+components:
+  parameters:
+    RegistrationRequestId:
+      name: registrationRequestId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    RegistrationProof:
+      name: X-Registration-Proof
+      in: header
+      required: true
+      description: Prueba opaca devuelta una sola vez al iniciar la solicitud; no se persiste en claro en Backend o Database.
+      schema: { type: string, minLength: 1 }
+  schemas:
+    PhoneFirstRegistrationInput:
+      type: object
+      required: [username, firstNames, lastNames, phone]
+      properties:
+        username: { type: string, pattern: '^@[a-z0-9](?:[a-z0-9_]{1,18}[a-z0-9])$' }
+        firstNames: { type: string, minLength: 1, maxLength: 100 }
+        lastNames: { type: string, minLength: 1, maxLength: 100 }
+        phone: { type: string, pattern: '^3[0-9]{9}$' }
+    RegistrationCredentialsInput:
+      type: object
+      required: [email, password, acceptedTerms]
+      properties:
+        email: { type: string, format: email, maxLength: 254 }
+        password: { type: string, format: password, writeOnly: true, minLength: 12, pattern: '^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{12,}$' }
+        acceptedTerms: { type: boolean, const: true }
+    PhoneFirstChannelRequest:
+      type: object
+      required: [channel]
+      properties:
+        channel: { type: string, enum: [PHONE_SIMULATOR, EMAIL] }
+    PhoneFirstOtpVerification:
+      allOf:
+        - $ref: '#/components/schemas/PhoneFirstChannelRequest'
+        - type: object
+          required: [code]
+          properties:
+            code: { type: string, pattern: '^[0-9]{6}$' }
+    PhoneFirstRegistrationResponse:
+      type: object
+      required: [registrationRequestId, stage, registrationProof, expiresAt]
+      properties:
+        registrationRequestId: { type: string, format: uuid }
+        stage: { type: string, const: PHONE_PENDING }
+        registrationProof:
+          type: string
+          description: Se entrega una sola vez al iniciar el flujo; el cliente debe protegerlo y enviarlo exclusivamente en X-Registration-Proof.
+        expiresAt: { type: string, format: date-time }
+        simulatedPhoneCode:
+          type: [string, 'null']
+          pattern: '^[0-9]{6}$'
+          description: Solo aparece con el simulador habilitado para el cliente autorizado; no es un SMS.
+    RegistrationStageResponse:
+      type: object
+      required: [stage, expiresAt]
+      properties:
+        stage: { type: string, enum: [PHONE_PENDING, PHONE_VERIFIED, EMAIL_PENDING] }
+        expiresAt: { type: string, format: date-time }
+        simulatedPhoneCode: { type: [string, 'null'], pattern: '^[0-9]{6}$' }
+    RegistrationVerificationResult:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string, enum: [PHONE_VERIFIED, COMPLETED] }
+        userId: { type: [string, 'null'], format: uuid }
+    Error:
+      type: object
+      required: [code, message, requestId]
+      properties:
+        code: { type: string }
+        message: { type: string }
+        requestId: { type: string, format: uuid }
+        fields: { type: array, items: { type: object } }
+  responses:
+    ValidationError:
+      description: Entrada o encabezado inválido.
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    RuleViolation:
+      description: Solicitud, fase, prueba o OTP no autorizados; no revela existencia ni datos de otra solicitud.
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }

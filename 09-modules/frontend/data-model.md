@@ -14,7 +14,7 @@ Frontend posee estado efímero de presentación y preferencias de interfaz. Cons
 | sesión visible | habilitar navegación autenticada | contexto Frontend |
 | preferencias | tema, idioma y presentación | contexto Frontend |
 | formularios | captura y validación inmediata | pantallas |
-| SOS visible | representar progreso del flujo | mocks o respuesta del contrato Backend |
+| SOS visible | representar progreso del flujo | respuesta Backend mediante `mobile/src/core/api/emergencyApi.ts` |
 
 ## Relaciones
 
@@ -29,13 +29,13 @@ flowchart LR
 
 - No declarar éxito remoto antes de una confirmación contractual.
 - Mantener separados datos simulados y respuestas reales.
-- No guardar secretos en almacenamiento del cliente.
+- No registrar ni publicar credenciales o tokens; evaluar la seguridad de los almacenes utilizados en cada plataforma.
 
 ## Datos sensibles
 
 | Dato | Riesgo | Control |
 |---|---|---|
-| token de sesión | suplantación | estrategia segura Pendiente con Backend |
+| token de sesión | suplantación | Mobile guarda refresh token con `expo-secure-store`; Web lo guarda en `sessionStorage` y mantiene access token en memoria. Son decisiones implementadas, no una auditoría de seguridad. |
 | ubicación | exposición | solicitar y transmitir según autorización |
 | evidencia | filtración | no publicar localizadores públicos |
 

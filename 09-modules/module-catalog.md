@@ -7,9 +7,9 @@
 
 | Ecosistema | Repositorio | Responsabilidad | Estado verificado |
 |---|---|---|---|
-| Frontend | [AlertaMujer_Frontend](https://github.com/FreinierCardona/AlertaMujer_Frontend) | Mobile, Web, interacción, accesibilidad e i18n | Implementación local y mocks; consumo real requiere evidencia Frontend |
+| Frontend | [AlertaMujer_Frontend](https://github.com/FreinierCardona/AlertaMujer_Frontend) | Mobile, Web, interacción, accesibilidad e i18n | Clientes REST/STOMP implementados; ejecución integrada requiere evidencia |
 | Backend | [AlertaMujer_Backend](https://github.com/FreinierCardona/AlertaMujer_Backend) | API, seguridad, reglas e integraciones | HU-API-001 a 019 integradas; 126 pruebas aprobadas contra PostgreSQL local |
-| Database | [AlertaMujer_Database](https://github.com/FreinierCardona/AlertaMujer_Database) | PostgreSQL, Liquibase, grants y validación | 25 HU-DB integradas; HU-DB-025 aplicada |
+| Database | [AlertaMujer_Database](https://github.com/FreinierCardona/AlertaMujer_Database) | PostgreSQL, Liquibase, grants y validación | Scripts incluyen HU-DB-026 y flujo telefónico HU-DB-028; aplicación en ambiente por verificar |
 
 ## Capacidades Backend
 
@@ -20,7 +20,7 @@
 | Emergency | Ciclo SOS, estado, ubicación e historial | emergency.* |
 | Evidence | Carga y acceso autorizado | emergency_evidences y almacenamiento privado |
 | Chat | Historial y canal en tiempo real | emergency_chat_messages |
-| Notification | Panel interno derivado de alertas abiertas y contactos aceptados | Emergency / Contacts / Evidence; transición ADR-006 |
+| Alertas para contactos | Consultas internas derivadas de alertas abiertas y contactos aceptados en `contacts` | Emergency / Contacts / Evidence |
 | Administration | Operación autorizada y auditoría | audit.* y consultas controladas |
 | Shared | Configuración, seguridad y correlación | configuration.* |
 
@@ -28,10 +28,10 @@
 
 | Consumidor | Proveedor | Interfaz |
 |---|---|---|
-| Frontend | Backend | REST y WSS/STOMP implementados; integración Frontend pendiente de evidencia |
+| Frontend | Backend | Clientes REST y STOMP presentes; ejecución integrada pendiente de evidencia |
 | Backend | Database | SQL mediante rol alertamujer_app |
 | Database | PostgreSQL | Changelog Liquibase |
-| Backend | FCM | Implementado en el estado actual, pero aprobado para retiro por ADR-006; no es arquitectura objetivo |
+| Backend | FCM | No se encontró adaptador en el código principal revisado; las tablas históricas permanecen en Database |
 
 ## Regla
 

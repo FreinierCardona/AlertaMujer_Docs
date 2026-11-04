@@ -8,7 +8,7 @@
 | Regla | Responsable | Estado |
 |---|---|---|
 | Secretos fuera de Git y documentación | Cada ecosistema | Vigente |
-| JWT, datasource, FCM y SMTP por entorno | Operación / Backend | Implementado como variables; gestión de entorno pendiente |
+| JWT, datasource y SMTP por entorno | Operación / Backend | Implementado como variables; gestión de entorno pendiente |
 | Rotación y respuesta a compromiso | Seguridad / Operación | Pendiente |
 | Logs sin contraseñas, OTP, tokens o PII innecesaria | Backend / Operación | Implementado y probado localmente |
 

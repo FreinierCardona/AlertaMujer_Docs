@@ -32,10 +32,18 @@ Exponer la API Java/Spring Boot, seguridad, reglas transaccionales e integracion
 | Dependencia | Motivo | Estado comprobado |
 |---|---|---|
 | Database | Persistencia PostgreSQL y funciones protegidas | Validada con PostgreSQL 17.11 |
-| FCM legado | Intento por contacto elegible | Implementado actualmente; retiro aprobado por ADR-006/HU-API-021 |
-| Panel interno | Consulta de alertas/evidencias para contactos | Propuesto en HU-API-022 |
+| FCM | Entrega remota | No se encontró integración FCM en `src/main` ni dependencia Firebase en `pom.xml`; las tablas históricas de Database siguen en los scripts. |
+| Panel interno | Consulta de alertas/evidencias para contactos | `contacts/controller/ContactAlertController.java` implementa consultas; acceso local a evidencia por contacto confirmado el 2026-11-03. |
 | SMTP | Envío de OTP | Integración de código implementada; entrega de buzón no probada aquí |
 | Almacenamiento privado | Evidencias fotográficas | Implementado bajo EVIDENCE_STORAGE_PATH |
+
+## Componentes observados en el código
+
+Bajo `src/main/java/com/alertamujer/backend/`, `identity` implementa registro v1/v2, OTP, autenticación y perfil; `contacts` administra invitaciones y alertas de contactos; `emergency` gestiona SOS, ubicación e historial; `evidence` gestiona archivos locales; `chat` expone historial REST y mensajes STOMP; `administration` ofrece consultas y acciones administrativas; `shared` reúne seguridad, configuración, auditoría y errores. Cada controlador delega en servicios y repositorios de su módulo.
+
+`shared/security/SecurityConfiguration.java` permite registro, acceso, renovación y recuperación públicos; protege `/api/v1/admin/**` con `ENTITY_ADMIN` y exige autenticación para el resto. `/ws` permite el handshake HTTP y `chat/websocket/StompAuthenticationInterceptor.java` interviene el canal STOMP. Configura CORS por `CORS_ALLOWED_ORIGINS` y usa BCrypt.
+
+`pom.xml` declara Java 21 y Spring Boot 4.1.1, starters de JPA, Security, OAuth2 resource server, Web MVC, WebSocket, validación, correo y actuator; controlador PostgreSQL y `webp-imageio`. Esto describe dependencias declaradas, no operación verificada.
 
 ## Estado de entrega
 
@@ -54,6 +62,10 @@ Exponer la API Java/Spring Boot, seguridad, reglas transaccionales e integracion
 - El Backend no incorpora migrations ejecutables ni conexiones con usuarios propietarios.
 - Los contratos y la trazabilidad se actualizan con el cambio de código.
 - Las pruebas declaran con precisión sus límites: simulación de proveedor no equivale a entrega externa.
+
+## Emergencia y evidencia — corte 2026-11-04
+
+El heartbeat acepta ubicación opcional y restaura `OFFLINE` al estado operativo previo. La recepción de WebP de hasta 500 000 bytes admite `OFFLINE` para la propietaria habilitada y rechaza `FINALIZED`; `max_evidence_count = 0` desactiva el límite de cantidad. La estructura del archivo se valida sin decodificar ni recodificar píxeles.
 
 ---
 

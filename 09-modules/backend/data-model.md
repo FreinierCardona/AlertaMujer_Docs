@@ -15,7 +15,7 @@ Backend posee DTO, modelos de aplicación, repositorios y transacciones. AlertaM
 | Profile | Preferencias SOS y datos editables | profile.* e identity.users |
 | Contacts | Invitaciones y relaciones aceptadas | contacts.emergency_contacts |
 | Emergency | SOS, ubicación, estado e historial | emergency.emergencies, emergency_locations y emergency_status_history |
-| Notification | Tokens de dispositivo e intentos por emergencia | notification.user_device_tokens y emergency.emergency_notification_attempts |
+| Alertas para contactos | Consultas derivadas de relaciones aceptadas y emergencias | contacts.emergency_contacts, emergency.emergencies, ubicaciones y evidencias |
 | Evidence | Metadatos y referencia interna; binario fuera de PostgreSQL | emergency.emergency_evidences |
 | Chat | Mensajes ordenados e idempotentes | emergency.emergency_chat_messages |
 | Administration | Consulta y auditoría autorizada | identity.*, emergency.* y audit.audit_logs |
@@ -23,7 +23,9 @@ Backend posee DTO, modelos de aplicación, repositorios y transacciones. AlertaM
 
 ## Relación de capas
 
-El contrato REST o STOMP se adapta mediante DTO. El servicio valida reglas y transacciones, el repositorio consulta PostgreSQL migrado y los adaptadores de archivos, SMTP o FCM permanecen fuera de las entidades persistentes.
+El contrato REST o STOMP se adapta mediante DTO. El servicio valida reglas y transacciones, el repositorio consulta PostgreSQL migrado y los adaptadores de archivos y SMTP permanecen fuera de las entidades persistentes.
+
+El código declara `@Entity` para `identity.registration_requests` (`RegistrationRequestEntity`) y `configuration.system_configuration` (`SystemConfigurationEntity`). Los demás repositorios revisados usan principalmente `JdbcTemplate`; la ausencia de entidad JPA no implica ausencia de acceso.
 
 ## Reglas de integridad verificadas
 
@@ -39,7 +41,7 @@ El contrato REST o STOMP se adapta mediante DTO. El servicio valida reglas y tra
 |---|---|---|
 | Credenciales, OTP y refresh token | Hash y acceso protegido; no se serializan | No demuestra rotación de secretos por ambiente |
 | Ubicación, evidencia y chat | Autorización por emergencia y rutas no públicas | No sustituye política operativa de retención |
-| Tokens FCM | Propiedad y resultado técnico saneado | No demuestra recepción por dispositivo real |
+| Tablas FCM históricas | `notification.user_device_tokens` y `notification.emergency_notification_attempts` permanecen en scripts Database | No se encontró acceso a ellas en `src/main` de Backend |
 
 ---
 

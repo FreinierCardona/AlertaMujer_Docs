@@ -1,7 +1,7 @@
 # HU-API-022 — Exponer alertas y evidencias seguras al contacto
 
 > [!NOTE] INSTRUCTIONS
-> Historia Propuesta. Reutilizar emergencia/contactos/evidencia; no crear tabla de notificaciones.
+> Estado observado: `ContactAlertController` y su servicio implementan rutas de lectura; falta validar los criterios completos y el recorrido integrado.
 
 ## Identificación
 

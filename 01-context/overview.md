@@ -20,19 +20,19 @@ AlertaMujer permite preparar contactos, activar una emergencia SOS con ubicació
 |---|---|
 | Usuaria `USER` | Solicitar ayuda y mantener control sobre su alerta y datos. |
 | Administrador `ENTITY_ADMIN` | Atender y consultar información autorizada sin finalizar por la usuaria. |
-| Contacto de emergencia | Aceptar/rechazar relación y recibir un intento de notificación. |
+| Contacto de emergencia | Aceptar/rechazar relación y consultar alertas abiertas vinculadas. |
 | Visitante | Conocer capacidades reales y disponibilidad del APK. |
 
 ## Problema que resuelve
 
-Reduce la fricción entre reconocer riesgo, crear una alerta trazable y disponer de contexto para atención. No garantiza conectividad, aviso con la aplicación cerrada ni respuesta institucional. El FCM todavía presente en código es legado en retiro por ADR-006.
+Reduce la fricción entre reconocer riesgo, crear una alerta trazable y disponer de contexto para atención. No garantiza conectividad, aviso con la aplicación cerrada ni respuesta institucional. El panel interno requiere que la persona consulte la aplicación; los scripts Database conservan tablas históricas de FCM.
 
 ## Restricciones
 
 | Restricción | Consecuencia |
 |---|---|
 | Tres repositorios independientes | Cambios coordinados mediante contratos, no carpetas compartidas. |
-| Backend no implementado | API y arquitectura son objetivo, no evidencia ejecutable. |
+| Integración y despliegue por verificar | El código disponible no acredita operación en un ambiente concreto. |
 | Android como cliente móvil | GPS, cámara, permisos y marcador dependen del dispositivo. |
 | PostgreSQL + Liquibase | Database es la única fuente de esquema y grants. |
 | Evidencia local servidor | No se declara almacenamiento en nube. |

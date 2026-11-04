@@ -15,9 +15,8 @@ Frontend Mobile y Web consume REST y WSS del Backend. El Backend accede a Postgr
 |---|---|---|
 | Shared | Seguridad, errores, configuración, auditoría y correlación | Configuración Database |
 | Identity | Registro, OTP, JWT, sesión, cuenta y perfil | Shared |
-| Contacts | Directorio e invitaciones | Identity |
+| Contacts | Directorio, invitaciones y alertas para contactos | Identity, Emergency, Evidence |
 | Emergency | SOS, estados, ubicaciones e historial | Identity, Contacts |
-| Notification | Tokens e intentos FCM | Emergency, Contacts |
 | Evidence | Archivos privados y metadata autorizada | Emergency |
 | Chat | REST histórico y WSS/STOMP | Emergency, Identity |
 | Administration | Atención, cuentas y auditoría | Módulos anteriores |

@@ -6,16 +6,16 @@
 
 - Un sistema distribuido en tres repositorios independientes: Frontend, Backend y Database.
 - Una aplicación Mobile Android, una Web pública y un panel administrativo dentro de Frontend.
-- Un Backend Java/Spring Boot modular con las HU-API-001 a HU-API-019 integradas en develop y las HU-API-020 a 022 propuestas.
+- Un Backend Java/Spring Boot modular con identidad, contactos, emergencias, evidencia, chat y administración; el estado del código se detalla en las fichas de módulos.
 - Una base PostgreSQL gobernada exclusivamente mediante Liquibase desde Database.
 - Contratos REST y WSS/STOMP que coordinan clientes y servidor.
 - Documentación guiada por Software Design Documentation, trazabilidad y evidencia verificable.
 
 ## Estado comprobado del Backend
 
-El corte del 2026-10-13 verificó `develop` en `f2edcb5`. La suite integrada contra PostgreSQL 17.11 terminó con 138 pruebas, 0 fallos, 0 errores y 0 omitidas. El Backend implementa identidad, contactos, SOS, estados, evidencia, chat, FCM vigente, administración, jobs y CORS local.
+El corte histórico del 2026-10-13 verificó `develop` en `f2edcb5` y reportó 138 pruebas aprobadas con PostgreSQL 17.11. La revisión estática posterior encontró también consultas para contactos, registro telefónico v2 y límite WebP de 500 000 bytes; no encontró adaptador FCM en el código principal actual.
 
-Esto acredita código integrado y pruebas locales con fixtures sintéticas. No acredita un despliegue productivo, la llegada de SMTP a un buzón, Mobile en dispositivo, TLS, SLO ni un pipeline de promoción. ADR-006 aprueba retirar FCM y ADR-007 aprueba WebP previo de hasta 500 KB (500 000 bytes); ambas decisiones siguen pendientes de implementación.
+Las pruebas históricas usan fixtures sintéticas y no acreditan el código posterior ni despliegue productivo, recepción SMTP, APK, segundo plano, TLS, SLO o promoción. El 2026-11-03 se confirmó localmente en Expo Go la carga y consulta de fotografías por contacto y administrador; ese resultado no cubre todos los dispositivos o ambientes. Database conserva scripts históricos de FCM; la aplicación de migraciones debe comprobarse por ambiente.
 
 Consulte [el estado técnico del 2026-10-13](./13-operations/project-status-2026-10-13.md) y [el paquete detallado de HUs](./04-requirements/change-package-evidence-internal-notifications.md).
 
@@ -28,6 +28,8 @@ Consulte [el estado técnico del 2026-10-13](./13-operations/project-status-2026
 - Tratar una rama Git como ambiente desplegado sin evidencia operativa.
 
 ## Cómo usar este repositorio
+
+Para lectores funcionales: [flujo funcional](./03-product/functional-flow.md), [experiencia Mobile](./12-ux-ui/mobile.md) y [experiencia Web](./12-ux-ui/web.md). Para desarrolladores: [arquitectura](./05-architecture/README.md), [datos](./06-data/models.md), [API](./07-api/README.md) y [módulos](./09-modules/module-catalog.md).
 
 1. Lea [00-sdd-guide.md](./00-sdd-guide.md) para conocer fases, puertas y orden.
 2. Aplique primero [00-governance](./00-governance/README.md).

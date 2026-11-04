@@ -1,7 +1,7 @@
 # HU-AM-028 — Corregir captura y carga de evidencia WebP
 
 > [!NOTE] INSTRUCTIONS
-> Historia Propuesta. No marcar Implementada sin prueba Android real y recorrido contra HU-API-020/HU-DB-026.
+> Estado observado: conversión, captura automática y carga presentes en `develop`; el recorrido local con Expo Go se comprobó el 2026-11-03. Persisten pruebas de APK y segundo plano.
 
 ## Identificación
 
@@ -43,6 +43,10 @@ Escenario: carga fallida
 
 - Funcionales: permiso concedido/denegado, límite, offline y reintento en Android real.
 - Técnicas: config Expo desde Mobile, MIME/firma WebP, tamaño, multipart sin header manual, timeout de archivo, typecheck/lint.
+
+## Ampliación observada en develop
+
+`AutomaticEvidenceCapture` intenta capturas cada 10 s con cámara lista y app activa, y se pausa en segundo plano. La carga multipart usa `expo-file-system` `File`; confirma únicamente tras respuesta del servidor. La prueba local del 2026-11-03 confirmó consulta por contacto y administrador, sin acreditar captura con la app cerrada ni APK.
 
 ---
 

@@ -45,7 +45,7 @@ La API escucha en http://localhost:8080/api/v1 y la salud técnica está en http
 | SQLState 28P01 | Credencial local desactualizada | Sincronizar .env con la configuración Database sin mostrar ni versionar valores |
 | Conexión rechazada desde host | URL Docker usada fuera de Docker | Usar 127.0.0.1:5434 para la ejecución host |
 | Health 503 con REST/DB iniciados | Contribuidor SMTP no disponible | Revisar el componente SMTP antes de afirmar indisponibilidad total |
-| Resultado FCM aceptado | Firebase aceptó el intento | No afirmar llegada o lectura en dispositivo |
+| Alertas para contactos no aparecen | Requieren relación aceptada, emergencia abierta y sesión autorizada | Revisar respuesta de `/api/v1/me/contact-alerts` y permisos sin exponer datos |
 | Endpoint protegido devuelve 401/403 | Falta o no es válida la identidad vigente | Revisar token, sesión, rol, propiedad y estado |
 
 ## Docker
