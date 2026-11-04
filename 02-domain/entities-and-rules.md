@@ -13,7 +13,7 @@
 | Emergencia | UUID de emergencia | activa → en proceso/sin conexión → finalizada | `emergency.emergencies` |
 | Evidencia | UUID de metadata | creada durante alerta; lectura histórica | `emergency.emergency_evidences` |
 | Mensaje | secuencia `BIGINT` + UUID cliente | persistido → publicado | `emergency.emergency_chat_messages` |
-| Intento FCM | secuencia de intento | pendiente → resultado proveedor | `notification.emergency_notification_attempts` |
+| Intento FCM histórico | secuencia de intento | datos heredados en scripts Database | `notification.emergency_notification_attempts` |
 
 ## Reglas de negocio
 
@@ -25,8 +25,8 @@
 | BR-04 | SOS exige contacto aceptado, cuenta válida, permisos, GPS, red y coordenada. | Emergencia / Mobile |
 | BR-05 | El reintento SOS devuelve la misma emergencia abierta. | Emergencia |
 | BR-06 | Contacto es relación, no rol; no permite autocontacto ni duplicado. | Contactos |
-| BR-07 | FCM realiza un intento y no acredita entrega o lectura. | Notificaciones |
-| BR-08 | En el código actual la evidencia es WebP, máximo 1 MB y 10 fotografías por emergencia; ADR-007/HU-DB-026 reducen el objetivo a 500 KB (500 000 bytes). | Evidencias |
+| BR-07 | El contacto autorizado consulta alertas abiertas vinculadas; no hay entrega push remota en el código principal revisado. | Contactos |
+| BR-08 | La evidencia WebP tiene límite de 500 000 bytes en Mobile, Backend y migración Database; la cantidad máxima se obtiene de configuración; `0` desactiva el tope de aplicación. | Evidencias |
 | BR-09 | Chat no acepta mensajes después de `FINALIZED`. | Chat |
 | BR-10 | Los cuatro idiomas cambian interfaz, no datos aportados por actores. | Experiencia |
 

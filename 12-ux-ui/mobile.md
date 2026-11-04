@@ -16,8 +16,8 @@ Mobile acompaña a la usuaria en registro, sesión, configuración, contactos y 
 | contactos | administrar red de emergencia | HU Frontend |
 | SOS | iniciar y seguir una emergencia | flujo funcional |
 | ubicación | comunicar estado y permisos | requisito correspondiente |
-| evidencia | capturar con consentimiento y estado | decisión pendiente de archivos |
-| chat | intercambiar mensajes asociados al evento | contrato WSS pendiente |
+| evidencia | capturar con consentimiento y estado | código de captura y almacenamiento local del Backend |
+| chat | intercambiar mensajes asociados al evento | código REST y STOMP |
 | notificaciones internas | campana, indicador, listado y detalle de alertas vinculadas | ADR-006 y HU-AM-030/031 |
 
 ## Estados obligatorios
@@ -37,7 +37,7 @@ Probar lector de pantalla, foco, tamaño de texto, contraste, orientación aplic
 
 ## Integración
 
-Mientras Backend no esté disponible, cada flujo que use mocks lo indica en evidencia y no atribuye persistencia real.
+Los clientes de `mobile/src/core/api/` llaman a REST y el código incluye chat STOMP. La presencia de estos clientes no confirma conectividad, permisos del dispositivo o entrega externa en ejecución.
 
 ## Decisiones de cambio aprobadas
 
@@ -46,7 +46,7 @@ Mientras Backend no esté disponible, cada flujo que use mocks lo indica en evid
 - Mobile convierte la captura a WebP antes de la carga y valida un máximo de 500 KB (500 000 bytes).
 - Push remoto y registro de token se retiran. El aviso foreground requerido por ubicación en segundo plano es un mecanismo local distinto.
 
-Estado: estas decisiones están documentadas, pero sus HUs siguen propuestas. El código actual todavía contiene FCM y la configuración Expo está ubicada fuera de `mobile/`, hallazgo que debe corregir HU-AM-028.
+Estado revisado: existen alertas internas, captura automática en primer plano y límite de 500 000 bytes. El 2026-11-03 se confirmó en Expo Go la captura y visualización local por contacto y administrador; no valida APK ni operación en segundo plano. No se encontró Firebase en `mobile/package.json`. `PHONE_SIMULATOR` no envía SMS real.
 
 ---
 

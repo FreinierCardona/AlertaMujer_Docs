@@ -1,7 +1,7 @@
 # HU-API-021 — Retirar FCM y tokens de dispositivo
 
 > [!NOTE] INSTRUCTIONS
-> Historia Propuesta. Ejecutar coordinada con Mobile y Database; no borrar datos antes de definir la migración.
+> Estado observado: No se encontraron endpoint ni adaptador FCM en `src/main` y `pom.xml`; no se verificaron todos los criterios ni la retirada física Database.
 
 ## Identificación
 

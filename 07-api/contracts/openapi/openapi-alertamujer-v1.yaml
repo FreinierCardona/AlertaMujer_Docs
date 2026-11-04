@@ -138,13 +138,6 @@ paths:
       x-functional: { actor: Account owner, previousState: Authenticated, postState: Nonblank message stored, idempotency: Same body is safe, transaction: Upsert own setting, auditEvent: NONE }
       requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SosMessage' } } } }
       responses: { '200': { description: Saved setting, content: { application/json: { schema: { $ref: '#/components/schemas/SosMessage' } } } }, '422': { $ref: '#/components/responses/RuleViolation' } }
-  /me/device-tokens:
-    post:
-      tags: [Profile]
-      summary: Registra o actualiza token FCM propio
-      x-functional: { actor: Account owner, previousState: Authenticated, postState: Active device token registered, idempotency: Same owner token updates last-seen data; another owner receives generic conflict, transaction: Upsert token owned by actor only, auditEvent: NONE }
-      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/DeviceTokenInput' } } } }
-      responses: { '201': { description: Token registered }, '200': { description: Existing token refreshed }, '409': { $ref: '#/components/responses/StateConflict' }, '422': { $ref: '#/components/responses/RuleViolation' } }
   /directory:
     get:
       tags: [Contacts]
@@ -210,10 +203,10 @@ paths:
   /emergencies/{emergencyId}/heartbeats:
     post:
       tags: [Emergencies]
-      summary: Registra latido y ubicación actual
-      x-functional: { actor: Emergency owner, previousState: ACTIVE or IN_PROGRESS or OFFLINE emergency, postState: Location persisted and OFFLINE recovers previous operational state, idempotency: Repeated coordinate is accepted once per request, transaction: Lock emergency; revalidate; append location/history if state changes, auditEvent: NONE }
+      summary: Registra latido y, opcionalmente, ubicación
+      x-functional: { actor: Emergency owner, previousState: ACTIVE or IN_PROGRESS or OFFLINE emergency, postState: Heartbeat updated; optional location persisted; OFFLINE recovers previous operational state, idempotency: Repeated coordinate may be stored again, transaction: Lock emergency; revalidate; append location when supplied and history if state changes, auditEvent: NONE }
       parameters: [{ $ref: '#/components/parameters/EmergencyId' }]
-      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/LocationInput' } } } }
+      requestBody: { required: false, content: { application/json: { schema: { $ref: '#/components/schemas/LocationInput' } } } }
       responses: { '204': { description: Heartbeat accepted }, '409': { $ref: '#/components/responses/StateConflict' } }
   /emergencies/{emergencyId}/locations:
     post:
@@ -270,7 +263,7 @@ paths:
     post:
       tags: [Evidence]
       summary: Carga una fotografía de evidencia
-      x-functional: { actor: Emergency owner, previousState: Open authorized emergency with fewer than 10 evidences, postState: WebP metadata/reference persisted after file processing, idempotency: No automatic duplicate retry; client retries only after failure response, transaction: Validate/open state; store file; persist metadata; compensate file on DB failure, auditEvent: NONE }
+      x-functional: { actor: Emergency owner, previousState: Owned enabled emergency in ACTIVE or IN_PROGRESS or OFFLINE and within configured count if positive, postState: WebP metadata/reference persisted after file processing, idempotency: No automatic duplicate retry; client retries only after failure response, transaction: Validate/open state; store file; persist metadata; compensate file on DB failure, auditEvent: NONE }
       parameters: [{ $ref: '#/components/parameters/EmergencyId' }]
       requestBody: { required: true, content: { multipart/form-data: { schema: { type: object, required: [file], properties: { file: { type: string, format: binary } } } } } }
       responses: { '201': { description: Evidence metadata, content: { application/json: { schema: { $ref: '#/components/schemas/Evidence' } } } }, '409': { $ref: '#/components/responses/StateConflict' }, '422': { $ref: '#/components/responses/RuleViolation' } }
@@ -414,7 +407,6 @@ components:
           required: [field, value, code]
           properties: { field: { type: string, enum: [phone] }, value: { type: string, pattern: '^3[0-9]{9}$' }, code: { type: string, pattern: '^[0-9]{6}$' } }
     SosMessage: { type: object, required: [message], properties: { message: { type: string, minLength: 1, maxLength: 500 } } }
-    DeviceTokenInput: { type: object, required: [token, platform], properties: { token: { type: string, writeOnly: true }, platform: { type: string, enum: [ANDROID] } } }
     ContactInvitation: { type: object, required: [contactId, status, expiresAt], properties: { contactId: { type: string, format: uuid }, status: { type: string, enum: [PENDING, ACCEPTED, EXPIRED, REJECTED] }, expiresAt: { type: string, format: date-time, nullable: true } } }
     DirectoryUser: { type: object, required: [username, firstNames, lastNames], properties: { username: { type: string }, firstNames: { type: string }, lastNames: { type: string } } }
     DirectoryPage: { type: object, required: [items, page, size, total], properties: { items: { type: array, items: { $ref: '#/components/schemas/DirectoryUser' } }, page: { type: integer }, size: { type: integer }, total: { type: integer } } }
@@ -430,7 +422,7 @@ components:
     EmergencyLocation: { type: object, required: [latitude, longitude, capturedAt, receivedAt], properties: { latitude: { type: number, minimum: -90, maximum: 90 }, longitude: { type: number, minimum: -180, maximum: 180 }, accuracyMeters: { type: number, minimum: 0, nullable: true }, capturedAt: { type: string, format: date-time }, receivedAt: { type: string, format: date-time } } }
     EmergencyDetail: { allOf: [{ $ref: '#/components/schemas/Emergency' }, { type: object, required: [messageSnapshot], properties: { messageSnapshot: { type: string, maxLength: 500 }, lastConfirmedLocation: { allOf: [{ $ref: '#/components/schemas/EmergencyLocation' }], nullable: true } } }] }
     EmergencyPage: { type: object, required: [items, page, size, total], properties: { items: { type: array, items: { $ref: '#/components/schemas/Emergency' } }, page: { type: integer }, size: { type: integer }, total: { type: integer } } }
-    Evidence: { type: object, required: [evidenceId, mimeType, sizeBytes, receivedAt], properties: { evidenceId: { type: string, format: uuid }, mimeType: { type: string, enum: [image/webp] }, sizeBytes: { type: integer, maximum: 1048576 }, receivedAt: { type: string, format: date-time } } }
+    Evidence: { type: object, required: [evidenceId, mimeType, sizeBytes, receivedAt], properties: { evidenceId: { type: string, format: uuid }, mimeType: { type: string, enum: [image/webp] }, sizeBytes: { type: integer, minimum: 1, maximum: 500000 }, receivedAt: { type: string, format: date-time } } }
     ChatMessage: { type: object, required: [messageId, clientMessageId, content, sentAt], properties: { messageId: { type: integer, format: int64, minimum: 1 }, clientMessageId: { type: string, format: uuid }, content: { type: string, maxLength: 500 }, sentAt: { type: string, format: date-time } } }
     Dashboard: { type: object, properties: { activeCount: { type: integer }, inProgressCount: { type: integer }, offlineCount: { type: integer } } }
     UserPage: { type: object, required: [items, page, size, total], properties: { items: { type: array, items: { $ref: '#/components/schemas/UserProfile' } }, page: { type: integer }, size: { type: integer }, total: { type: integer } } }

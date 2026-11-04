@@ -11,7 +11,7 @@
 | Frontend → Backend | JWT, sesión, rol, propiedad, estado y CORS explícito | Implementado y probado localmente |
 | Backend → Database | alertamujer_app y mínimo privilegio | Verificado contra PostgreSQL 17.11 |
 | Migrator → Database | Credencial separada, Liquibase y rollback | Propiedad Database |
-| Backend → FCM/SMTP/archivos | Secretos por entorno, rutas privadas y resultados técnicos | Código implementado; operación externa pendiente |
+| Backend → SMTP/archivos | Secretos por entorno y rutas privadas | Código implementado; entrega SMTP y operación del almacenamiento pendientes de validación |
 
 ## Identidad y sesión
 
@@ -33,11 +33,11 @@
 
 ## Datos y archivos
 
-Fotografías usan nombre aleatorio y ruta no pública; PostgreSQL conserva metadatos. Los logs y errores excluyen contraseñas, OTP, refresh token, token FCM, ruta privada, contenido de chat y ubicación precisa innecesaria.
+Fotografías usan nombre aleatorio y ruta no pública; PostgreSQL conserva metadatos. Los logs y errores excluyen contraseñas, OTP, refresh token, ruta privada, contenido de chat y ubicación precisa innecesaria.
 
 ## Evidencia y pendientes
 
-El 2026-10-08, la suite de 126 pruebas aprobó sin fallos ni omisiones sobre PostgreSQL local. Quedan pendientes rotación de secretos, rate limiting general, TLS de ambientes, retención de logs, threat model, pruebas de penetración y validación real de SMTP/FCM.
+El 2026-10-08, la suite de 126 pruebas aprobó sin fallos ni omisiones sobre PostgreSQL local. Quedan pendientes rotación de secretos, rate limiting general, TLS de ambientes, retención de logs, threat model, pruebas de penetración y validación real de SMTP.
 
 ---
 

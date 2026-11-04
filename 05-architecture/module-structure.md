@@ -5,18 +5,18 @@
 
 ## Árbol Backend implementado
 
-La raíz Java contiene AlertaMujerApplication y el paquete backend. Dentro de backend existen los módulos shared, identity, contacts, emergency, notification, evidence, chat y administration.
+La raíz Java contiene AlertaMujerApplication y el paquete backend. Dentro de backend existen los módulos shared, identity, contacts, emergency, evidence, chat y administration.
 
 - shared concentra configuración, seguridad, errores, auditoría y observabilidad.
 - identity concentra registro, OTP, sesiones y perfil.
 - contacts administra directorio e invitaciones.
 - emergency administra SOS, ubicaciones, estados e historial.
-- notification expone el panel interno derivado; tokens e intentos FCM son legado pendiente de retiro por ADR-006.
+- contacts también expone consultas del panel interno de alertas para contactos aceptados.
 - evidence persiste metadatos y mantiene almacenamiento privado.
 - chat ofrece REST, STOMP y publicación posterior al commit.
 - administration agrupa panel, atención, usuarios y auditoría.
 
-Cada módulo mantiene sus capas controller, dto, service, repository y model cuando corresponden. Los adaptadores específicos permanecen dentro de su módulo: fcm, storage y websocket.
+Cada módulo mantiene sus capas controller, dto, service, repository y model cuando corresponden. Los adaptadores específicos permanecen dentro de su módulo: storage y websocket.
 
 ## Estructuras de los demás ecosistemas
 

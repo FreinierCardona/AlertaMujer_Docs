@@ -15,19 +15,19 @@
 
 ## Contexto
 
-El Backend actual admite una solicitud multipart de hasta 10 MB, pero convierte el resultado a WebP de máximo 1 MB y Database rechaza metadatos por encima de 1 048 576 bytes. Mobile captura JPEG/PNG con `expo-image-picker`, no convierte a WebP antes de enviar y cancela cualquier carga que exceda 15 segundos. Además, la configuración nativa de Expo se encuentra fuera del directorio Mobile, por lo que permisos y plugins no quedan respaldados por la ubicación esperada.
+Al tomar la decisión, el Backend admitía una solicitud multipart de hasta 10 MB, pero convierte el resultado a WebP de máximo 1 MB y Database rechaza metadatos por encima de 1 048 576 bytes. Mobile captura JPEG/PNG con `expo-image-picker`, no convierte a WebP antes de enviar y cancela cualquier carga que exceda 15 segundos. En ese corte la configuración nativa de Expo se encontraba fuera del directorio Mobile. En la revisión posterior existen límites de 500 000 bytes en Mobile, Backend y migración Database; el resultado de una prueba local no acredita todos los ambientes.
 
 | Restricción | Fuente |
 |---|---|
 | Solo fotografías tomadas con cámara durante una alerta abierta | RF7 y flujo de emergencia |
-| Máximo 10 evidencias confirmadas por emergencia | Regla vigente |
+| Cantidad configurable; `0` desactiva el tope de aplicación | HU-DB-030, Backend `EvidenceServiceImpl` |
 | Formato transferido y almacenado `image/webp` | Decisión 2026-10-13 |
 | Tamaño máximo del WebP transferido y final: 500 KB (500 000 bytes) | Decisión actualizada |
 | Archivo privado fuera de PostgreSQL | ADR-005 |
 
 ## Decisión
 
-**Decidimos:** Mobile convierte la captura a WebP antes de enviarla y rechaza una salida WebP superior a 500 KB (500 000 bytes); Backend valida firma, MIME, dimensiones y tamaño, puede re-encodear para normalizar, y nunca persiste un archivo final superior a ese límite.
+**Decidimos:** Mobile convierte la captura a WebP antes de enviarla y rechaza una salida WebP superior a 500 KB (500 000 bytes); Backend valida MIME, estructura RIFF/WebP y tamaño; no decodifica píxeles ni recodifica. El archivo final no supera ese límite.
 
 La solicitud multipart admite el archivo WebP y un margen de protocolo suficiente. PostgreSQL conserva solo metadata y valida `file_size_bytes` entre 1 y 500 000. No se distribuye el archivo original JPEG/PNG y no se crea una fila si falla la conversión, validación o escritura.
 

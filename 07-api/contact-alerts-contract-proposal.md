@@ -70,7 +70,7 @@ Si alguna condición falla, el recurso individual responde `404` para no revelar
 
 ## Evidencia WebP
 
-HU-API-020 cambia el upload existente: Mobile envía `image/webp`; tamaño máximo 500 KB (500 000 bytes); máximo 10 evidencias; solo la propietaria puede cargar. El contacto es lector, nunca cargador.
+HU-API-020 cambia el upload existente: Mobile envía `image/webp`; tamaño máximo 500 KB (500 000 bytes); cantidad configurable (`0` sin tope de aplicación tras HU-DB-030); solo la propietaria puede cargar. El contacto es lector, nunca cargador.
 
 ---
 

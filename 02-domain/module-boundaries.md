@@ -26,9 +26,10 @@ Una capacidad con vocabulario, reglas y dueño claros. Frontend, Backend y Datab
 | Evidence | cámara, galería y visor | archivos y autorización | metadata `emergency` |
 | Chat | REST + WSS/STOMP | autorización y publicación | mensajes `emergency` |
 
-Transición: tokens, adaptador FCM y schema `notification` existen en el código físico actual, pero ADR-006 ordena retirarlos; no son el límite objetivo del módulo.
 | Administration | panel protegido | RBAC, atención y auditoría | schema `audit` |
 | Experience | idioma, tema y accesibilidad | sin persistencia actual | sin tabla propia |
+
+Database conserva scripts del schema `notification`; el adaptador FCM no aparece en el código principal Backend revisado. Las consultas del panel residen en `contacts`.
 
 ## Señales de límite incorrecto
 

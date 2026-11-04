@@ -1,7 +1,7 @@
 # HU-DB-026 — Reducir límite de evidencia a 500 KB
 
 > [!NOTE] INSTRUCTIONS
-> Historia Propuesta. Implementar solo mediante nuevo changeset Liquibase con rollback verificable.
+> Estado observado: Changesets y rollback están presentes; la aplicación por ambiente y la validación completa no se comprobaron.
 
 ## Identificación
 

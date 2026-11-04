@@ -1,7 +1,7 @@
 # Paquete de cambio — Evidencia WebP y notificaciones internas
 
 > [!NOTE] INSTRUCTIONS
-> Mantener este archivo como índice del incremento. Cada HU vive en una ficha propia y permanece Propuesta hasta contar con código, pruebas e integración verificable.
+> Mantener este archivo como índice del incremento. Cada HU vive en una ficha propia. Varias capacidades tienen código observado; el cierre requiere pruebas y evidencia de integración por criterio.
 
 ## Objetivo
 

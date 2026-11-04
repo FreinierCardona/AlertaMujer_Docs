@@ -4,7 +4,11 @@ Los cambios siguen una estructura inspirada en Keep a Changelog y se agrupan por
 
 ## [Unreleased]
 
+Se sincronizan latidos, evidencia, HU-DB-030 y OpenAPI con los ecosistemas en `develop`, diferenciando la prueba local en Expo Go de la validación productiva pendiente.
+
 ### Added
+
+Las entradas históricas siguientes describen cortes anteriores; consultar la auditoría fechada para el estado vigente.
 
 - ADR-006 para retirar notificaciones push y usar un panel interno derivado de alertas abiertas.
 - ADR-007 para convertir a WebP antes de transferir y admitir archivos finales de hasta 500 KB.

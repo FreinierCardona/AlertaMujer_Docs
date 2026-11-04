@@ -38,14 +38,15 @@
 
 Las 25 historias están integradas en `develop`; HU-DB-025 está aplicada y aporta `account_origin` y `accepted_terms_at` a solicitudes de registro.
 
-## Cambio aprobado y pendiente
+## Cambios posteriores
 
 | Id | Resultado propuesto | Dependencia | Estado |
 |---|---|---|---|
-| HU-DB-026 | Reducir a 500 KB el límite de metadata WebP y la configuración correspondiente | ADR-007, HU-DB-020 | Propuesta |
+| HU-DB-026 | Reducir a 500 KB el límite de metadata WebP y la configuración correspondiente | ADR-007, HU-DB-020 | SQL y changesets presentes; aplicación por ambiente no verificada |
 | HU-DB-027 | Retirar tablas, índices, grants y schema exclusivos de FCM sin crear tabla de notificación interna | ADR-006, HU-DB-016/022 | Propuesta |
+| HU-DB-030 | Permitir secuencia positiva y desactivar el tope de cantidad con configuración cero | HU-DB-020 y HU-API-020 | Changesets y rollback en `develop`; aplicación por ambiente requiere verificación |
 
-La estructura física actual todavía conserva 16 entidades y siete schemas; el objetivo posterior a HU-DB-027 es 14 entidades y seis schemas. HU-DB-026 reduce el límite físico actual de 1 MB a 500 KB (500 000 bytes). Detalle y Gherkin: [change-package-evidence-internal-notifications.md](./change-package-evidence-internal-notifications.md).
+La estructura física actual todavía conserva 16 entidades y siete schemas; el objetivo posterior a HU-DB-027 es 14 entidades y seis schemas. HU-DB-026 incluye la reducción a 500 KB (500 000 bytes) y un `CHECK NOT VALID`; una base concreta puede no tener aún el cambio aplicado. Detalle y Gherkin: [change-package-evidence-internal-notifications.md](./change-package-evidence-internal-notifications.md).
 
 ---
 

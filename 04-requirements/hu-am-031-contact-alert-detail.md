@@ -1,7 +1,7 @@
 # HU-AM-031 — Consultar detalle y evidencias como contacto
 
 > [!NOTE] INSTRUCTIONS
-> Historia Propuesta. Mostrar solo datos necesarios para apoyo y retirar el acceso cuando deje de ser válido.
+> Estado observado: Existe detalle de alerta de contacto en Mobile y Backend; falta verificar cada criterio con sesión y dispositivo.
 
 ## Identificación
 

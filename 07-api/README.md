@@ -18,9 +18,9 @@ Definir cómo Frontend consume capacidades Backend y cómo se gobiernan los cont
 
 ## Estado comprobado
 
-El Backend integrado expone las familias de rutas de identidad, perfil, contactos, emergencias, evidencia, chat, dispositivo y administración bajo /api/v1, además de /ws para STOMP. El corte del 2026-10-08 ejecutó 126 pruebas sin fallos, errores ni omisiones contra PostgreSQL local.
+El Backend expone rutas de identidad, perfil, contactos, emergencias, evidencia, chat y administración bajo `/api/v1`; el registro telefónico también tiene rutas bajo `/api/v2/registration-requests`, y `/ws` es la entrada STOMP. El corte del 2026-10-08 ejecutó 126 pruebas sin fallos, errores ni omisiones contra PostgreSQL local.
 
-La evidencia confirma la implementación y las pruebas de los flujos, no una integración ya realizada por el Frontend ni un despliegue TLS. Los consumidores conservan OpenAPI y WSS/STOMP como fuente para cuerpos, restricciones, códigos y destinos.
+Los clientes de Mobile y Web consumen rutas del Backend en el código. Su presencia no confirma que la integración, la entrega SMTP o TLS funcionen en un ambiente concreto. Los consumidores conservan OpenAPI y WSS/STOMP como fuente para cuerpos, restricciones, códigos y destinos.
 
 ## Fuera de alcance
 
@@ -44,4 +44,4 @@ La evidencia confirma la implementación y las pruebas de los flujos, no una int
 ---
 
 **Relacionados:** [rest-conventions.md](rest-conventions.md) · [wss-stomp.md](wss-stomp.md) · [../04-requirements/traceability-matrix.md](../04-requirements/traceability-matrix.md) · [../09-modules/backend/README.md](../09-modules/backend/README.md)
-Consulte [contact-alerts-contract-proposal.md](./contact-alerts-contract-proposal.md) para el contrato objetivo todavía no implementado del panel interno de contactos. El OpenAPI v1 conserva el contrato ejecutable vigente hasta que HU-API-020 a 022 se integren.
+La propuesta [contact-alerts-contract-proposal.md](./contact-alerts-contract-proposal.md) es antecedente de diseño: `ContactAlertController` ya declara `GET /api/v1/me/contact-alerts`, `/{emergencyId}`, `/{emergencyId}/evidences` y `/{emergencyId}/evidences/{evidenceId}/content`. El OpenAPI debe contrastarse operación por operación con controladores y DTO antes de considerarlo completo. El archivo v2 existente en el directorio se conserva sin modificar.

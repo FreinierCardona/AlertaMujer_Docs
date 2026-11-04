@@ -43,6 +43,14 @@ Conservar comando, salida, plataforma, versión y captura sin datos sensibles.
 
 Revertir solo el cambio propio mediante Git; no borrar estado de otros desarrolladores.
 
+## Diagnóstico de evidencia y conectividad
+
+- Confirmar permiso de cámara, primer plano y estado de guardado; el temporizador de 10 s no garantiza entrega.
+- Si falla la carga, revisar mensaje, sesión, URL y respuesta HTTP sin registrar fotografías ni credenciales. Expo Go usa `File` para el multipart.
+- Comprobar metadata PostgreSQL y archivo privado; abrir el contenido como contacto aceptado y administrador autorizado.
+- Vigilar capacidad y copias de PostgreSQL y archivos: `max_evidence_count = 0` no impone un límite de cantidad y las fotos ocupan espacio del volumen.
+- `OFFLINE` indica falta de latidos confirmados, no prueba por sí solo que el teléfono carezca de internet. Probar red, reanudación y ubicación por separado.
+
 ---
 
 **Relacionados:** [`README.md`](README.md) · [`../../13-operations/runbook.md`](../../13-operations/runbook.md)

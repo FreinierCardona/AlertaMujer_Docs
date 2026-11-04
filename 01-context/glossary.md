@@ -13,7 +13,7 @@
 | Contacto de emergencia | Relación aceptada entre usuarias. | rol, autoridad |
 | Administrador de entidad | Cuenta funcional `ENTITY_ADMIN`. | rol PostgreSQL |
 | Evidencia | Fotografía WebP asociada a una emergencia. | video, archivo genérico |
-| Intento FCM legado | Solicitud técnica del código actual, aprobada para retiro por ADR-006. | entrega, lectura, arquitectura objetivo |
+| Intento FCM legado | Registro técnico histórico de un intento de proveedor; sus tablas siguen en los scripts Database. | entrega, lectura, arquitectura objetivo |
 | Notificación interna | Vista derivada de alertas abiertas vinculadas; no crea estado leído/no leído. | push remoto |
 | OTP | Código de un solo uso persistido como hash. | contraseña temporal |
 | Sesión | Credencial renovable y revocable asociada a una cuenta. | JWT aislado |

@@ -1,7 +1,7 @@
 # HU-AM-030 — Mostrar campana y listado de alertas vinculadas
 
 > [!NOTE] INSTRUCTIONS
-> Historia Propuesta. El indicador se deriva del Backend; no crear estado paralelo de notificaciones.
+> Estado observado: Existen clientes y pantallas de alertas internas; falta verificar cada criterio con Backend y dispositivo.
 
 ## Identificación
 

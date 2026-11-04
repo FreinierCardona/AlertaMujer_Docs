@@ -3,6 +3,8 @@
 > [!NOTE] INSTRUCTIONS
 > Corte verificable de repositorios locales, Docs y Obsidian. Los porcentajes ponderan implementación, integración, pruebas y coherencia documental; no representan horas consumidas.
 
+> **Fotografía histórica del 13 de octubre de 2026.** Los porcentajes y pendientes reflejan ese corte; para el código posterior consulte [módulos](../09-modules/module-catalog.md) y [modelo de datos](../06-data/models.md).
+
 ## Avance evaluado
 
 | Área | Avance | Evidencia y límite principal |

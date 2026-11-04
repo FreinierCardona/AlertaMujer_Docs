@@ -5,17 +5,17 @@
 
 ## Usuario y propósito
 
-Web soporta tareas de operación autorizada y consulta controlada según roles todavía por cerrar completamente.
+Web presenta páginas públicas y tareas administrativas; el código exige sesión para las rutas administrativas y Backend restringe `/api/v1/admin/**` a `ENTITY_ADMIN`.
 
 ## Áreas funcionales
 
 | Área | Resultado esperado | Estado |
 |---|---|---|
-| acceso | autenticación y sesión segura | interfaz implementada; integración pendiente |
-| tablero | resumen operativo comprensible | mocks/estado local |
-| emergencias | consultar y atender según autorización | contrato pendiente |
-| usuarios | operaciones permitidas y auditadas | En refinamiento |
-| auditoría | consulta restringida | En refinamiento |
+| acceso | inicio, renovación y cierre de sesión | `AdminLogin` y `authApi`; validación integrada pendiente |
+| tablero | contadores operativos | `Dashboard` y `/api/v1/admin/dashboard` |
+| emergencias | consultar, ver detalle y solicitar atención | `AlertsList`, `AlertDetail` y `adminEmergencyApi` |
+| usuarios | consultar, crear, cambiar estado y solicitar eliminación | `UsersList`, `UserDetail`, `CreateUserForm` y `adminUsersApi` |
+| auditoría | consultar registros | `AuditPage` y `/api/v1/admin/audit-logs` |
 
 ## Estados obligatorios
 
@@ -34,9 +34,8 @@ Orden de foco, landmarks, encabezados, nombres accesibles, contraste y mensajes 
 
 ## Pendientes
 
-- Matriz final de roles administrativos.
-- Contratos reales de consulta y atención.
-- Criterios aprobados para eliminación de cuenta.
+- Validar los flujos en navegador con una sesión real, permisos y datos del ambiente elegido.
+- Verificar accesibilidad y diseño responsivo; la existencia de componentes no demuestra su cumplimiento.
 
 ---
 

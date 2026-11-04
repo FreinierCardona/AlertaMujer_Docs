@@ -30,7 +30,7 @@
 | Archivos | WebP <=500 KB (500 000 bytes); limpieza inmediata + un reintento; reconciliación >24 h |
 | GPS | precisión y frecuencia sujetas a permisos y dispositivo |
 
-Estado de transición: el código vigente aún integra FCM; ADR-006 ordena retirarlo mediante HU-AM-029, HU-API-021 y HU-DB-027. Maps y el aviso foreground Android permanecen. La operación de Maps sigue pendiente de configuración por ambiente.
+Estado observado: no se encontró integración FCM en el código principal de Backend ni dependencia Firebase en Mobile. Database conserva scripts de tablas de tokens e intentos; su retirada física y la situación de cada base desplegada requieren verificación. Maps y el aviso foreground local requieren validación en el ambiente y dispositivo.
 
 ---
 

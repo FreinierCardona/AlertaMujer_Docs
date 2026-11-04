@@ -3,6 +3,12 @@
 > [!NOTE] INSTRUCTIONS
 > El flujo describe comportamiento confirmado; rutas y payloads pertenecen a `07-api`.
 
+## Acceso y registro
+
+La aplicación móvil ofrece inicio de sesión, recuperación de contraseña y registro. En el registro telefónico actual se ingresan datos personales, se verifica el teléfono mediante un código simulado y después se completan correo, contraseña y aceptación de términos; el correo requiere verificación. El código simulado no es un SMS real. La cuenta creada por administración sigue un flujo distinto: se crea habilitada y la aceptación de términos queda pendiente para la usuaria.
+
+En Web, la persona administradora inicia sesión para consultar tablero, alertas, usuarias y auditoría, y puede iniciar atención o gestionar cuentas según autorización. El código contiene estos recorridos; su funcionamiento completo depende de Backend, datos y configuración del ambiente.
+
 ## Preparación
 
 1. La usuaria registra y verifica su identidad, inicia sesión y completa perfil.
@@ -12,7 +18,7 @@
 
 ## Emergencia
 
-| Paso | Actor | Resultado confirmado |
+| Paso | Actor | Comportamiento implementado en código |
 |---|---|---|
 | 1 | Usuaria | Mantiene SOS y confirma intención. |
 | 2 | Mobile | Envía coordenada inicial y contexto válido. |
@@ -20,7 +26,7 @@
 | 4 | Database | Persiste emergencia, historial y primera ubicación. |
 | 5 | Backend | Deja la alerta disponible para los contactos aceptados mediante consultas internas autorizadas. |
 | 6 | Mobile | Presenta el último estado confirmado. |
-| 7 | Usuaria | Puede aportar fotografía, chat o abrir marcador. |
+| 7 | Mobile / usuaria | Captura automática cada 10 s mientras la pantalla está activa y la cámara disponible; también permite captura manual, chat y marcador. |
 | 8 | Administrador | Consulta y puede iniciar atención. |
 | 9 | Propietaria | Solicita finalización; `FINALIZED` es terminal. |
 

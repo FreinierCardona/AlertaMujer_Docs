@@ -17,7 +17,7 @@
 | Administración | Atención, cuentas y auditoría | eventos administrativos | Web / Backend / Database |
 | Experiencia | Idiomas, tema, navegación y accesibilidad | preferencias locales | Frontend |
 
-El módulo FCM del código actual es legado y se retira coordinadamente mediante ADR-006; no se crea persistencia paralela para el panel interno.
+El panel interno se deriva de emergencias y relaciones aceptadas; Database conserva scripts de FCM históricos y el Backend principal revisado no contiene el adaptador FCM.
 
 ## Leyenda de relaciones
 

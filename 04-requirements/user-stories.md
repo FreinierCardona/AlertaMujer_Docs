@@ -15,11 +15,11 @@
 
 | Grupo | Cantidad | Estado | Fuente técnica |
 |---|---:|---|---|
-| HU-AM | 31 | 001–027 con código integrado; 028–031 propuestas | Frontend |
-| HU-DB | 27 | 001–025 integradas; 026–027 propuestas | Database |
-| HU-API | 22 | 001–019 integradas y verificadas; 020–022 propuestas | Backend |
+| HU-AM | 31 | 001–027 con evidencia histórica; 028–031 con código observado y validación pendiente | Frontend |
+| HU-DB | 27 fichas detalladas en este catálogo | 026 tiene changesets; 027 sin retiro físico observado; 028 y 030 en changelog | Database |
+| HU-API | 22 | 001–019 con evidencia histórica; 020–022 con código observado y validación pendiente | Backend |
 
-La evidencia actual del Backend es 138 pruebas automáticas, sin fallos, errores ni omisiones, ejecutadas el 2026-10-13 con fixtures sintéticas sobre PostgreSQL 17.11. Frontend pasa typecheck/lint/build, pero Playwright solo pasa 3/10 y no existe prueba Mobile en dispositivo. Las HUs propuestas no están implementadas.
+El corte histórico del 2026-10-13 registró 138 pruebas Backend y 3/10 Playwright Web; esos resultados no acreditan cambios posteriores. Los componentes de 028–031 y API-020–022 se observaron en código; el recorrido local de evidencias con Expo Go y consulta por contacto/administrador se confirmó el 2026-11-03. No se declara cierre de todos los criterios ni validación de APK.
 
 ## Escribir una historia
 

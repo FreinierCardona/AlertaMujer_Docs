@@ -22,7 +22,7 @@
 
 | Id | Pregunta | Responsable | Criterio de cierre |
 |---|---|---|---|
-| FE-PEN-01 | ¿Cómo se almacenará la sesión real? | Pendiente | contrato Backend y prueba de seguridad |
+| FE-PEN-01 | ¿Es adecuada la estrategia de almacenamiento de sesión por plataforma? | Pendiente | evaluación de seguridad de SecureStore y sessionStorage |
 | FE-PEN-02 | ¿Cómo se recuperará chat tras reconexión? | Pendiente | contrato WSS aprobado |
 
 ## Conflictos
